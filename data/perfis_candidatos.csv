@@ -1,0 +1,127 @@
+handle,nome,tipo,seguidores,faixa,ultimo_post,reels_ultimos12,status,nicho,origem,confianca_handle,observacao
+impulsostone,Impulso Stone,marca,4118,micro,2026-11-10,3,apto,educacao_mpe,material_stone,alta,perfil-alvo dos criativos; avaliar se entra na base ou so como referencia
+rodrigofinancas,Rodrigo Financas,criador,376546,grande,2026-11-10,10,apto,financas,material_stone (parceiro Impulso),alta,embaixador Impulso; slide recomenda usar so 1-2 parceiros
+indiacorrea,India Correa,criador,1323,micro,2026-10-28,2,apto,empreendedorismo,material_stone (parceiro Impulso),alta,embaixadora Impulso
+chefrut,Chef Ruth,criador,6871,micro,2026-11-10,8,apto,alimentacao,material_stone (parceiro Impulso),alta,embaixadora Impulso; empreendedora real
+wr_walterrodrigues,Walter Rodrigues,criador,16024,medio,2026-11-08,11,fora_do_tema,empreendedorismo,material_stone (parceiro Impulso),alta,embaixador Impulso
+oijedai,Jedai,criador,3495,micro,2026-11-10,9,fora_do_tema,a_verificar,material_stone (parceiro Impulso),alta,embaixador Impulso
+facoascontas,Pamela Margarida,criador,55681,medio,2026-11-06,8,apto,financas_mpe,diariodocomercio.com.br (finfluencers mineiros),alta,gestao financeira e precificacao p/ MEI e mulheres; ~55 mil
+camilafarani,Camila Farani,criador,1167322,grande,2026-11-06,3,apto,empreendedorismo,influency.me,alta,investidora anjo; conteudo mais generico
+zicaassis,Zica Assis,empreendedor_real,98290,medio,2026-11-03,9,apto,beleza,influency.me,alta,fundadora Beleza Natural
+caitomaiaoficial,Caito Maia,empreendedor_real,1445665,grande,2026-11-09,9,apto,empreendedorismo,influency.me,alta,fundador Chilli Beans
+adrianapreta,Adriana Barbosa,empreendedor_real,52514,medio,2026-11-06,1,apto,afroempreendedorismo,forbes.com.br (2021),media,Feira Preta / PretaHub
+nathfinancas,Nath Financas,criador,1094866,grande,2026-11-10,5,apto,financas,conhecimento_previo,media,financas para baixa renda; tem conteudo MEI
+anafontes,Ana Fontes,criador,2470,micro,2026-10-30,3,fora_do_tema,empreendedorismo_feminino,conhecimento_previo,media,fundadora Rede Mulher Empreendedora
+redemulherempreendedora,Rede Mulher Empreendedora,instituicao,218247,grande,2026-11-10,3,apto,empreendedorismo_feminino,rme.net.br,media,publico parecido com o do Impulso (mulheres)
+celsoathayde,Celso Athayde,empreendedor_real,143657,grande,2026-11-11,6,apto,empreendedorismo_periferico,conhecimento_previo,media,Favela Holding / CUFA
+carolpaiffer,Carol Paiffer,criador,396,micro,,0,handle_errado,empreendedorismo,conhecimento_previo,media,Shark Tank Brasil
+joaokepler,Joao Kepler,criador,1252291,grande,2026-11-10,9,apto,empreendedorismo,conhecimento_previo,media,investidor; tom mais motivacional
+geracaodevalor,Geracao de Valor (Flavio Augusto),criador,5040909,grande,2026-11-10,8,apto,motivacao,conhecimento_previo,media,bom contraste p/ hipotese motivacional vs dor real
+camilarenaux,Camila Renaux,criador,230487,grande,2026-11-10,4,apto,marketing_mpe,conhecimento_previo,media,marketing digital p/ pequenos negocios
+rafaelkiso,Rafael Kiso,criador,529815,grande,2026-11-10,11,apto,marketing,conhecimento_previo,baixa,fundador mLabs
+leandroladeira,Leandro Ladeira,criador,115,micro,,0,handle_errado,marketing,conhecimento_previo,media,marketing digital; publico de infoprodutores
+thiagoconcer,Thiago Concer,criador,,,,,nao_encontrado,vendas,conhecimento_previo,media,vendas
+sebrae,Sebrae,instituicao,2331444,grande,2026-11-10,7,apto,educacao_mpe,conhecimento_previo,alta,principal referencia MPE
+sebraesp,Sebrae SP,instituicao,510783,grande,2026-11-09,7,apto,educacao_mpe,conhecimento_previo,media,
+sebraemg,Sebrae MG,instituicao,,,,,nao_encontrado,educacao_mpe,conhecimento_previo,media,
+sebraerj,Sebrae RJ,instituicao,375017,grande,2026-11-11,9,apto,educacao_mpe,conhecimento_previo,baixa,
+sebraepr,Sebrae PR,instituicao,197498,grande,2026-11-10,6,apto,educacao_mpe,sebraepr.com.br,media,tem conteudo 'vender no Instagram p/ MEI'
+contabilizei,Contabilizei,marca,208777,grande,2026-11-10,7,apto,contabilidade_mei,conhecimento_previo,media,
+contaazul,Conta Azul,marca,321011,grande,2026-11-10,5,apto,gestao,conhecimento_previo,media,
+omie,Omie,marca,,,,,nao_encontrado,gestao,conhecimento_previo,baixa,handle pode ser outro
+nuvemshop,Nuvemshop,marca,487955,grande,2026-11-10,9,apto,vendas_online,conhecimento_previo,media,
+olist,Olist,marca,,,,,nao_encontrado,vendas_online,conhecimento_previo,media,
+mlabs,mLabs,marca,34,micro,2012-01-23,0,handle_errado,marketing_mpe,conhecimento_previo,baixa,
+rdstation,RD Station,marca,455139,grande,2026-11-10,6,apto,marketing,conhecimento_previo,media,
+infinitepay,InfinitePay,marca_concorrente,2451568,grande,2026-11-10,9,apto,maquininha,conhecimento_previo,media,concorrente direto
+pagbank,PagBank,marca_concorrente,888487,grande,2026-11-09,9,apto,maquininha,conhecimento_previo,media,concorrente direto
+mercadopago,Mercado Pago,marca_concorrente,,,,,nao_encontrado,maquininha,conhecimento_previo,baixa,handle pode ser mercadopagobr
+cielo,Cielo,marca_concorrente,806,micro,,0,handle_errado,maquininha,conhecimento_previo,media,concorrente direto
+sumupbrasil,SumUp,marca_concorrente,639,micro,2021-08-01,1,inativo,maquininha,conhecimento_previo,baixa,handle incerto
+cora.bancodaspj,Cora,marca_concorrente,,,,,nao_encontrado,banco_pj,conhecimento_previo,baixa,handle incerto
+asaas,Asaas,marca_concorrente,1885,micro,,0,handle_errado,banco_pj,conhecimento_previo,baixa,
+stone,Stone,marca,711371,grande,2026-11-10,10,apto,maquininha,conhecimento_previo,baixa,handle oficial da Stone a confirmar
+tonbrasil,Ton,marca,7,micro,2022-11-03,1,handle_errado,maquininha,conhecimento_previo,baixa,handle oficial da Ton a confirmar
+dicasmei,MEiSHOP,marca,30307,medio,2026-11-09,0,sem_reels,contabilidade_mei,instagram.com (busca web),alta,gestao do CNPJ MEI; ~31 mil (dado possivelmente antigo)
+donasdeconfeitaria,Bella Andrade,criador,89453,medio,2026-10-29,10,apto,alimentacao,instagram.com (busca web),alta,mentora de confeiteiras; precificacao; ~75 mil
+docerotina,Isabelle Cristina (Doce Rotina),criador,37,micro,2014-01-08,0,handle_errado,alimentacao,realizzarecursos.com.br,baixa,curso de precificacao na confeitaria; ~80 mil; @ inferido do nome
+donosderestaurantes,Donos de Restaurantes,criador,479615,grande,2026-11-10,7,apto,alimentacao,blog.instadelivery.com.br,media,gestao de restaurantes; fonte antiga
+midsdelivery,Mids Delivery,criador,,,,,nao_encontrado,alimentacao,blog.instadelivery.com.br,media,marketing p/ delivery; fonte antiga
+escoladelojista,Escola de Lojista,criador,68085,medio,2026-11-06,11,apto,varejo,escoladelojista.com.br,baixa,@ inferido do site
+gianescatolin,Gia Escatolin,criador,8985,micro,2026-11-09,5,apto,empreendedorismo_feminino,instagram.com (busca web),alta,mentora de mulheres empreendedoras
+manoelitatrindade,Manoelita Trindade,criador,3799,micro,2025-11-05,5,inativo,vendas_instagram,instagram.com (busca web),alta,mentora de vendas pelo Instagram
+vicente_sevilha,Vicente Sevilha,criador,,,,,nao_encontrado,contabilidade_mpe,crcmg.org.br (ranking 2021),media,impostos e questoes trabalhistas; checar se fala com donos de negocio
+_kalps23,Kaique Lopes | Precificação,criador,972,micro,2026-10-30,8,apto,precificacao,apify hashtag #pequenosnegocios (2026-11-11),alta,prioridade media; perfil 'Precificacao'
+_pontodocaldo,PONTO DO CALDO,criador,39920,medio,2026-11-11,7,apto,alimentacao,apify hashtag #precificacao (2026-11-11),alta,prioridade media; empreendedor real calcula custo
+acertenodigital,Washington Saw - Apaixonado por Estratégias Digitais,criador,12807,medio,2026-06-26,11,apto,marketing_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade baixa; humor sobre marketing digital
+acontadoradasoficinas,Ana Paixão | A Contadora das Oficinas,criador,22998,medio,2026-11-10,12,apto,gestao_mpe,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; contadora p/ donos de oficina
+adorosemijoiasoficial,ATACADO DE SEMIJOIAS | A’DORO,criador,58693,medio,2026-11-10,7,apto,varejo,apify hashtag #precificacao (2026-11-11),alta,prioridade media; atacado ensinando revendedoras a precificar
+adv.cristinamaneschi,Dra. Cristina Maneschi - INSS e Aposentadoria,criador,998460,grande,2026-11-10,10,fora_do_tema,juridico_mei,apify hashtag #microempreendedora (2026-11-11),alta,prioridade baixa; INSS para MEI
+agafestlocacoes,Agafest Locações,criador,315,micro,2026-11-07,3,apto,historia_empreendedor,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade media; empreendedor real dando licoes
+aj.identidade,AJ - Identidade visual | Naming | Posicionamento,criador,368240,grande,2026-11-10,0,sem_reels,servicos_autonomos,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; precificacao p/ designers
+alexandresimas,ALEXANDRE SIMAS Autor e palestrante,criador,42023,medio,2026-11-10,5,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; reajuste de precos
+amandamirandasoueu,Amanda Miranda,criador,38737,medio,2026-11-08,10,fora_do_tema,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; ganchos de conteudo
+ana.paula.garcia,Ana Paula Garcia,criador,84644,medio,2026-10-22,7,apto,vendas_instagram,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade alta; erros de quem vende no Instagram
+atelier_dourado,Atelier Dourado por Isabella Dourado,criador,95888,medio,2026-11-11,12,apto,costura,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; gestao de atelie p/ costureiras
+brunabarros.flora,Bruna Barros | Educação para Floriculturas,criador,15633,medio,2026-11-04,9,apto,floricultura,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; educacao p/ floriculturas
+brunaivosant,Bruna Ivo | Fé • Família • Propósito,criador,138218,grande,2026-11-08,2,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; viver da confeitaria
+camaranomidiasdigitais_,Camarano Mídias Digitais,criador,216,micro,2026-04-28,8,apto,beleza,apify hashtag #salaodebelezaempreendedor (2026-11-11),alta,prioridade media; anuncios p/ saloes
+chefchris.boiago,Chef Chris Boiago,criador,6222,micro,2026-10-30,9,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; comecar na confeitaria
+clarianalima,Clariana Lima | MENTORA DE EMPRESAS,criador,9105,micro,2026-11-08,6,apto,alimentacao,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; mentora de empreendedoras; historia de cliente
+conicesar,Augusto César Coni,criador,5096,micro,2026-11-09,5,apto,historia_empreendedor,apify hashtag #pequenosnegocios (2026-11-11),alta,prioridade alta; historias de pequenos empreendedores
+contadora.naiale,Naiale | Contadora de Prestadores de Serviços,criador,14030,medio,2026-11-10,8,apto,contabilidade_mei,apify hashtag #microempreendedorindividual (2026-11-11),alta,prioridade alta; contadora de prestadores/MEI
+deboraa.vasconcelos,Débora Vasconcelos | Gestão para confeiteiras,criador,104568,grande,2026-11-11,9,apto,alimentacao,apify hashtag #confeitariaempreendedora;#precificacao (2026-11-11),alta,prioridade alta; gestao p/ confeitaria
+dhuanysouza,Dhuany Souza | Empreendedora,criador,22334,medio,2026-11-05,6,apto,marketing_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade media; conteudo que vende
+digitalmentee_,Alynne Farias | Dicas de Instagram,criador,1344,micro,2024-06-27,10,inativo,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; dicas de Instagram
+dinogueno,Dino Gueno,criador,421648,grande,2026-11-10,7,apto,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade media; tendencias do varejo p/ lojistas
+doce_ray,Rayane | Artista digital,criador,93980,medio,2026-11-10,11,fora_do_tema,marketing_mpe,apify hashtag #microempreendedora (2026-11-11),alta,prioridade baixa; embalagem/experiencia p/ pequenas lojas
+eduaragao.contador,Eduardo Aragão | Contador,criador,5369,micro,2026-11-09,2,apto,contabilidade_mpe,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; split payment e precificacao
+eric.delivery.elite,Eric Rodrigues Roza | Delivery Elite,criador,27094,medio,2026-11-11,6,apto,alimentacao,apify hashtag #dicasparaempreendedores;#pequenosnegocios (2026-11-11),alta,prioridade alta; gestao de delivery
+estefira,Esté Fira,criador,19496,medio,2026-11-07,12,apto,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; Instagram p/ negocios
+eumichelesilvaof,Michele Silva | Influencer Shopee ✨,criador,21391,medio,2026-11-09,9,fora_do_tema,vendas_online,apify hashtag #lojistas (2026-11-11),alta,prioridade baixa; vender na Shopee
+fabio.morassi,Fabio Morassi,criador,3376,micro,2026-10-26,7,apto,empreendedorismo,apify hashtag #precificacao (2026-11-11),alta,prioridade media; analise de negocios (Shark Tank)
+fabiolacakesconfeitaria,Fabiola Vasconcelos | Professora e Mentora de Confeitaria,criador,10422,medio,2026-10-25,12,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; professora de confeitaria (negocio)
+gabii.estevao,Gabi Estevão | Mentora de Lojistas,criador,5121,micro,2026-11-10,7,apto,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade alta; mentora de lojistas
+geanmaurice,Gean Maurice | Mentor de Lojista de Maquiagem,criador,35932,medio,2026-11-10,8,apto,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade alta; mentor de lojistas
+gislainebarbosaoficial,Gislaine Barbosa | Contabilidade Digital,criador,24973,medio,2026-11-07,2,apto,contabilidade_mei,apify hashtag #microempreendedorindividual (2026-11-11),alta,prioridade alta; contabilidade MEI; humor
+hannycristina,Hanny Cristina,criador,12361,medio,2026-11-09,6,apto,empreendedorismo_feminino,apify hashtag #lojistas (2026-11-11),alta,prioridade media; fala com 'dona' de negocio
+imomarketingdigital,IMO | Marketing Digital,criador,2057,micro,2025-04-07,10,inativo,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; marketing p/ restaurantes
+instacomstephanie,Stephanie Benvindo | Conteúdo & Posicionamento,criador,432683,grande,2026-11-06,11,apto,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; erros que fazem perder vendas
+janessafranca,Janessa França | Micropigmentação Olinda,criador,13233,medio,2026-10-28,7,apto,beleza,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; Instagram p/ profissionais de beleza
+jessicateixeira_jst,Jéssica | Stories Criativos e Adesivos,criador,33976,medio,2024-03-09,8,inativo,marketing_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade baixa; stories criativos
+josikonkol,Josi Konkol | Mentora | Vendas Sistêmicas,criador,196334,grande,2026-11-08,9,apto,vendas,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; mentora de vendas p/ mulheres
+karinaishikawa,Karina Ishikawa ® | Advogada,criador,5270,micro,2026-08-21,9,apto,juridico_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade media; registro de marca
+karolinebragaf,Karoline Braga | CRESCER E VENDER NO INSTA,criador,134200,grande,2026-11-10,9,apto,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; crescer e vender no Instagram
+kelrylene,Kelrylene Gomes | Contadora,criador,8234,micro,2026-10-30,9,apto,contabilidade_mei,apify hashtag #microempreendedora (2026-11-11),alta,prioridade alta; contadora MEI
+larice_,Larice Souza,criador,504222,grande,2026-11-10,9,apto,contabilidade_mpe,apify hashtag #pequenosnegocios (2026-11-11),alta,prioridade baixa; calculos trabalhistas p/ empresas
+lelinhagentil,Lelinha Gentil,criador,1062913,grande,2026-11-10,12,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade media; percepcao de preco
+leticiadoladosul,Letícia Sales | A menina da colher de pau🥄,criador,63423,medio,2026-11-10,10,fora_do_tema,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade baixa; lojas de roupa da feira
+mariliasartori.modamkt,Marilia Sartori|Instagram p/ Negócios|Agência Moda Digital,criador,27557,medio,2026-11-10,6,apto,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade alta; Instagram p/ lojas de moda
+marinatavora,Marina Távora | Empresária,criador,70688,medio,2026-11-06,8,apto,alimentacao,apify hashtag #confeitariaempreendedora;#precificacao (2026-11-11),alta,prioridade alta; valor/preco na confeitaria
+nanimagalhaesoficial,Nani Magalhães | Confeitaria e Empreendorismo,criador,1240411,grande,2026-11-10,12,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; confeitaria que vende
+oficialpudimdacris,Pudim da Cris l São José dos Campos,criador,9345,micro,2026-11-10,8,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; empreendedora real: doce lucrativo
+onelsonmiguel,Nelson Miguel | Árabe do Marketing & Conteúdo,criador,357001,grande,2026-10-29,1,apto,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; stories p/ negocios
+otaviodduarte,Otávio Duarte | Tráfego Pago,criador,15320,medio,2026-11-10,6,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade media; precificacao/trafego p/ pequenos negocios
+pedronogueira.jr,Pedro Nogueira | Empresário,criador,22561,medio,2026-11-10,12,apto,gestao_mpe,apify hashtag #precificacao (2026-11-11),alta,prioridade media; erros de gestao
+penteadokaique,Kaique | Tráfego Pago,criador,2282,micro,2026-11-09,11,apto,precificacao,apify hashtag #pequenosnegocios;#precificacao (2026-11-11),alta,prioridade media; ancoragem de preco
+rafaelatyara,Rafaela| Vendas para Lojas,criador,13830,medio,2026-10-28,7,apto,varejo,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade media; vendas p/ lojas
+rannallygomes,Rannally | Mentora de Psicopedagogas e Reforços,criador,138597,grande,2026-11-09,2,apto,servicos_autonomos,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; precificacao p/ psicopedagogas
+ravisbakery_,RaVi’s Bakery - Padaria Artesanal,criador,59179,medio,2026-11-08,12,apto,historia_empreendedor,apify hashtag #pequenosnegocios (2026-11-11),alta,prioridade media; padaria artesanal em casa
+rayssamedrado,Rayssa Medrado | Vendas,criador,6004,micro,2026-11-11,10,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade media; leitura de preco pelo cliente
+receitastremdeminas,Aline Santos | Confeitaria Afetiva,criador,314143,grande,2026-11-01,8,apto,alimentacao,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; custo do produto na confeitaria
+roger.poder,Roger | Persuasão e Negociação,criador,26369,medio,2026-11-11,12,apto,vendas,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; negociacao de preco
+seu.cnpj,Seu CNPJ,criador,28212,medio,2024-03-11,2,inativo,contabilidade_mei,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade alta; alertas p/ MEI
+silviamatosp.ai,Sil Matos • Estratégias com IA⚡️,criador,276129,grande,2026-11-09,12,fora_do_tema,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; Instagram com IA
+soucarolssoares,Carol Soares | Marketing de Conexão,criador,32240,medio,2026-11-08,9,apto,marketing_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade baixa; humor p/ empreendedores
+stanpizzol,STAN PIZZOL | MENTORIA E TREINAMENTO,criador,39133,medio,2026-11-10,12,apto,varejo,apify hashtag #lojistas (2026-11-11),alta,prioridade media; treinamento de vendas p/ lojas
+suelenfuhr,SU | MARKETING CRIATIVO,criador,88521,medio,2026-11-04,6,apto,marketing_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade media; funcoes do Instagram
+thafernandah,Thais Fernanda,criador,402443,grande,2026-11-10,8,fora_do_tema,vendas,apify hashtag #dicasparaempreendedores;#vendernoinstagram (2026-11-11),alta,prioridade baixa; vender mais; curso
+vagnerisidoriooficial,Vagner Nunes Isidorio,criador,7270,micro,2026-11-10,10,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade media; preco ideal
+valkiriaic,Valkiria ®️ Design e Inovação,criador,56956,medio,2026-11-05,7,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; objecao 'ta caro'
+vanessareatti.oficial,Vanessa Reatti | Confeitaria e Precificação,criador,1940,micro,2026-09-29,2,apto,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; marketing p/ confeitaria
+venilladoces,Venilla Doces • Confeitaria em Recife,criador,7278,micro,2025-01-11,10,inativo,alimentacao,apify hashtag #confeitariaempreendedora (2026-11-11),alta,prioridade alta; empreendedora real: dicas de comeco
+victorgordeeff,Victor Gordeeff | Arquiteto e professor 🎓,criador,220089,grande,2026-11-04,3,apto,servicos_autonomos,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; precificacao de projetos
+vivian.cakedesigner,Vívian Freitas | Bolos em Pasta Americana,criador,44641,medio,2026-11-10,9,apto,alimentacao,apify hashtag #precificacao (2026-11-11),alta,prioridade alta; precificacao na confeitaria
+vivianisilveiramarketing,Viviani Silveira l Marketing Digital,criador,215462,grande,2026-11-07,5,apto,marketing_mpe,apify hashtag #vendernoinstagram (2026-11-11),alta,prioridade baixa; stories
+willianmuller_,Willian Müller,criador,22284,medio,2026-11-07,11,apto,precificacao,apify hashtag #precificacao (2026-11-11),alta,prioridade baixa; precificacao em planos
+wjrconsulting,WJR | Gestão Financeira Inteligente para PMEs,criador,211825,grande,2026-11-11,7,apto,gestao_mpe,apify hashtag #dicasparaempreendedores (2026-11-11),alta,prioridade media; gestao financeira/precificacao
