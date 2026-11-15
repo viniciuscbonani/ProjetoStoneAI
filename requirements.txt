@@ -1,0 +1,7 @@
+apify_client==3.5.1
+faster-whisper==1.2.1
+google-genai==3.3.0
+imageio-ffmpeg==0.8.1
+numpy==2.5.4
+pydantic==2.14.3
+python-dotenv==1.2.4
