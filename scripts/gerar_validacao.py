@@ -53,9 +53,10 @@ def main() -> None:
             f'<img src="data:image/jpeg;base64,{base64.b64encode((RAIZ / "data" / "midia" / sc / f"q_{q}.jpg").read_bytes()).decode()}" title="{q}">'
             for q in QUADROS)
         campos = "".join(
-            f'<div class="campo"><span>{c}</span>'
-            + "".join(f'<label><input type="radio" name="{sc}|{c}" value="{o}">{o}</label>' for o in opcoes(c))
-            + "</div>" for c in CAMPOS)
+            f'<div class="campo"><span class="nome">{c.replace("_", " ")}</span><div class="opcoes">'
+            + "".join(f'<label><input type="radio" name="{sc}|{c}" value="{o}">{o.replace("_", " ")}</label>'
+                      for o in opcoes(c))
+            + "</div></div>" for c in CAMPOS)
         cartoes.append(f"""
 <section data-sc="{sc}"><h2>{i}/{len(escolhidos)} · <a href="{r['url']}" target="_blank">abrir no Instagram</a>
  · {float(r['duracao_s']):.0f}s</h2>
@@ -72,9 +73,17 @@ def main() -> None:
 body {{ font-family: system-ui, sans-serif; background:var(--bg); color:var(--fg); max-width:1100px; margin:0 auto; padding:16px; }}
 section {{ background:var(--card); border:1px solid var(--borda); border-radius:10px; padding:16px; margin:16px 0; }}
 .quadros {{ display:flex; gap:6px; overflow-x:auto; }} .quadros img {{ height:220px; border-radius:6px; }}
-.campos {{ display:grid; grid-template-columns:1fr; gap:6px; margin-top:10px; }}
-.campo span {{ display:inline-block; min-width:220px; font-weight:600; }}
-label {{ margin-right:10px; white-space:nowrap; }} a {{ color:var(--destaque); }}
+.campos {{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }}
+.campo {{ display:grid; grid-template-columns:200px 1fr; gap:10px; align-items:start;
+  padding-top:10px; border-top:1px solid var(--borda); }}
+.nome {{ font-weight:600; padding-top:4px; }}
+.opcoes {{ display:flex; flex-wrap:wrap; gap:6px; }}
+.opcoes label {{ display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border:1px solid var(--borda);
+  border-radius:999px; cursor:pointer; white-space:nowrap; }}
+.opcoes label:has(input:checked) {{ border-color:var(--destaque); background:color-mix(in srgb, var(--destaque) 18%, transparent); }}
+.opcoes input {{ margin:0; }}
+@media (max-width: 640px) {{ .campo {{ grid-template-columns:1fr; }} }}
+a {{ color:var(--destaque); }}
 #barra {{ position:sticky; top:0; background:var(--bg); padding:8px 0; border-bottom:1px solid var(--borda); }}
 button {{ font-size:15px; padding:6px 14px; }}
 </style></head><body>
