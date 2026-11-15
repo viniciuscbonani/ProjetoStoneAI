@@ -1,0 +1,10 @@
+data,conta,actor,run_id,dataset_id,perfis,config,itens,custo_usd,finalidade
+2026-11-11,principal,apify/instagram-hashtag-scraper,,,12 hashtags,1a pagina por hashtag (plano gratis),208,,descoberta de perfis
+2026-11-11,principal,apify/instagram-profile-scraper,,,126,includeAboutSection=false,126,0.328,verificacao de perfis
+2026-11-14,principal,rowfinch/instagram-reel-scraper,VSODEo0kTV1v5sPnk,YHyeh4i12QmLYdvlX,gabii.estevao;contadora.naiale,resultsLimit=30 newerThan=2026-08-01 skipPinned,25,~0.01,teste de rotas
+2026-11-14,principal,esdrasdw/instagram-content-scraper,5Ne28XYtqr88QAY6U,Ade9hrd7Xi9eP7aFj,gabii.estevao;contadora.naiale,reels resultsLimit=30 newerThan=2026-08-01 skipPinned,60,~0.003,teste de rotas
+2026-11-14,principal,apify/instagram-reel-scraper,BNaqmfZ3SYONjrYsV,0mQVB9Ru1JGnSz2Sq,gabii.estevao;contadora.naiale,resultsLimit=10 newerThan=2026-08-01 skipPinned,20,~0.05,teste de rotas (referencia)
+2026-11-14,principal,esdrasdw/instagram-content-scraper,GRdYqqcFnCyn3CpMX,p5tXv0Cm3rVTl6Doy,92 aptos,reels resultsLimit=100 newerThan=2025-11-14 skipPinned,7561,0.3753,coleta principal
+2026-11-14,principal,instagram-scraper/instagram-profile-reels-scraper,sMOBuOhijVDF49k29,gowuGaIaTD5GJM1gx,gianescatolin;gabii.estevao;instacomstephanie;onelsonmiguel;wjrconsulting,postsPerProfile=5,25,0.0305,confirmacao de curtidas ocultas
+2026-11-14,principal,esdrasdw/instagram-content-scraper,znt53HyXynR0SQhGi,eeYH5F0NR0weuZVXJ,81 perfis da amostra,so shortCode e videoUrl,6752,0.3345,links novos para download
+2026-11-14,principal,apify/instagram-reel-scraper,KmNO86XwBaSL7xAC3,0Z0eRsDnxfCNUbGVt,944 Reels da amostra,links diretos dos Reels,944,2.4528,comentarios + auditoria + links
