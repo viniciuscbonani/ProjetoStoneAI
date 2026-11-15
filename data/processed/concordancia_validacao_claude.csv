@@ -1,0 +1,11 @@
+campo,n,concordancia,kappa,leitura
+abordagem,50,0.74,0.58,moderada
+criador_e_empreendedor_real,50,0.66,0.38,fraca
+fala_de_negocio,50,0.9,0.65,boa
+formato_video,50,0.68,0.62,boa
+tem_cta,50,0.68,0.39,fraca
+tem_rosto,50,0.98,0.93,muito boa
+tema_principal,50,0.74,0.69,boa
+texto_na_tela,50,1.0,1.0,muito boa
+tipo_cta,50,0.56,0.43,moderada
+tipo_hook,50,0.62,0.52,moderada
