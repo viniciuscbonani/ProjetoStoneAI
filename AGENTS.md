@@ -22,15 +22,17 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 
 ## Ambiente
 - Python 3.12 em `.venv` (`.venv/bin/python`); dependências em `requirements.txt`.
-- Gemini no plano grátis: ~500 requisições/dia **por modelo**. A anotação usa `gemini-3.5-flash-lite`;
-  para outras tarefas, prefira outro modelo (ex.: `gemini-3.5-flash`) para não disputar a cota.
+- Gemini no plano grátis, cota diária **por modelo**: `gemini-3.5-flash-lite` ~500/dia;
+  `gemini-3.5-flash` só **20/dia**. Anotação e agente usam o flash-lite (o agente gasta 3 a 7 chamadas por
+  execução; `AGENTE_MODELO` troca o modelo). A cota zera ~05h (horário de Brasília).
 - ffmpeg vem do pacote `imageio-ffmpeg` (`imageio_ffmpeg.get_ffmpeg_exe()`); não há ffmpeg no sistema.
 - Processos longos: rodar desacoplados (`setsid nohup ... &`), porque a sessão pode encerrar.
 
 ## Pipeline (scripts em `scripts/`, na ordem)
 `coleta_esdrasdw.py` → `curtidas_ocultas.py` / `confirmar_ocultas.py` → `preparar_base.py --min-views 300`
 → `sortear_amostra.py` → `processar_midia.py` → `transcrever_paralelo.sh 7 2` → `coleta_comentarios.py`
-→ `anotar_gemini.py` (rubrica em `rubrica.py`) → `lift.py` → `gerar_validacao.py` / `concordancia.py`.
+→ `anotar_gemini.py` (rubrica em `rubrica.py`) → `lift.py` → `gerar_validacao.py` / `concordancia.py`
+→ `indexar_base.py` (gera `data/processed/agente.db`, a base do agente; rodar de novo se a anotação ou o lift mudarem).
 Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
 
 ## Dados
@@ -73,3 +75,14 @@ Exigências do documento do projeto:
   inspiraram), `confidence_flag`, `explanation`.
 - Pronto quando: os 3 modos respondem com achados provisórios, saída validada, referências com link e
   log gravado.
+
+Implementação (pacote `agente/`, branch `agente`): um agente que recebe o modo. Grafo em `grafo.py`:
+orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator → revisor (refaz 1×) → montar_saida.
+- `ferramentas.py`: `consultar_caracteristicas`, `buscar_referencias`, `perfis_em_destaque`; cada `@tool`
+  devolve texto para o LLM e os dados à parte (`content_and_artifact`). `findings`, `reference_posts` e
+  `profiles` são montados desses dados, nunca do texto do LLM; o revisor rejeita citação que não veio deles.
+- `confidence_flag`: robusto | fragil | insuficiente, pelo achado mais fraco entre os principais.
+- Modos prontos: analisar, recomendar. Faltam gerar_criativo, avaliar (vídeo ou roteiro; inclui a
+  ferramenta `ler_video`), servidor MCP, API FastAPI e front React + Mantine.
+- Uso: `from agente import executar; executar({"mode": "analisar", "query": "..."})`. Log em
+  `data/logs/agente.jsonl`.

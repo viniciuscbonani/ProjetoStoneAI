@@ -98,6 +98,11 @@ def perfis_em_destaque(n: int = 8, segmento: str | None = None, faixas: list[str
 
 # ---------------------------------------------------------------- versões @tool para o orquestrador
 
+def id_achado(a: dict) -> str:
+    """Identificador estável de um achado, usado nas citações: campo=valor [recorte]."""
+    return f"{a['campo']}={a['valor']}" + (f" [{a['recorte']}]" if a["recorte"] else "")
+
+
 def _do_estado(estado: dict) -> dict:
     e = estado["entrada"]
     f = e.filters
@@ -106,35 +111,38 @@ def _do_estado(estado: dict) -> dict:
 
 
 @tool("consultar_caracteristicas", response_format="content_and_artifact")
-def consultar_caracteristicas_tool(estado: Annotated[dict, InjectedState],
-                                   campos: list[str] | None = None) -> tuple[str, list[dict]]:
+def consultar_caracteristicas_tool(estado: Annotated[dict, InjectedState], campos: list[str] | None = None,
+                                   ignorar_recorte: bool = False) -> tuple[str, list[dict]]:
     """Compara a frequência de características entre os Reels de alto engajamento (top 10%) e um grupo de
     controle. Use para saber O QUE aparece mais (ou menos) no top. `campos` limita a comparação (ex.:
     ["duracao_faixa", "formato_video"]); sem campos, compara os principais. O recorte do pedido (segmento,
-    faixa, período) é aplicado automaticamente.
+    faixa, período) é aplicado automaticamente; com ignorar_recorte=true, consulta a amostra inteira (útil
+    quando o recorte tem poucos Reels).
 
     Campos disponíveis: duracao_faixa, formato_video, tipo_hook, hook_visual, tema_principal, pilar_impulso,
     segmento_publico, tem_rosto, pessoa_em_cena, prova_social, texto_na_tela, tom, usa_linguagem_regional,
     tem_cta, tipo_cta, oferta_ou_beneficio_explicito, convite_participacao, abordagem, fala_de_negocio,
     tem_data_comemorativa, ritmo_cortes, legenda_tamanho."""
-    linhas = consultar_caracteristicas(campos, **_do_estado(estado))
+    recorte = {} if ignorar_recorte else _do_estado(estado)
+    linhas = consultar_caracteristicas(campos, **recorte)
     if not linhas:
         return "Nenhum Reel no recorte pedido.", []
     ordem = sorted(linhas, key=lambda a: (ORDEM_ROBUSTEZ[a["robustez"]], -abs(a["dif_pp"])))
     texto = [f"Recorte: {linhas[0]['recorte'] or 'amostra inteira'} (top × controle; robustez entre colchetes)"]
-    texto += [f"- {a['campo']}={a['valor']}: {a['descricao']}, lift {a['lift']} [{a['robustez']}, n_top={a['n_top']}]"
+    texto += [f"- {id_achado(a)}: {a['descricao']}, lift {a['lift']} [{a['robustez']}, n_top={a['n_top']}]"
               for a in ordem[:25]]
     return "\n".join(texto), linhas
 
 
 @tool("buscar_referencias", response_format="content_and_artifact")
-def buscar_referencias_tool(estado: Annotated[dict, InjectedState], caracteristicas: dict[str, str] | None = None,
+def buscar_referencias_tool(estado: Annotated[dict, InjectedState], caracteristicas: list[str] | None = None,
                             n: int = 5) -> tuple[str, list[dict]]:
     """Busca Reels REAIS do grupo de alto engajamento que tenham as características pedidas, para citar como
-    referência. `caracteristicas` mapeia campo para valor, como aparecem em consultar_caracteristicas (ex.:
-    {"duracao_faixa": "mais_90s", "formato_video": "explicativo"}). Devolve até `n` Reels (máx. 8), com link
+    referência. `caracteristicas` é uma lista de "campo=valor", como aparecem em consultar_caracteristicas
+    (ex.: ["duracao_faixa=mais_90s", "formato_video=explicativo"]). Devolve até `n` Reels (máx. 8), com link
     e métricas. O recorte do pedido é aplicado automaticamente."""
-    refs = buscar_referencias(caracteristicas, min(n, 8), **_do_estado(estado))
+    pares = dict(c.split(" [")[0].split("=", 1) for c in caracteristicas or [] if "=" in c)
+    refs = buscar_referencias(pares, min(n, 8), **_do_estado(estado))
     if not refs:
         return "Nenhum Reel do top com todas essas características; tente com menos características.", []
     texto = [f"- {r['shortCode']} (@{r['perfil']}, {r['faixa']}, {r['duracao_s']:.0f} s, "
