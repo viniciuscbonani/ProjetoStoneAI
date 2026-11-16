@@ -49,11 +49,22 @@ Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
 
 Métrica principal: **taxa de engajamento = (curtidas + comentários) ÷ seguidores**.
 
-## Estado da análise (provisório; fechamento na #17)
-- Reels com **mais de 90 s**: 32% no top × 16% no controle (lift 1,96; robusto). **30–60 s** aparecem menos (21% × 31%).
-- Formato **explicativo** (20% × 9%) e gancho de **curiosidade** (36% × 28%): diferenças frágeis.
-- Sem diferença clara: convite à participação, dor real, motivacional genérica, CTA, prova social e
-  comentários com intenção de contato (4,8% × 4,6%).
+## Achados finais (#17, fechados em 16/11)
+Lista oficial para playbook, README e slides: `data/processed/achados_finais.csv` e
+`data/processed/perfis_destaque.csv`, gerados por `scripts/achados_finais.py` (rodar de novo se o lift mudar).
+Teste extra de concentração: os 6 criadores com mais Reels no top somam 37% do top; cada achado foi
+recalculado sem eles (coluna `mantem_sem_6_maiores`).
+- **Diferença clara** (mantém sem os 6): **mais de 90 s** (32% × 16%, 2× mais comum no top) e **30–60 s**
+  aparecendo menos (21% × 31%).
+- **Indícios**: gancho de **curiosidade** (36% × 28%) e de **polêmica** (5% × 2%, raro) mantêm sem os 6;
+  formato **explicativo** (20% × 9%) e **data comemorativa** aparecendo menos (4% × 10%, ao contrário dos
+  anúncios da Stone) **dependem dos maiores criadores** e somem sem eles.
+- **Hipóteses da Stone sem diferença** nos Reels orgânicos (e seguem assim sem os 6): pessoas reais/rosto,
+  dor real, frase motivacional genérica, CTA, prova social, histórias reais e comentários com intenção de
+  contato (4,8% × 4,6%: engajar mais não traz mais pedidos de contato). Convite à participação: só 3% dos
+  Reels, poucos dados.
+- **Perfis em destaque**: 15 criadores com mais Reels no top; 4 com ocultação parcial de curtidas
+  (@fabio.morassi, @larice_, @caitomaiaoficial, @karolinebragaf), cuja taxa pode estar distorcida.
 - Confiabilidade dos campos: bons — tem_rosto, tem_cta, tipo_cta, tema_principal, fala_de_negocio,
   formato_video; moderados — abordagem, tipo_hook; **fraco — criador_e_empreendedor_real (não usar)**.
 
