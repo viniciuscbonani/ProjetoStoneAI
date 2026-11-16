@@ -8,7 +8,7 @@ profiles e warnings são acréscimos do projeto.
 from datetime import date
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 Modo = Literal["analisar", "recomendar", "gerar_criativo", "avaliar"]
 Segmento = Literal["alimentacao", "beleza", "varejo", "servicos"]
@@ -33,6 +33,12 @@ class Entrada(BaseModel):
     filters: Filtros | None = None
     video_path: str | None = Field(None, description="vídeo a avaliar (modo avaliar)")
     roteiro: str | None = Field(None, description="roteiro em texto a avaliar, sem vídeo (modo avaliar)")
+
+    @model_validator(mode="after")
+    def _avaliar_tem_material(self):
+        if self.mode == "avaliar" and not (self.video_path or (self.roteiro and self.roteiro.strip())):
+            raise ValueError("o modo avaliar precisa de video_path ou roteiro")
+        return self
 
 
 class Achado(BaseModel):
@@ -111,9 +117,12 @@ class Ponto(BaseModel):
 
 
 class Avaliacao(BaseModel):
+    fonte: Literal["video", "roteiro"]
     leitura: dict[str, str | bool | int | float] = Field(description="como o agente leu o vídeo ou roteiro")
     pontos_fortes: list[Ponto]
     pontos_a_melhorar: list[Ponto]
+    sem_efeito: list[Ponto] = Field(default_factory=list,
+                                    description="o que o vídeo tem, mas não diferencia o top (não precisa mudar)")
 
 
 class Saida(BaseModel):

@@ -5,6 +5,7 @@ a comparação top x controle em recortes (segmento, faixa, período), recalcula
 bootstrap por perfil do lift.py.
 """
 
+import csv
 import json
 import random
 import sqlite3
@@ -101,6 +102,37 @@ def vezes(lift: float | None) -> str:
     return f"{1 / lift:.1f}× menos comum no top".replace(".", ",") if lift > 0 else "não aparece no top"
 
 
+@cache
+def depende_de_poucos() -> frozenset[str]:
+    """Achados (campo=valor) que perdem a força sem os 6 criadores com mais Reels no top, segundo
+    scripts/achados_finais.py (coluna mantem_sem_6_maiores)."""
+    arq = RAIZ / "data" / "processed" / "achados_finais.csv"
+    if not arq.exists():
+        return frozenset()
+    return frozenset(f"{r['campo']}={r['valor']}" for r in csv.DictReader(open(arq))
+                     if r["robustez"] in ("robusto", "fragil") and r["mantem_sem_6_maiores"] == "False")
+
+
+def faixa_duracao(s: float) -> str:
+    """Mesmas faixas do lift.py."""
+    for limite, nome in ((15, "ate_15s"), (30, "15_30s"), (60, "30_60s"), (90, "60_90s")):
+        if s <= limite:
+            return nome
+    return "mais_90s"
+
+
+@cache
+def limiares_ritmo() -> tuple[float, float]:
+    """Tercis de cortes por minuto na amostra (lento | medio | rapido), como no lift.py."""
+    cpm = sorted(r["cortes_por_minuto"] for r in todos_reels())
+    return cpm[len(cpm) // 3], cpm[2 * len(cpm) // 3]
+
+
+def ritmo_cortes(cortes_por_minuto: float) -> str:
+    t1, t2 = limiares_ritmo()
+    return "lento" if cortes_por_minuto <= t1 else "medio" if cortes_por_minuto <= t2 else "rapido"
+
+
 def achados(campos: list[str] | None = None) -> list[dict]:
     """Achados do lift na amostra inteira (tabela achados)."""
     linhas = []
@@ -113,7 +145,7 @@ def achados(campos: list[str] | None = None) -> list[dict]:
                        "freq_top": f("freq_top"), "freq_controle": f("freq_controle"), "dif_pp": f("dif_pp"),
                        "lift": f("lift"), "ic95_min": f("ic95_min"), "ic95_max": f("ic95_max"),
                        "n_top": int(r["n_top"]), "n_controle": int(r["n_controle"]), "robustez": r["robustez"],
-                       "recorte": None})
+                       "recorte": None, "depende_de_poucos": f"{r['campo']}={r['valor']}" in depende_de_poucos()})
     return linhas
 
 

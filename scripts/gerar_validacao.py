@@ -14,10 +14,12 @@ import base64
 import csv
 import html
 import json
+import sys
 import random
 from pathlib import Path
 
-from rubrica import Anotacao
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from agente.rubrica import Anotacao
 
 RAIZ = Path(__file__).resolve().parent.parent
 N_POR_GRUPO = 25

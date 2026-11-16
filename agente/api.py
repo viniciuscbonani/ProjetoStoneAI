@@ -1,11 +1,12 @@
 """API HTTP do agente, usada pelo front (web/).
 
 Rotas:
-- POST /consultas: roda o agente (analisar | recomendar) e devolve a Saida
+- POST /consultas: roda o agente (analisar | recomendar | gerar_criativo) e devolve a Saida
 - GET /panorama: achados do lift e perfis em destaque, sem LLM
 - GET /reels/{shortCode} e /reels/{shortCode}/quadros/{nome}: detalhe e quadros de um Reel da base
 - GET /execucoes e /execucoes/{run_id}: histórico, lido do log do agente
 - POST /imagens e GET /imagens/{run_id}: imagens dos criativos (Cloudflare Workers AI), geradas sob demanda
+- POST /avaliacoes e GET /avaliacoes/{id}: modo avaliar (vídeo ou roteiro), em segundo plano, com progresso
 
 Uso:
     .venv/bin/uvicorn agente.api:app --port 8000
@@ -13,13 +14,16 @@ Uso:
 
 import json
 import re
+import threading
+import uuid
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from langchain_google_genai.chat_models import GoogleRateLimitError
 from pydantic import BaseModel
 
 from . import IMPLEMENTADOS, dados, executar, imagens
+from .avaliacao import salvar_upload
 from .contrato import Entrada, Saida
 from .registro import LOG
 
@@ -147,3 +151,65 @@ def imagem(run_id: str, nome: str) -> FileResponse:
     if not RUN_ID.match(run_id) or not ARQUIVO_IMAGEM.match(nome) or not caminho.exists():
         raise HTTPException(404, "imagem não encontrada")
     return FileResponse(caminho, media_type="image/jpeg")
+
+
+# ---------------------------------------------------------------- avaliar (em segundo plano)
+
+# O aviso chega quando um nó termina; a tela mostra a etapa seguinte, que é a que está rodando.
+PROXIMA_ETAPA = {"ler": "Comparando com os achados da base", "comparar": "Escrevendo os pontos fortes e a melhorar",
+                 "avaliador": "Revisando", "revisor": "Finalizando", "montar_saida": "Pronto"}
+TAMANHO_MAXIMO = 300 * 1024 * 1024
+_avaliacoes: dict[str, dict] = {}
+_trava = threading.Lock()
+
+
+def _rodar_avaliacao(id_: str, entrada: dict) -> None:
+    def avancar(no: str) -> None:
+        with _trava:
+            _avaliacoes[id_]["etapa"] = PROXIMA_ETAPA.get(no, no)
+
+    with _trava:
+        _avaliacoes[id_]["etapa"] = ("Lendo o vídeo: quadros, transcrição e rubrica (1 a 3 min)"
+                                     if entrada.get("video_path") else "Lendo o roteiro")
+    try:
+        saida = executar(entrada, ao_avancar=avancar)
+        with _trava:
+            _avaliacoes[id_].update(pronto=True, etapa="Pronto", saida=saida.model_dump(mode="json"))
+    except Exception as e:  # o erro vai para a tela e para o log do agente
+        with _trava:
+            _avaliacoes[id_].update(pronto=True, erro=f"{type(e).__name__}: {str(e)[:300]}")
+
+
+@app.post("/avaliacoes")
+def criar_avaliacao(query: str = Form("Avaliar meu vídeo"), segment: str | None = Form(None),
+                    roteiro: str | None = Form(None), arquivo: UploadFile | None = File(None)) -> dict:
+    """Recebe um vídeo (arquivo) ou um roteiro em texto e começa a avaliação; o front consulta o progresso em
+    GET /avaliacoes/{id}. A leitura do vídeo leva de 1 a 3 minutos (transcrição local + Gemini)."""
+    entrada = {"mode": "avaliar", "query": query or "Avaliar meu vídeo", "segment": segment or None}
+    if arquivo is not None and arquivo.filename:
+        conteudo = arquivo.file.read(TAMANHO_MAXIMO + 1)
+        if len(conteudo) > TAMANHO_MAXIMO:
+            raise HTTPException(413, "vídeo maior que 300 MB")
+        entrada["video_path"] = str(salvar_upload(arquivo.filename, conteudo))
+    elif roteiro and roteiro.strip():
+        entrada["roteiro"] = roteiro
+    else:
+        raise HTTPException(422, "envie um vídeo ou um roteiro")
+    try:
+        Entrada.model_validate(entrada)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    id_ = uuid.uuid4().hex[:12]
+    with _trava:
+        _avaliacoes[id_] = {"id": id_, "pronto": False, "etapa": "Na fila", "erro": None, "saida": None,
+                            "fonte": "video" if "video_path" in entrada else "roteiro"}
+    threading.Thread(target=_rodar_avaliacao, args=(id_, entrada), daemon=True).start()
+    return {"id": id_}
+
+
+@app.get("/avaliacoes/{id_}")
+def ver_avaliacao(id_: str) -> dict:
+    with _trava:
+        if id_ not in _avaliacoes:
+            raise HTTPException(404, "avaliação não encontrada (a API pode ter sido reiniciada)")
+        return dict(_avaliacoes[id_])

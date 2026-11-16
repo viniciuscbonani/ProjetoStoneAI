@@ -32,7 +32,7 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 ## Pipeline (scripts em `scripts/`, na ordem)
 `coleta_esdrasdw.py` → `curtidas_ocultas.py` / `confirmar_ocultas.py` → `preparar_base.py --min-views 300`
 → `sortear_amostra.py` → `processar_midia.py` → `transcrever_paralelo.sh 7 2` → `coleta_comentarios.py`
-→ `anotar_gemini.py` (rubrica em `rubrica.py`) → `lift.py` → `gerar_validacao.py` / `concordancia.py`
+→ `anotar_gemini.py` (rubrica em `agente/rubrica.py`) → `lift.py` → `gerar_validacao.py` / `concordancia.py`
 → `indexar_base.py` (gera `data/processed/agente.db`, a base do agente; rodar de novo se a anotação ou o lift mudarem).
 Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
 
@@ -41,7 +41,7 @@ Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
 |---|---|
 | `data/processed/base.csv` | 7.561 Reels; `no_ranking=True` em 4.719. Colunas: shortCode, url, perfil, publicado_em, curtidas, comentarios, visualizacoes, duracao_s, seguidores, faixa (micro/medio/grande), tipo, nicho, taxa_engajamento, taxa_visualizacoes, taxa_comentarios, motivo_fora, legenda |
 | `data/processed/amostra.csv` | 944 Reels: `grupo` = top (472, 10% de maior taxa) ou controle (472, sorteado e estratificado por faixa) |
-| `data/processed/anotacoes.jsonl` | Anotação do Gemini por Reel da amostra; usar só `versao_rubrica == "v2"`. Campos na classe `Anotacao` de `scripts/rubrica.py` |
+| `data/processed/anotacoes.jsonl` | Anotação do Gemini por Reel da amostra; usar só `versao_rubrica == "v2"`. Campos na classe `Anotacao` de `agente/rubrica.py` |
 | `data/processed/lift.csv` | Top × controle por campo/valor: freq_top, freq_controle, dif_pp, lift, ic95_min/max, confidence_flag, robusto_sensibilidade |
 | `data/processed/concordancia_*.csv` | Concordância da anotação (validação cruzada entre modelos) |
 | `data/midia/{shortCode}/` | 8 quadros, `transcricao.json`, `meta.json` (fora do Git) |
@@ -133,13 +133,26 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
     (mais barato) não aceita 9:16 nem referência.
 - Servidor MCP: `agente/servidor_mcp.py` com o pacote `fastmcp` (o SDK `mcp` 2.x renomeou o FastMCP para
   MCPServer); ferramentas analisar, recomendar e gerar_criativo. Rodar com `.venv/bin/python -m agente.servidor_mcp`.
-- Modo **avaliar** (#27, acréscimo do projeto ao documento): a pessoa envia o próprio vídeo, ou só o roteiro
-  em texto, e recebe pontos fortes e pontos a melhorar. Fluxo: `ler_video` (quadros, cortes, transcrição
-  local e rubrica v2) → comparação por código com os achados → redator, cada ponto com achado, robustez e
-  Reels de referência. Sem nota de engajamento (modelo preditivo está fora do escopo); fala-se em aderência
-  aos padrões observados. Desenhado no FigJam (seção Agente).
+- Modo **avaliar** (#27, acréscimo do projeto ao documento; `agente/avaliacao.py`): a pessoa envia o próprio
+  vídeo, ou só o roteiro em texto, e recebe pontos fortes, pontos a melhorar e o que não precisa mudar. Caminho
+  fixo, sem orquestrador: ler → comparar → avaliador → revisor → saída.
+  - **ler** usa `agente/midia.py`, a mesma leitura dos Reels da amostra (quadros e cortes com ffmpeg, transcrição
+    com faster-whisper local, rubrica v2 no flash-lite). `processar_midia.py`, `transcrever.py` e
+    `anotar_gemini.py` usam essas mesmas funções. Roteiro: só a rubrica, duração estimada (2,5 palavras/s) e
+    campos visuais fora da comparação.
+  - **comparar** (código): o que o vídeo tem e aparece mais no top (robusto/frágil) é forte; o que aparece menos,
+    ou a falta da melhor alternativa do mesmo campo, é a melhorar; "sem diferença" vai para "não precisa mudar".
+    Cada ponto leva 2 Reels de exemplo. O LLM só redige o texto de cada ponto. Sem nota nem previsão.
+  - Tempo: 40 s a 3 min por vídeo (transcrição e esperas quando o Gemini responde 503); roteiro, ~30 s.
+  - API: `POST /avaliacoes` (vídeo ou roteiro, em segundo plano) e `GET /avaliacoes/{id}` (etapa atual). Vídeos
+    em `data/uploads/` (fora do Git). Testado com vídeos reconstruídos de Reels da base (quadros + áudio): a
+    leitura bate com a anotação original em 9 de 10 campos.
+  - A redação (flash) volta para o flash-lite também quando o flash está sobrecarregado (503), não só sem cota.
+- Achados que dependem de poucos criadores (`dados.depende_de_poucos()`, de `achados_finais.csv`: explicativo e
+  data comemorativa) chegam ao redator, ao gerador e ao avaliador com esse aviso.
 - API e front básico (para testar): `.venv/bin/uvicorn agente.api:app --port 8000` e, em `web/`,
   `npm install && npm run dev` (http://localhost:5173; o Vite repassa `/api` para a porta 8000). Front em
-  React + Vite + Mantine 9: telas Perguntar, Panorama e Histórico, e gaveta com os quadros de cada Reel.
+  React + Vite + Mantine 9: telas Perguntar (os 4 modos), Panorama e Histórico, e gaveta com os quadros de cada
+  Reel.
 - Uso: `from agente import executar; executar({"mode": "analisar", "query": "..."})`. Log em
   `data/logs/agente.jsonl`.

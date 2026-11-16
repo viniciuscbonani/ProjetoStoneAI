@@ -13,22 +13,24 @@ Uso:
 import argparse
 import csv
 import json
+import sys
 import os
 import time
 from pathlib import Path
 
 from dotenv import load_dotenv
 from google import genai
-from google.genai import errors, types
+from google.genai import errors
 from pydantic import ValidationError
 
-from rubrica import PROMPT, VERSAO, Anotacao
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from agente import midia  # noqa: E402
+from agente.rubrica import VERSAO
 
 RAIZ = Path(__file__).resolve().parent.parent
 MIDIA = RAIZ / "data" / "midia"
 SAIDA = RAIZ / "data" / "processed" / "anotacoes.jsonl"
 MODELO_PADRAO = "gemini-3.5-flash-lite"
-ESPERA_429 = [30, 60, 120, 300]
 
 
 def pronto(sc: str) -> bool:
@@ -39,38 +41,8 @@ def pronto(sc: str) -> bool:
     return (pasta / "transcricao.json").exists() or not json.loads(meta.read_text())["tem_audio"]
 
 
-def montar_conteudo(reel: dict) -> list:
-    pasta = MIDIA / reel["shortCode"]
-    meta = json.loads((pasta / "meta.json").read_text())
-    trans = json.loads((pasta / "transcricao.json").read_text()) if (pasta / "transcricao.json").exists() else {}
-    texto = (f"{PROMPT}\n\nDuração: {meta['duracao_s']:.0f} s\n"
-             f"Legenda: {reel['legenda'] or '(sem legenda)'}\n"
-             f"Fala nos 3 primeiros segundos: {trans.get('gancho_falado') or '(sem fala)'}\n"
-             f"Transcrição completa: {trans.get('texto') or '(sem fala)'}\n\nQuadros:")
-    partes = [texto]
-    for nome, t in meta["quadros"].items():
-        partes.append(f"[{nome}, {t:.1f} s]")
-        partes.append(types.Part.from_bytes(data=(pasta / f"q_{nome}.jpg").read_bytes(), mime_type="image/jpeg"))
-    return partes
-
-
 def anotar(client: genai.Client, modelo: str, reel: dict) -> dict:
-    for espera in ESPERA_429 + [None]:
-        try:
-            resp = client.models.generate_content(
-                model=modelo, contents=montar_conteudo(reel),
-                config=types.GenerateContentConfig(response_mime_type="application/json",
-                                                   response_schema=Anotacao, temperature=0),
-            )
-            anot = Anotacao.model_validate_json(resp.text)
-            return anot.model_dump()
-        except errors.APIError as e:
-            # 429 = limite de cota por minuto; 503 = modelo sobrecarregado. Os dois passam com espera.
-            if e.code not in (429, 503) or espera is None:
-                raise
-            print(f"  {e.code}, esperando {espera}s")
-            time.sleep(espera)
-    raise RuntimeError("inalcançável")
+    return midia.anotar(client, modelo, MIDIA / reel["shortCode"], reel["legenda"])
 
 
 def main() -> None:

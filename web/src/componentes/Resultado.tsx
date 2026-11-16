@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { useAbrirReel } from "../App";
 import { CONFIANCA, num, pct, ROBUSTEZ, vezes } from "../formato";
 import type { Achado, Confianca, Saida } from "../tipos";
+import CartaoAvaliacao from "./CartaoAvaliacao";
 import CartaoCriativo from "./CartaoCriativo";
 import CartaoReel from "./CartaoReel";
 
@@ -59,16 +60,18 @@ const comLinks = (texto: string) => texto.replace(/\[([A-Za-z0-9_-]{9,})\]/g, "[
 
 export default function Resultado({ saida }: { saida: Saida }) {
   const abrirReel = useAbrirReel();
-  const comDiferenca = saida.findings.filter((a) => a.robustez !== "sem_diferenca");
+  // Na avaliação, os achados já aparecem dentro de cada ponto; as listas gerais ficam só para os outros modos.
+  const findings = saida.mode === "avaliar" ? [] : saida.findings;
+  const comDiferenca = findings.filter((a) => a.robustez !== "sem_diferenca");
   const mais = comDiferenca.filter((a) => a.dif_pp > 0);
   const menos = comDiferenca.filter((a) => a.dif_pp < 0);
-  const semDiferenca = saida.findings.filter((a) => a.robustez === "sem_diferenca");
+  const semDiferenca = findings.filter((a) => a.robustez === "sem_diferenca");
 
   return (
     <Stack gap="lg">
       <Card withBorder padding="lg">
         <Group justify="space-between" mb="sm">
-          <Title order={4}>{saida.mode === "gerar_criativo" ? "Por que estes criativos" : "Resposta"}</Title>
+          <Title order={4}>{{ gerar_criativo: "Por que estes criativos", avaliar: "Resumo da avaliação" }[saida.mode as string] ?? "Resposta"}</Title>
           <Group gap="xs">
             <Text size="xs" c="dimmed">Confiança</Text>
             <SeloConfianca confianca={saida.confidence_flag} />
@@ -93,6 +96,8 @@ export default function Resultado({ saida }: { saida: Saida }) {
         ))}
         <Text size="xs" c="dimmed" mt="sm">Execução {saida.run_id} · padrões observados, não garantia de resultado</Text>
       </Card>
+
+      {saida.avaliacao && <CartaoAvaliacao a={saida.avaliacao} />}
 
       {saida.creatives?.length > 0 && (
         <Stack gap="md">

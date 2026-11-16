@@ -91,12 +91,37 @@ export interface ImagemGerada {
   revisao: RevisaoImagem | null;
 }
 
+export interface Ponto {
+  texto: string;
+  achado: string;
+  robustez: Robustez;
+  referencias: string[];
+}
+
+export interface Avaliacao {
+  fonte: "video" | "roteiro";
+  leitura: Record<string, string | number | boolean>;
+  pontos_fortes: Ponto[];
+  pontos_a_melhorar: Ponto[];
+  sem_efeito: Ponto[];
+}
+
+export interface EstadoAvaliacao {
+  id: string;
+  pronto: boolean;
+  etapa: string;
+  erro: string | null;
+  fonte: "video" | "roteiro";
+  saida: Saida | null;
+}
+
 export interface Saida {
   run_id: string;
   mode: Modo;
   findings: Achado[];
   reference_posts: ReferencePost[];
   creatives: Criativo[];
+  avaliacao?: Avaliacao | null;
   profiles: Perfil[];
   confidence_flag: Confianca;
   explanation: string;

@@ -23,32 +23,24 @@ import argparse
 import csv
 import json
 import os
-import re
-import subprocess
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
-import imageio_ffmpeg
+import sys
+
 from apify_client import ApifyClient
 from dotenv import load_dotenv
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from agente import midia  # noqa: E402  (extração compartilhada com o modo avaliar do agente)
 
 RAIZ = Path(__file__).resolve().parent.parent
 MIDIA = RAIZ / "data" / "midia"
 LINKS = RAIZ / "data" / "interim" / f"links_videos_{date.today().isoformat()}.json"
-FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
-LIMIAR_CENA = 0.3
 DOWNLOADS_SIMULTANEOS = 6
-
-
-def instantes(duracao: float) -> dict[str, float]:
-    fim = max(duracao, 1.0)
-    pontos = {"gancho_0s": 0.0, "gancho_1s": 1.0, "gancho_2s": 2.0, "gancho_3s": 3.0,
-              "meio_40": 0.4 * fim, "meio_60": 0.6 * fim,
-              "final_2s": fim - 2.0, "final_0s": fim - 0.5}
-    return {k: round(min(max(t, 0.0), fim - 0.1), 2) for k, t in pontos.items()}
 
 
 def links_novos(amostra: list[dict]) -> dict[str, str]:
@@ -74,10 +66,6 @@ def links_novos(amostra: list[dict]) -> dict[str, str]:
     return links
 
 
-def ffmpeg(*args: str) -> subprocess.CompletedProcess:
-    return subprocess.run([FFMPEG, "-hide_banner", "-y", *args], capture_output=True, text=True)
-
-
 def processar(reel: dict, url: str) -> dict:
     pasta = MIDIA / reel["shortCode"]
     pasta.mkdir(parents=True, exist_ok=True)
@@ -87,19 +75,7 @@ def processar(reel: dict, url: str) -> dict:
         f.write(r.read())
 
     try:
-        ffmpeg("-i", str(video), "-vn", "-ac", "1", "-ar", "16000", "-c:a", "aac", "-b:a", "48k", str(pasta / "audio.m4a"))
-        quadros = {}
-        for nome, t in instantes(float(reel["duracao_s"] or 0)).items():
-            saida = pasta / f"q_{nome}.jpg"
-            ffmpeg("-ss", str(t), "-i", str(video), "-frames:v", "1", "-vf", "scale=-2:640", "-q:v", "4", str(saida))
-            if saida.exists():
-                quadros[nome] = t
-        cenas = ffmpeg("-i", str(video), "-vf", f"select='gt(scene,{LIMIAR_CENA})',showinfo", "-an", "-f", "null", "-")
-        cortes = len(re.findall(r"pts_time:", cenas.stderr))
-        meta = {"shortCode": reel["shortCode"], "duracao_s": float(reel["duracao_s"] or 0),
-                "quadros": quadros, "cortes": cortes, "tem_audio": (pasta / "audio.m4a").exists()}
-        (pasta / "meta.json").write_text(json.dumps(meta, ensure_ascii=False))
-        return meta
+        return midia.extrair(video, pasta, float(reel["duracao_s"] or 0))
     finally:
         video.unlink(missing_ok=True)
 

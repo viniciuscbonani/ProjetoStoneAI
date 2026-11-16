@@ -19,7 +19,7 @@ from typing import Annotated, TypedDict
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_google_genai.chat_models import GoogleRateLimitError
+from langchain_google_genai.chat_models import GoogleAPIError, GoogleRateLimitError
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 
@@ -95,6 +95,9 @@ class Estado(TypedDict, total=False):
     campos_pergunta: list[str]  # campos que o orquestrador consultou ou buscou explicitamente
     redacao: Redacao | None
     rascunho: Criativos | None
+    leitura: dict  # modo avaliar: como o vídeo ou roteiro foi lido
+    pontos: list[dict]  # modo avaliar: pontos decididos por código
+    redacao_avaliacao: BaseModel | None
     problemas: list[str]
     redacoes: int
     tokens: int
@@ -285,6 +288,8 @@ def _contexto(estado: Estado) -> str:
     def linha(i: str, a: dict) -> str:
         comparacao = ("diferença não confiável entre top e controle" if a["robustez"] == "sem_diferenca"
                       else dados.vezes(a["lift"]))
+        if a.get("depende_de_poucos"):
+            comparacao += " (atenção: o sinal depende de poucos criadores e some sem os 6 maiores; diga isso)"
         return (f"- {i}: {a['descricao']}; {comparacao}; selo: {a['robustez']} (n_top={a['n_top']})"
                 + (f"; exemplos: {', '.join(f'[{s}]' for s in exemplos[id_achado(a)])}"
                    if exemplos.get(id_achado(a)) else ""))
@@ -320,20 +325,23 @@ def _contexto(estado: Estado) -> str:
     return "\n".join(linhas)
 
 
-def _escrever(estado: Estado, no: str, esquema: type[BaseModel], tarefa: str) -> tuple[BaseModel | None, dict]:
-    """Chama o modelo de redação com saída estruturada; se a cota dele acabar, segue com o modelo padrão."""
+def _escrever(estado: Estado, no: str, esquema: type[BaseModel], tarefa: str,
+              contexto: str | None = None) -> tuple[BaseModel | None, dict]:
+    """Chama o modelo de redação com saída estruturada; se a cota dele acabar ou ele estiver sobrecarregado
+    (503), segue com o modelo padrão."""
     sistema = f"{PERSONA}\n\n{REGRAS_DADOS}\n\nTarefa ({estado['entrada'].mode}): {tarefa}"
-    pedido = _contexto(estado)
+    pedido = contexto or _contexto(estado)
     if estado.get("problemas"):
         pedido += "\n\nCORRIJA na nova versão:\n" + "\n".join(f"- {p}" for p in estado["problemas"])
     mensagens = [SystemMessage(sistema), HumanMessage(pedido)]
     modelo = MODELO_REDATOR
     try:
         r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
-    except GoogleRateLimitError:
-        if modelo == MODELO:
+    except (GoogleRateLimitError, GoogleAPIError) as e:
+        indisponivel = isinstance(e, GoogleRateLimitError) or "503" in str(e) or "UNAVAILABLE" in str(e)
+        if modelo == MODELO or not indisponivel:
             raise
-        modelo = MODELO  # cota do modelo do redator esgotada: segue com o modelo padrão
+        modelo = MODELO  # cota esgotada ou modelo sobrecarregado: segue com o modelo padrão
         r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
     return r["parsed"], {"redacoes": estado.get("redacoes", 0) + 1,
                          "tokens": estado.get("tokens", 0) + _tokens(r["raw"]), **_contar(estado, no, modelo)}
@@ -386,6 +394,9 @@ IDS_POR_EXTENSO = r",?\s*conforme(?: visto)?\s+n?o\s+achado A\d{1,2}\b"
 def revisar(estado: Estado) -> list[str]:
     if estado["entrada"].mode == "gerar_criativo":
         return revisar_criativos(estado)
+    if estado["entrada"].mode == "avaliar":
+        from .avaliacao import revisar_avaliacao
+        return revisar_avaliacao(estado)
     red = estado.get("redacao")
     if red is None:
         return ["a resposta não veio no formato pedido"]
@@ -472,7 +483,8 @@ def revisor(estado: Estado) -> dict:
             **_contar(estado, "revisor_tom", MODELO)}
 
 
-ESCRITOR_POR_MODO = {"analisar": "redator", "recomendar": "redator", "gerar_criativo": "gerador"}
+ESCRITOR_POR_MODO = {"analisar": "redator", "recomendar": "redator", "gerar_criativo": "gerador",
+                     "avaliar": "avaliador"}
 
 
 def decidir_revisao(estado: Estado) -> str:
@@ -562,6 +574,9 @@ def _saida_criativos(estado: Estado) -> Saida:
 def montar_saida(estado: Estado) -> dict:
     if estado["entrada"].mode == "gerar_criativo":
         return {"saida": _saida_criativos(estado)}
+    if estado["entrada"].mode == "avaliar":
+        from .avaliacao import saida_avaliacao
+        return {"saida": saida_avaliacao(estado)}
     red = estado.get("redacao") or Redacao(explanation="Não foi possível redigir a resposta.", achados_citados=[],
                                             achados_principais=[], referencias_citadas=[])
     vis = visiveis(estado)

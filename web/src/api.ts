@@ -1,4 +1,4 @@
-import type { Entrada, ExecucaoResumo, ImagemGerada, Panorama, ReelDetalhe, Saida } from "./tipos";
+import type { Entrada, EstadoAvaliacao, ExecucaoResumo, ImagemGerada, Panorama, ReelDetalhe, Saida } from "./tipos";
 
 async function chamar<T>(caminho: string, init?: RequestInit): Promise<T> {
   const resp = await fetch(`/api${caminho}`, init);
@@ -27,6 +27,8 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run_id: runId, criativo, indice }),
     }),
+  avaliar: (dados: FormData) => chamar<{ id: string }>("/avaliacoes", { method: "POST", body: dados }),
+  estadoAvaliacao: (id: string) => chamar<EstadoAvaliacao>(`/avaliacoes/${id}`),
   imagens: (runId: string) => chamar<Record<string, ImagemGerada>>(`/imagens/${runId}`),
 };
 
