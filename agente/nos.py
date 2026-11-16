@@ -17,6 +17,7 @@ from typing import Annotated, TypedDict
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai.chat_models import GoogleRateLimitError
 from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 
@@ -26,8 +27,10 @@ from .ferramentas import FERRAMENTAS, buscar_referencias, id_achado
 from .persona import PERSONA, REGRAS_DADOS
 
 # flash-lite: ~500 requisições/dia no plano grátis; o gemini-3.5-flash tem só 20/dia, pouco para 4 a 7
-# chamadas por execução.
+# chamadas por execução. O redator pode usar outro modelo (AGENTE_MODELO_REDATOR); se a cota dele acabar,
+# volta para o MODELO.
 MODELO = os.environ.get("AGENTE_MODELO", "gemini-3.5-flash-lite")
+MODELO_REDATOR = os.environ.get("AGENTE_MODELO_REDATOR", MODELO)
 MAX_CHAMADAS = 5
 MAX_REDACOES = 2
 EXEMPLOS_ACHADOS = 4  # achados que aparecem mais no top com exemplos buscados por código
@@ -56,14 +59,22 @@ class Estado(TypedDict, total=False):
     problemas: list[str]
     redacoes: int
     tokens: int
+    chamadas_llm: dict[str, int]  # por nó, para o log
+    modelos: list[str]  # modelo de cada chamada, na ordem
     saida: Saida
 
 
 @cache
-def llm() -> ChatGoogleGenerativeAI:
+def llm(modelo: str = MODELO) -> ChatGoogleGenerativeAI:
     # Sem temperature: os modelos Gemini 3.5 usam amostragem fixa e ignoram o parâmetro.
     load_dotenv(dados.RAIZ / ".env")
-    return ChatGoogleGenerativeAI(model=MODELO, max_retries=4, google_api_key=os.environ["GEMINI_API_KEY"])
+    return ChatGoogleGenerativeAI(model=modelo, max_retries=2, google_api_key=os.environ["GEMINI_API_KEY"])
+
+
+def _contar(estado: Estado, no: str, modelo: str) -> dict:
+    chamadas = dict(estado.get("chamadas_llm", {}))
+    chamadas[no] = chamadas.get(no, 0) + 1
+    return {"chamadas_llm": chamadas, "modelos": [*estado.get("modelos", []), modelo]}
 
 
 def _tokens(msg) -> int:
@@ -107,7 +118,8 @@ def orquestrador(estado: Estado) -> dict:
     prompt = PROMPT_ORQUESTRADOR.format(modo=e.mode, query=e.query, recorte=_recorte(e), maximo=MAX_CHAMADAS,
                                         usadas=_chamadas(estado))
     resposta = llm().bind_tools(FERRAMENTAS).invoke([SystemMessage(prompt), *estado["messages"]])
-    return {"messages": [resposta], "tokens": estado.get("tokens", 0) + _tokens(resposta)}
+    return {"messages": [resposta], "tokens": estado.get("tokens", 0) + _tokens(resposta),
+            **_contar(estado, "orquestrador", MODELO)}
 
 
 def pediu_ferramenta(estado: Estado) -> str:
@@ -215,10 +227,17 @@ def redator(estado: Estado) -> dict:
     pedido = _contexto(estado)
     if estado.get("problemas"):
         pedido += "\n\nCORRIJA na nova versão:\n" + "\n".join(f"- {p}" for p in estado["problemas"])
-    r = llm().with_structured_output(Redacao, include_raw=True).invoke(
-        [SystemMessage(sistema), HumanMessage(pedido)])
+    mensagens = [SystemMessage(sistema), HumanMessage(pedido)]
+    modelo = MODELO_REDATOR
+    try:
+        r = llm(modelo).with_structured_output(Redacao, include_raw=True).invoke(mensagens)
+    except GoogleRateLimitError:
+        if modelo == MODELO:
+            raise
+        modelo = MODELO  # cota do modelo do redator esgotada: segue com o modelo padrão
+        r = llm(modelo).with_structured_output(Redacao, include_raw=True).invoke(mensagens)
     return {"redacao": r["parsed"], "redacoes": estado.get("redacoes", 0) + 1,
-            "tokens": estado.get("tokens", 0) + _tokens(r["raw"])}
+            "tokens": estado.get("tokens", 0) + _tokens(r["raw"]), **_contar(estado, "redator", modelo)}
 
 
 # ---------------------------------------------------------------- revisor e saída
