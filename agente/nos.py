@@ -30,7 +30,7 @@ from .persona import PERSONA, REGRAS_DADOS
 # chamadas por execução. O redator pode usar outro modelo (AGENTE_MODELO_REDATOR); se a cota dele acabar,
 # volta para o MODELO.
 MODELO = os.environ.get("AGENTE_MODELO", "gemini-3.5-flash-lite")
-MODELO_REDATOR = os.environ.get("AGENTE_MODELO_REDATOR", MODELO)
+MODELO_REDATOR = os.environ.get("AGENTE_MODELO_REDATOR", "gemini-3.5-flash")
 MAX_CHAMADAS = 5
 MAX_REDACOES = 2
 EXEMPLOS_ACHADOS = 4  # achados que aparecem mais no top com exemplos buscados por código

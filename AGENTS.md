@@ -23,8 +23,9 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 ## Ambiente
 - Python 3.12 em `.venv` (`.venv/bin/python`); dependências em `requirements.txt`.
 - Gemini no plano grátis, cota diária **por modelo**: `gemini-3.5-flash-lite` ~500/dia;
-  `gemini-3.5-flash` só **20/dia**. Anotação e agente usam o flash-lite (o agente gasta 3 a 7 chamadas por
-  execução; `AGENTE_MODELO` troca o modelo). A cota zera ~05h (horário de Brasília).
+  `gemini-3.5-flash` só **20/dia**. A anotação usa o flash-lite. O agente faz 3 a 5 chamadas por execução:
+  orquestrador no flash-lite (`AGENTE_MODELO`) e redação no flash (`AGENTE_MODELO_REDATOR`), que volta sozinha
+  para o flash-lite quando a cota do flash acaba. A cota zera ~05h (horário de Brasília).
 - ffmpeg vem do pacote `imageio-ffmpeg` (`imageio_ffmpeg.get_ffmpeg_exe()`); não há ffmpeg no sistema.
 - Processos longos: rodar desacoplados (`setsid nohup ... &`), porque a sessão pode encerrar.
 
