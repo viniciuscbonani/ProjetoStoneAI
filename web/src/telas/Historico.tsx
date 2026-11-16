@@ -2,7 +2,7 @@ import { Alert, Badge, Button, Card, Loader, Stack, Table, Text } from "@mantine
 import { useEffect, useState } from "react";
 
 import { api } from "../api";
-import Resultado, { SeloRobustez } from "../componentes/Resultado";
+import Resultado, { SeloConfianca } from "../componentes/Resultado";
 import type { ExecucaoResumo, Modo, Saida } from "../tipos";
 
 const ROTULO_MODO: Record<Modo, string> = {
@@ -46,7 +46,7 @@ export default function Historico({ ativo }: { ativo: boolean }) {
               <Table.Td><Text size="xs">{e.quando.replace("T", " ").slice(0, 16)}</Text></Table.Td>
               <Table.Td><Text size="sm">{ROTULO_MODO[e.mode]}</Text></Table.Td>
               <Table.Td><Text size="sm" lineClamp={1}>{e.query}</Text>{e.segment && <Text size="xs" c="dimmed">{e.segment}</Text>}</Table.Td>
-              <Table.Td>{e.erro ? <Badge color="red" variant="light">erro</Badge> : e.confidence_flag && <SeloRobustez robustez={e.confidence_flag} />}</Table.Td>
+              <Table.Td>{e.erro ? <Badge color="red" variant="light">erro</Badge> : e.confidence_flag && <SeloConfianca confianca={e.confidence_flag} />}</Table.Td>
               <Table.Td><Text size="xs">{Math.round(e.duracao_s)} s</Text></Table.Td>
             </Table.Tr>
           ))}

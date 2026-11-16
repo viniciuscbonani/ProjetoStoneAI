@@ -6,7 +6,7 @@ import { CartaoAchado } from "../componentes/Resultado";
 import { inteiro } from "../formato";
 import type { Panorama as TPanorama } from "../tipos";
 
-const ORDEM = { robusto: 0, fragil: 1, insuficiente: 2 };
+const ORDEM = { robusto: 0, fragil: 1, sem_diferenca: 2, insuficiente: 3 };
 
 export default function Panorama() {
   const [dados, setDados] = useState<TPanorama | null>(null);
@@ -18,7 +18,7 @@ export default function Panorama() {
   const achados = useMemo(() => {
     if (!dados) return [];
     return dados.achados
-      .filter((a) => a.dif_pp !== 0 && (filtro === "todos" || (a.robustez !== "insuficiente" && Math.abs(a.dif_pp) >= 3)))
+      .filter((a) => a.dif_pp !== 0 && (filtro === "todos" || a.robustez === "robusto" || a.robustez === "fragil"))
       .sort((a, b) => ORDEM[a.robustez] - ORDEM[b.robustez] || Math.abs(b.dif_pp) - Math.abs(a.dif_pp));
   }, [dados, filtro]);
 
@@ -40,7 +40,7 @@ export default function Panorama() {
             <Text size="sm" c="dimmed">Frequência de cada característica nos Reels de alto engajamento × controle sorteado.</Text>
           </div>
           <SegmentedControl value={filtro} onChange={setFiltro}
-            data={[{ value: "relevantes", label: "Diferenças relevantes" }, { value: "todos", label: "Todas" }]} />
+            data={[{ value: "relevantes", label: "Diferenças claras e indícios" }, { value: "todos", label: "Todas" }]} />
         </Group>
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
           {achados.map((a) => <CartaoAchado key={a.campo + a.valor} a={a} />)}

@@ -92,6 +92,15 @@ def descrever(campo: str, valor, freq_top: float, freq_controle: float) -> str:
     return f"{rotulo(campo, valor)} — {freq_top:.0%} no top × {freq_controle:.0%} no controle"
 
 
+def vezes(lift: float | None) -> str:
+    """O lift em linguagem simples: '2,0× mais comum no top' ou '1,5× menos comum no top'."""
+    if lift is None:
+        return "só aparece no top"
+    if lift >= 1:
+        return f"{lift:.1f}× mais comum no top".replace(".", ",")
+    return f"{1 / lift:.1f}× menos comum no top".replace(".", ",") if lift > 0 else "não aparece no top"
+
+
 def achados(campos: list[str] | None = None) -> list[dict]:
     """Achados do lift na amostra inteira (tabela achados)."""
     linhas = []
@@ -132,8 +141,8 @@ def filtrar(reels=None, *, grupo: str | None = None, segmento: str | None = None
 def comparar(reels: list[dict], campos: list[str], recorte: str, semente: int = 11) -> list[dict]:
     """Top x controle dentro de um recorte, com IC95 do lift por bootstrap de perfis (como no lift.py).
 
-    Não repete o teste de sensibilidade do lift; por isso um recorte nunca sai "robusto" só pelo IC:
-    o melhor que ele alcança é "fragil" quando o IC não cruza 1 (e "insuficiente" com n_top < 20)."""
+    Não repete o teste de sensibilidade do lift; por isso um recorte nunca sai "robusto": o melhor que ele
+    alcança é "fragil" (IC exclui o 1); com IC contendo o 1 é "sem_diferenca", e com n_top < 20, "insuficiente"."""
     top = [r for r in reels if r["grupo"] == "top"]
     ctl = [r for r in reels if r["grupo"] == "controle"]
     if not top or not ctl:
@@ -163,7 +172,8 @@ def comparar(reels: list[dict], campos: list[str], recorte: str, semente: int = 
                            "lift": round(ft / fc, 2) if fc else None, "ic95_min": round(ic[0], 2),
                            "ic95_max": round(ic[1], 2), "n_top": n_top,
                            "n_controle": sum(str(r[campo]) == valor for r in ctl),
-                           "robustez": "insuficiente" if n_top < MIN_N_TOP else "fragil", "recorte": recorte})
+                           "robustez": "insuficiente" if n_top < MIN_N_TOP
+                           else "sem_diferenca" if ic[0] <= 1 <= ic[1] else "fragil", "recorte": recorte})
     return linhas
 
 

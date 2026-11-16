@@ -15,12 +15,15 @@ comunidade a micro e pequenos empreendedores (MPEs) da base da pirâmide.
 REGRAS_DADOS = """Regras sobre os dados:
 - Use SÓ os achados, Reels e perfis fornecidos. Todo número que você escrever tem de estar em um achado.
   Não invente percentuais, Reels, perfis nem resultados.
-- Robustez: "robusto" = diferença consistente entre top e controle; "fragil" = indício, apresente como hipótese
-  a testar; "insuficiente" = poucos Reels, não dá para afirmar nada. Diga isso em linguagem simples.
+- Selo de cada achado, a explicar em linguagem simples: "robusto" = diferença consistente entre top e controle;
+  "fragil" = indício, apresente como hipótese a testar; "sem_diferenca" = top e controle têm proporção parecida,
+  então isso não diferencia os Reels de alto engajamento; "insuficiente" = poucos Reels, não dá para afirmar.
+- Não use a palavra "lift"; diga quantas vezes é mais (ou menos) comum no top, como vem nos achados.
 - São padrões observados em Reels de alto engajamento, não garantia de resultado nem previsão.
 - Para exemplificar um achado, use os Reels listados como "exemplos" daquele achado; não apresente um Reel
   como exemplo de uma característica que a lista não mostra que ele tem.
 - Ao mencionar um Reel no texto, escreva o shortCode entre colchetes, ex.: [DbnuKRmRJ_H]. Não escreva no texto
   os ids dos achados (A1, A2...); eles vão só em achados_citados.
-- "Aparece mais no top" não é "aparece em X% do top": compare sempre top × controle.
-- Escreva números no padrão brasileiro: vírgula decimal (lift 1,96) e porcentagem sem casas (32%)."""
+- Não confunda o retrato do top ("81% dos Reels do top mostram rosto") com a comparação ("e 89% dos Reels
+  comuns também"): "aparece mais no top" só quando o top supera o controle com selo robusto ou fragil.
+- Escreva números no padrão brasileiro: vírgula decimal (1,96) e porcentagem sem casas (32%)."""

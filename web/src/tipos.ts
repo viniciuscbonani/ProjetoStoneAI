@@ -1,7 +1,8 @@
 // Tipos espelhados de agente/contrato.py e das rotas de agente/api.py.
 
 export type Modo = "analisar" | "recomendar" | "gerar_criativo" | "avaliar";
-export type Robustez = "robusto" | "fragil" | "insuficiente";
+export type Robustez = "robusto" | "fragil" | "sem_diferenca" | "insuficiente";
+export type Confianca = "robusto" | "fragil" | "insuficiente";
 
 export interface Entrada {
   mode: Modo;
@@ -61,7 +62,7 @@ export interface Saida {
   findings: Achado[];
   reference_posts: ReferencePost[];
   profiles: Perfil[];
-  confidence_flag: Robustez;
+  confidence_flag: Confianca;
   explanation: string;
   warnings: string[];
 }
@@ -99,5 +100,5 @@ export interface ExecucaoResumo {
   segment: string | null;
   duracao_s: number;
   erro: string | null;
-  confidence_flag: Robustez | null;
+  confidence_flag: Confianca | null;
 }

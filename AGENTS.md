@@ -82,7 +82,15 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator �
 - `ferramentas.py`: `consultar_caracteristicas`, `buscar_referencias`, `perfis_em_destaque`; cada `@tool`
   devolve texto para o LLM e os dados à parte (`content_and_artifact`). `findings`, `reference_posts` e
   `profiles` são montados desses dados, nunca do texto do LLM; o revisor rejeita citação que não veio deles.
-- `confidence_flag`: robusto | fragil | insuficiente, pelo achado mais fraco entre os principais.
+- Selo de cada achado: **robusto** (IC95 do lift exclui o 1 e passa no teste de sensibilidade; 2 achados),
+  **fragil** (exclui o 1, mas não passa; 5), **sem_diferenca** (IC95 contém o 1: top e controle não se
+  distinguem; 67) e **insuficiente** (menos de 20 Reels no top; 18). No front: "Diferença clara", "Indício",
+  "Sem diferença" e "Poucos dados"; o lift aparece como "2× mais comum no top".
+- `confidence_flag` (robusto | fragil | insuficiente; no front, confiança alta/média/baixa): o achado mais
+  fraco entre os principais; um "sem diferença" conta como alta quando o IC95 fica entre 0,67 e 1,5.
+- Modo analisar responde primeiro à pergunta feita (o valor mais comum no top) e depois se isso diferencia
+  o top; os exemplos são dos valores perguntados (com e sem rosto, por exemplo). O recomendar usa só o que
+  aparece mais no top (para fazer) e menos (para evitar), sem os "sem diferença".
 - Modos prontos: analisar, recomendar. Faltam gerar_criativo e servidor MCP (#14), API FastAPI (#28) e
   front React + Mantine (#29).
 - Modo **avaliar** (#27, acréscimo do projeto ao documento): a pessoa envia o próprio vídeo, ou só o roteiro

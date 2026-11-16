@@ -1,4 +1,4 @@
-import type { Robustez } from "./tipos";
+import type { Confianca, Robustez } from "./tipos";
 
 const br = (n: number, casas = 0) => n.toLocaleString("pt-BR", { maximumFractionDigits: casas, minimumFractionDigits: casas });
 
@@ -8,9 +8,24 @@ export const inteiro = (x: number) => x.toLocaleString("pt-BR");
 export const compacto = (x: number) => new Intl.NumberFormat("pt-BR", { notation: "compact" }).format(x);
 
 export const ROBUSTEZ: Record<Robustez, { rotulo: string; cor: string; ajuda: string }> = {
-  robusto: { rotulo: "Robusto", cor: "stone", ajuda: "diferença consistente entre top e controle" },
-  fragil: { rotulo: "Frágil", cor: "yellow", ajuda: "indício; tratar como hipótese a testar" },
-  insuficiente: { rotulo: "Insuficiente", cor: "gray", ajuda: "poucos Reels; não dá para afirmar" },
+  robusto: { rotulo: "Diferença clara", cor: "stone", ajuda: "diferença consistente entre top e controle" },
+  fragil: { rotulo: "Indício", cor: "yellow", ajuda: "diferença que ainda não se sustenta em todos os testes; hipótese a testar" },
+  sem_diferenca: { rotulo: "Sem diferença", cor: "gray", ajuda: "top e controle têm proporção parecida: não diferencia os Reels de alto engajamento" },
+  insuficiente: { rotulo: "Poucos dados", cor: "orange", ajuda: "menos de 20 Reels no top; não dá para afirmar" },
+};
+
+export const CONFIANCA: Record<Confianca, { rotulo: string; cor: string; ajuda: string }> = {
+  robusto: { rotulo: "Alta", cor: "stone", ajuda: "a conclusão se apoia em dados consistentes" },
+  fragil: { rotulo: "Média", cor: "yellow", ajuda: "a conclusão se apoia em indícios; trate como hipótese" },
+  insuficiente: { rotulo: "Baixa", cor: "orange", ajuda: "a conclusão se apoia em poucos Reels" },
+};
+
+// O lift em linguagem simples, como no agente (dados.vezes).
+export const vezes = (lift: number | null, robustez: Robustez) => {
+  if (robustez === "sem_diferenca") return "proporção parecida no top e no controle";
+  if (lift == null) return "só aparece no top";
+  if (lift >= 1) return `${num(lift, 1)}× mais comum no top`;
+  return lift > 0 ? `${num(1 / lift, 1)}× menos comum no top` : "não aparece no top";
 };
 
 export const SEGMENTOS = [

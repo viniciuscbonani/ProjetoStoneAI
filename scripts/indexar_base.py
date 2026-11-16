@@ -4,7 +4,7 @@ Tabelas:
 - reels: um por Reel anotado (rubrica v2), com métricas da amostra, categorias da anotação e os
   campos calculados por código (faixa de duração, ritmo de cortes, tamanho da legenda...). Os campos
   calculados vêm de lift.carregar(), para serem idênticos aos usados no lift.
-- achados: data/processed/lift.csv, com a robustez resumida (robusto | fragil | insuficiente).
+- achados: data/processed/lift.csv, com a robustez resumida (robusto | fragil | sem_diferenca | insuficiente).
 - perfis: criadores da amostra, com presença no top e tema e formato predominantes.
 
 Rodar de novo sempre que a anotação ou o lift mudarem.
@@ -27,11 +27,14 @@ DESCARTADOS = {"criador_e_empreendedor_real"}
 
 
 def robustez(r: dict) -> str:
+    """insuficiente: menos de 20 Reels no top; sem_diferenca: o IC95 do lift contém o 1 (top e controle não se
+    distinguem); fragil: o IC95 exclui o 1, mas o resultado não se mantém sem os perfis de ocultação parcial;
+    robusto: exclui o 1 e se mantém."""
     if int(r["n_top"]) < MIN_N_TOP:
         return "insuficiente"
-    if r["confidence_flag"] == "False" and r["robusto_sensibilidade"] == "True":
-        return "robusto"
-    return "fragil"
+    if float(r["ic95_min"]) <= 1 <= float(r["ic95_max"]):
+        return "sem_diferenca"
+    return "robusto" if r["robusto_sensibilidade"] == "True" else "fragil"
 
 
 def main() -> None:

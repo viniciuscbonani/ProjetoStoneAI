@@ -13,7 +13,10 @@ from pydantic import BaseModel, Field
 Modo = Literal["analisar", "recomendar", "gerar_criativo", "avaliar"]
 Segmento = Literal["alimentacao", "beleza", "varejo", "servicos"]
 Faixa = Literal["micro", "medio", "grande"]
-Robustez = Literal["robusto", "fragil", "insuficiente"]
+# robusto: diferença consistente; fragil: diferença que não se mantém no teste de sensibilidade;
+# sem_diferenca: top e controle não se distinguem (IC95 do lift contém o 1); insuficiente: menos de 20 Reels no top.
+Robustez = Literal["robusto", "fragil", "sem_diferenca", "insuficiente"]
+Confianca = Literal["robusto", "fragil", "insuficiente"]
 
 
 class Filtros(BaseModel):
@@ -115,6 +118,6 @@ class Saida(BaseModel):
     creatives: list[Criativo] = Field(default_factory=list)
     avaliacao: Avaliacao | None = None
     profiles: list[Perfil] = Field(default_factory=list)
-    confidence_flag: Robustez
+    confidence_flag: Confianca
     explanation: str
     warnings: list[str] = Field(default_factory=list)

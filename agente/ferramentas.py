@@ -25,7 +25,7 @@ CAMPOS_PADRAO = ["duracao_faixa", "formato_video", "tipo_hook", "tema_principal"
 CATEGORIAS_REFERENCIA = ["formato_video", "duracao_faixa", "tipo_hook", "hook_visual", "tema_principal",
                          "pilar_impulso", "segmento_publico", "tem_rosto", "tem_cta", "tipo_cta", "abordagem", "tom"]
 MAX_POR_PERFIL = 2
-ORDEM_ROBUSTEZ = {"robusto": 0, "fragil": 1, "insuficiente": 2}
+ORDEM_ROBUSTEZ = {"robusto": 0, "fragil": 1, "sem_diferenca": 2, "insuficiente": 3}
 
 
 def _recorte(segmento: str | None, faixas: list[str] | None, inicio: date | None, fim: date | None) -> str | None:

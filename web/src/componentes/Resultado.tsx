@@ -2,8 +2,8 @@ import { Alert, Anchor, Badge, Card, Group, Progress, SimpleGrid, Stack, Text, T
 import Markdown from "react-markdown";
 
 import { useAbrirReel } from "../App";
-import { num, pct, ROBUSTEZ } from "../formato";
-import type { Achado, Saida } from "../tipos";
+import { CONFIANCA, num, pct, ROBUSTEZ, vezes } from "../formato";
+import type { Achado, Confianca, Saida } from "../tipos";
 import CartaoReel from "./CartaoReel";
 
 export function SeloRobustez({ robustez }: { robustez: Achado["robustez"] }) {
@@ -11,6 +11,15 @@ export function SeloRobustez({ robustez }: { robustez: Achado["robustez"] }) {
   return (
     <Tooltip label={r.ajuda}>
       <Badge color={r.cor} variant="light" style={{ flexShrink: 0, overflow: "visible" }}>{r.rotulo}</Badge>
+    </Tooltip>
+  );
+}
+
+export function SeloConfianca({ confianca }: { confianca: Confianca }) {
+  const c = CONFIANCA[confianca];
+  return (
+    <Tooltip label={c.ajuda}>
+      <Badge color={c.cor} variant="light" style={{ flexShrink: 0, overflow: "visible" }}>{c.rotulo}</Badge>
     </Tooltip>
   );
 }
@@ -35,9 +44,11 @@ export function CartaoAchado({ a }: { a: Achado }) {
           <Text size="xs" w={36} ta="right">{pct(a.freq_controle)}</Text>
         </Group>
       </Stack>
-      <Text size="xs" c="dimmed" mt={6}>
-        lift {num(a.lift)} (IC95 {num(a.ic95_min)}–{num(a.ic95_max)}) · {a.n_top} Reels no top · base: {a.recorte ?? "amostra inteira"}
-      </Text>
+      <Tooltip label={`lift ${num(a.lift)}; intervalo de 95%: ${num(a.ic95_min)} a ${num(a.ic95_max)}`}>
+        <Text size="xs" c="dimmed" mt={6}>
+          {vezes(a.lift, a.robustez)} · {a.n_top} Reels no top · base: {a.recorte ?? "amostra inteira"}
+        </Text>
+      </Tooltip>
     </Card>
   );
 }
@@ -47,8 +58,10 @@ const comLinks = (texto: string) => texto.replace(/\[([A-Za-z0-9_-]{9,})\]/g, "[
 
 export default function Resultado({ saida }: { saida: Saida }) {
   const abrirReel = useAbrirReel();
-  const mais = saida.findings.filter((a) => a.dif_pp > 0);
-  const menos = saida.findings.filter((a) => a.dif_pp < 0);
+  const comDiferenca = saida.findings.filter((a) => a.robustez !== "sem_diferenca");
+  const mais = comDiferenca.filter((a) => a.dif_pp > 0);
+  const menos = comDiferenca.filter((a) => a.dif_pp < 0);
+  const semDiferenca = saida.findings.filter((a) => a.robustez === "sem_diferenca");
 
   return (
     <Stack gap="lg">
@@ -57,7 +70,7 @@ export default function Resultado({ saida }: { saida: Saida }) {
           <Title order={4}>Resposta</Title>
           <Group gap="xs">
             <Text size="xs" c="dimmed">Confiança</Text>
-            <SeloRobustez robustez={saida.confidence_flag} />
+            <SeloConfianca confianca={saida.confidence_flag} />
           </Group>
         </Group>
         <Typography>
@@ -90,6 +103,14 @@ export default function Resultado({ saida }: { saida: Saida }) {
         <div>
           <Title order={5} mb="xs">Aparecem menos no top</Title>
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>{menos.map((a) => <CartaoAchado key={a.campo + a.valor + a.recorte} a={a} />)}</SimpleGrid>
+        </div>
+      )}
+
+      {semDiferenca.length > 0 && (
+        <div>
+          <Title order={5}>Sem diferença entre top e controle</Title>
+          <Text size="sm" c="dimmed" mb="xs">Aparecem em proporção parecida nos dois grupos: não explicam o engajamento.</Text>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>{semDiferenca.map((a) => <CartaoAchado key={a.campo + a.valor + a.recorte} a={a} />)}</SimpleGrid>
         </div>
       )}
 
