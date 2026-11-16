@@ -132,7 +132,7 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
   - Pesquisa (16/11): a cota grátis de imagem do Gemini é zero; o Groq não gera imagem; o `flux-1-schnell`
     (mais barato) não aceita 9:16 nem referência.
 - Servidor MCP: `agente/servidor_mcp.py` com o pacote `fastmcp` (o SDK `mcp` 2.x renomeou o FastMCP para
-  MCPServer); ferramentas analisar, recomendar e gerar_criativo. Rodar com `.venv/bin/python -m agente.servidor_mcp`.
+  MCPServer); ferramentas analisar, recomendar, gerar_criativo e avaliar. Rodar com `.venv/bin/python -m agente.servidor_mcp`.
 - Modo **avaliar** (#27, acréscimo do projeto ao documento; `agente/avaliacao.py`): a pessoa envia o próprio
   vídeo, ou só o roteiro em texto, e recebe pontos fortes, pontos a melhorar e o que não precisa mudar. Caminho
   fixo, sem orquestrador: ler → comparar → avaliador → revisor → saída.

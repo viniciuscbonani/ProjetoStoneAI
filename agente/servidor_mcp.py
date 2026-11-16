@@ -1,7 +1,7 @@
 """Servidor MCP do agente (FastMCP): uma ferramenta por modo, todas chamando executar().
 
-Qualquer cliente MCP (Claude Desktop, Claude Code, Cursor...) passa a ter as ferramentas analisar, recomendar e
-gerar_criativo. A resposta é a Saida do agente em JSON, com achados, Reels de referência e o run_id do log.
+Qualquer cliente MCP (Claude Desktop, Claude Code, Cursor...) passa a ter as ferramentas analisar, recomendar,
+gerar_criativo e avaliar. A resposta é a Saida do agente em JSON, com achados, Reels de referência e o run_id do log.
 
 Uso (transporte stdio, o padrão dos clientes MCP):
     .venv/bin/python -m agente.servidor_mcp
@@ -56,6 +56,18 @@ def gerar_criativo(query: Annotated[str, Field(description="que Reels são neces
     """Gera 3 criativos de Reels para a @impulsostone (gancho, roteiro em cenas, legenda, CTA e prompts de
     imagem), cada um com os achados e os Reels reais que o inspiraram. Leva de 1 a 2 minutos."""
     return _rodar("gerar_criativo", query, segment, faixa)
+
+
+@mcp.tool
+def avaliar(roteiro: Annotated[str | None, Field(description="roteiro em texto, se ainda não houver vídeo")] = None,
+            video_path: Annotated[str | None, Field(description="caminho local de um vídeo (mp4/mov)")] = None,
+            segment: Setor = None) -> dict:
+    """Avalia um vídeo (caminho local) ou um roteiro em texto da @impulsostone contra os padrões dos Reels de
+    alto engajamento: pontos fortes, pontos a melhorar e o que não precisa mudar, com Reels de exemplo. Não
+    prevê engajamento. Um vídeo leva de 1 a 3 minutos (transcrição local)."""
+    entrada = {"mode": "avaliar", "query": "Avaliar pelo MCP", "segment": segment,
+               "roteiro": roteiro, "video_path": video_path}
+    return executar(entrada).model_dump(mode="json")
 
 
 if __name__ == "__main__":
