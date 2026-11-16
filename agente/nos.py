@@ -360,7 +360,8 @@ INSTRUCOES_CRIATIVO = """Escreva 3 criativos de Reels para a @impulsostone atend
 - Imagens (em inglês; o estilo visual é aplicado depois, por código): personagem = quem aparece em todas
   as imagens do criativo, sempre a mesma pessoa; capa = o que a capa mostra; visual de cada cena = o que a
   imagem daquela cena mostra (ação, enquadramento, ambiente do negócio do setor), sem repetir a personagem.
-  Sem pessoas famosas.
+  Mostre a pessoa fazendo a ação; evite imagens centradas num papel escrito, numa tela ou numa placa (o gerador
+  de imagem inventa texto). Sem pessoas famosas.
 - Se o pedido citar um setor, use o ambiente e os exemplos desse setor.
 - Não escreva shortCodes nem ids de achado no roteiro, no gancho ou na legenda; eles vão só em inspirado_em
   e achados_usados.

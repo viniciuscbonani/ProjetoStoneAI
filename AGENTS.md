@@ -110,7 +110,12 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
     sob demanda e em ordem; a capa sai sem referência e cada cena usa **só um recorte do rosto e do tronco da
     capa** como referência. Com a capa inteira ou a cena anterior como referência, o modelo copiava pose e
     fundo e as cenas saíam iguais (testado em 16/11). ~5–10 s e ~140 neurons por imagem; o plano grátis
-    (10.000 neurons/dia) dá ~10 criativos completos. Credenciais `CLOUDFLARE_ACCOUNT_ID` e
+    (10.000 neurons/dia) dá ~10 criativos completos.
+  - **Revisor de imagem** (Gemini flash-lite com visão): reprova anatomia estranha, texto inventado em
+    destaque, objetos deformados, cena errada e, nas cenas, pessoa diferente da capa (a capa vai como
+    "IMAGEM 2", só para conferir a pessoa). Reprovada, gera de novo com outra seed e os problemas no prompt,
+    até 3 tentativas, e guarda a de maior nota; no front, cada imagem tem o selo ✓/⚠ com a nota. Ações
+    difíceis para o modelo (ex.: secar o cabelo de uma cliente) podem falhar nas 3; ficam marcadas com ⚠. Credenciais `CLOUDFLARE_ACCOUNT_ID` e
     `CLOUDFLARE_API_TOKEN` no `.env`; imagens em `data/imagens/` e log em `data/logs/imagens.jsonl`.
   - Pesquisa (16/11): a cota grátis de imagem do Gemini é zero; o Groq não gera imagem; o `flux-1-schnell`
     (mais barato) não aceita 9:16 nem referência.

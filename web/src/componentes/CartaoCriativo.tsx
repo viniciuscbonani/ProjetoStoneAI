@@ -1,9 +1,9 @@
-import { Alert, Anchor, Badge, Button, Card, Code, Collapse, CopyButton, Divider, Group, Image, Progress, Stack, Table, Text, Title } from "@mantine/core";
+import { Alert, Anchor, Badge, Button, Card, Code, Collapse, CopyButton, Divider, Group, Image, Progress, Stack, Table, Text, Title, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 import { useAbrirReel } from "../App";
 import { api } from "../api";
-import type { Criativo } from "../tipos";
+import type { Criativo, ImagemGerada } from "../tipos";
 
 function Copiar({ valor, rotulo = "Copiar" }: { valor: string; rotulo?: string }) {
   return (
@@ -28,13 +28,29 @@ function emTexto(c: Criativo) {
   ].join("\n");
 }
 
+// Selo da revisão de uma imagem gerada: nota do revisor e, se reprovada nas 3 tentativas, os problemas.
+function SeloRevisao({ img }: { img?: ImagemGerada }) {
+  const r = img?.revisao;
+  if (!img) return null;
+  if (!r) return <Text size="10px" c="dimmed" ta="center">sem revisão</Text>;
+  const rotulo = `${r.aprovada ? "✓" : "⚠"} ${r.nota}/10`;
+  const ajuda = r.aprovada
+    ? `Aprovada pelo revisor${r.tentativas > 1 ? ` na ${r.tentativas}ª tentativa` : ""}`
+    : `Melhor de ${r.tentativas} tentativas, ainda com problemas: ${r.problemas.join("; ")}`;
+  return (
+    <Tooltip label={ajuda} multiline w={260}>
+      <Text size="10px" ta="center" c={r.aprovada ? "stone.8" : "orange.8"} fw={600}>{rotulo}</Text>
+    </Tooltip>
+  );
+}
+
 // Índice 0 = capa; 1..n = cenas. Os nomes batem com os arquivos da API (criativo1_capa, criativo1_cena2...).
 const chave = (n: number, indice: number) => `criativo${n}_${indice === 0 ? "capa" : `cena${indice}`}`;
 
 export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number; runId: string }) {
   const abrirReel = useAbrirReel();
   const [verPrompt, setVerPrompt] = useState(false);
-  const [imagens, setImagens] = useState<Record<string, string>>({});
+  const [imagens, setImagens] = useState<Record<string, ImagemGerada>>({});
   const [gerando, setGerando] = useState<number | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const total = c.roteiro.length + 1;
@@ -50,7 +66,7 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
       for (let i = 0; i < total; i++) {
         setGerando(i);
         const r = await api.gerarImagem(runId, n, i);
-        setImagens((atual) => ({ ...atual, [chave(n, i)]: `/api${r.url}?v=${Date.now()}` }));
+        setImagens((atual) => ({ ...atual, [chave(n, i)]: { url: `${r.url}?v=${Date.now()}`, revisao: r.revisao } }));
       }
     } catch (e) {
       setErro((e as Error).message);
@@ -60,8 +76,8 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
   }
 
   const url = (indice: number) => {
-    const u = imagens[chave(n, indice)];
-    return u && !u.startsWith("/api") ? `/api${u}` : u;
+    const u = imagens[chave(n, indice)]?.url;
+    return u ? `/api${u}` : undefined;
   };
   const geradas = Array.from({ length: total }, (_, i) => url(i)).filter(Boolean).length;
 
@@ -78,9 +94,12 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
         </div>
         <Group gap="sm" align="flex-start" wrap="nowrap">
           {url(0) && (
-            <Anchor href={url(0)} target="_blank">
-              <Image src={url(0)} w={72} h={128} radius="sm" alt={`Capa do criativo ${n}`} />
-            </Anchor>
+            <Stack gap={2}>
+              <Anchor href={url(0)} target="_blank">
+                <Image src={url(0)} w={72} h={128} radius="sm" alt={`Capa do criativo ${n}`} />
+              </Anchor>
+              <SeloRevisao img={imagens[chave(n, 0)]} />
+            </Stack>
           )}
           <Copiar valor={emTexto(c)} rotulo="Copiar criativo" />
         </Group>
@@ -104,9 +123,12 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
               {geradas > 0 && (
                 <Table.Td w={64} style={{ verticalAlign: "top" }}>
                   {url(i + 1) && (
-                    <Anchor href={url(i + 1)} target="_blank">
-                      <Image src={url(i + 1)} w={54} h={96} radius="sm" alt={`Cena ${cena.tempo}`} />
-                    </Anchor>
+                    <Stack gap={2}>
+                      <Anchor href={url(i + 1)} target="_blank">
+                        <Image src={url(i + 1)} w={54} h={96} radius="sm" alt={`Cena ${cena.tempo}`} />
+                      </Anchor>
+                      <SeloRevisao img={imagens[chave(n, i + 1)]} />
+                    </Stack>
                   )}
                 </Table.Td>
               )}
@@ -141,14 +163,14 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
           </Group>
           <Text size="xs" c="dimmed" mt={4}>
             Copiar: cole no Gemini ou no ChatGPT. Gerar: capa e cenas em 9:16 pelo Cloudflare; cada cena usa o rosto da capa
-            como base, para manter a mesma pessoa (~5 a 10 s por imagem).
+            como base, para manter a mesma pessoa; um revisor confere cada imagem e, se reprovar, gera de novo (até 3 vezes).
           </Text>
           <Collapse expanded={verPrompt}>
             <Code block mt="xs" style={{ whiteSpace: "pre-wrap" }}>{c.prompt_copiar}</Code>
           </Collapse>
           {gerando !== null && (
             <Stack gap={4} mt="xs">
-              <Text size="xs">Gerando {gerando === 0 ? "a capa" : `a cena ${gerando} de ${total - 1}`}…</Text>
+              <Text size="xs">Gerando e revisando {gerando === 0 ? "a capa" : `a cena ${gerando} de ${total - 1}`}…</Text>
               <Progress value={(gerando / total) * 100} size="sm" />
             </Stack>
           )}

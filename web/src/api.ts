@@ -1,4 +1,4 @@
-import type { Entrada, ExecucaoResumo, Panorama, ReelDetalhe, Saida } from "./tipos";
+import type { Entrada, ExecucaoResumo, ImagemGerada, Panorama, ReelDetalhe, Saida } from "./tipos";
 
 async function chamar<T>(caminho: string, init?: RequestInit): Promise<T> {
   const resp = await fetch(`/api${caminho}`, init);
@@ -22,12 +22,12 @@ export const api = {
   execucoes: () => chamar<ExecucaoResumo[]>("/execucoes"),
   execucao: (runId: string) => chamar<{ saida: Saida | null; erro: string | null }>(`/execucoes/${runId}`),
   gerarImagem: (runId: string, criativo: number, indice: number) =>
-    chamar<{ indice: number; url: string }>("/imagens", {
+    chamar<ImagemGerada & { indice: number }>("/imagens", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run_id: runId, criativo, indice }),
     }),
-  imagens: (runId: string) => chamar<Record<string, string>>(`/imagens/${runId}`),
+  imagens: (runId: string) => chamar<Record<string, ImagemGerada>>(`/imagens/${runId}`),
 };
 
 export const urlQuadro = (shortCode: string, nome = "gancho_0s") => `/api/reels/${shortCode}/quadros/${nome}`;

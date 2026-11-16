@@ -79,6 +79,18 @@ export interface Criativo {
   achados_usados: string[];
 }
 
+export interface RevisaoImagem {
+  aprovada: boolean;
+  nota: number;
+  problemas: string[];
+  tentativas: number;
+}
+
+export interface ImagemGerada {
+  url: string;
+  revisao: RevisaoImagem | null;
+}
+
 export interface Saida {
   run_id: string;
   mode: Modo;

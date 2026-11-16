@@ -42,7 +42,8 @@ ESTILO_VISUAL = " ".join("""Impulso Stone visual style: bright, warm documentary
 Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone
 green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy
 advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text,
-letters, logos or watermarks in the image.""".split())
+letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands
+and anatomy.""".split())
 
 REGRAS_DADOS = """Regras sobre os dados:
 - Use SÓ os achados, Reels e perfis fornecidos. Todo número que você escrever tem de estar em um achado.

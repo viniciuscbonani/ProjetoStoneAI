@@ -113,15 +113,15 @@ def gerar_imagem(pedido: PedidoImagem) -> dict:
     if not 1 <= pedido.criativo <= len(criativos):
         raise HTTPException(404, "criativo não encontrado nesta execução")
     try:
-        caminho = imagens.gerar_do_criativo(pedido.run_id, pedido.criativo, pedido.indice,
-                                            criativos[pedido.criativo - 1])
+        caminho, revisao = imagens.gerar_do_criativo(pedido.run_id, pedido.criativo, pedido.indice,
+                                                     criativos[pedido.criativo - 1])
     except imagens.SemCredenciais as e:
         raise HTTPException(503, f"geração de imagem indisponível: {e}")
     except (IndexError, ValueError) as e:
         raise HTTPException(409, str(e))
     except RuntimeError as e:
         raise HTTPException(502, str(e))
-    return {"indice": pedido.indice, "url": f"/imagens/{pedido.run_id}/{caminho.name}"}
+    return {"indice": pedido.indice, "url": f"/imagens/{pedido.run_id}/{caminho.name}", "revisao": revisao}
 
 
 RUN_ID = re.compile(r"^[0-9]{8}-[0-9]{6}-[0-9a-f]{6}$")
@@ -129,12 +129,16 @@ ARQUIVO_IMAGEM = re.compile(r"^criativo[1-9]_(capa|cena[0-9]{1,2})\.jpg$")
 
 
 @app.get("/imagens/{run_id}")
-def imagens_da_execucao(run_id: str) -> dict[str, str]:
-    """Imagens já geradas de uma execução, por nome (criativo1_capa, criativo1_cena2...)."""
+def imagens_da_execucao(run_id: str) -> dict[str, dict]:
+    """Imagens já geradas de uma execução, por nome (criativo1_capa, criativo1_cena2...), com a revisão."""
     if not RUN_ID.match(run_id):
         raise HTTPException(404, "execução não encontrada")
     pasta = imagens.PASTA / run_id
-    return {p.stem: f"/imagens/{run_id}/{p.name}" for p in sorted(pasta.glob("*.jpg"))} if pasta.exists() else {}
+    if not pasta.exists():
+        return {}
+    revisoes = imagens.revisoes(run_id)
+    return {p.stem: {"url": f"/imagens/{run_id}/{p.name}", "revisao": revisoes.get(p.name)}
+            for p in sorted(pasta.glob("*.jpg"))}
 
 
 @app.get("/imagens/{run_id}/{nome}")
