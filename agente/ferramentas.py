@@ -142,6 +142,10 @@ def buscar_referencias_tool(estado: Annotated[dict, InjectedState], caracteristi
     (ex.: ["duracao_faixa=mais_90s", "formato_video=explicativo"]). Devolve até `n` Reels (máx. 8), com link
     e métricas. O recorte do pedido é aplicado automaticamente."""
     pares = dict(c.split(" [")[0].split("=", 1) for c in caracteristicas or [] if "=" in c)
+    invalidos = [f"{c}={v} (válidos: {', '.join(dados.valores(c)) if c in dados.CAMPOS else 'campo inexistente'})"
+                 for c, v in pares.items() if c not in dados.CAMPOS or v not in dados.valores(c)]
+    if invalidos:
+        return "Características inválidas, refaça com valores válidos: " + "; ".join(invalidos), []
     refs = buscar_referencias(pares, min(n, 8), **_do_estado(estado))
     if not refs:
         return "Nenhum Reel do top com todas essas características; tente com menos características.", []

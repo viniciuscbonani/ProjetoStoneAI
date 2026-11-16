@@ -33,6 +33,7 @@ def gravar(estado: dict, modelo: str, duracao_s: float, erro: str | None = None)
     linha = {"run_id": estado.get("run_id"), "quando": datetime.now().isoformat(timespec="seconds"),
              "modelo": modelo, "duracao_s": round(duracao_s, 1), "tokens": estado.get("tokens", 0),
              "entrada": estado["entrada"].model_dump(mode="json"), "ferramentas": ferramentas,
+             "exemplos_por_achado": estado.get("exemplos", {}),
              "redacoes": estado.get("redacoes", 0), "problemas_revisor": estado.get("problemas", []),
              "erro": erro, "saida": saida.model_dump(mode="json") if saida else None}
     LOG.parent.mkdir(parents=True, exist_ok=True)

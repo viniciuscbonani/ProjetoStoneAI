@@ -60,6 +60,12 @@ def todos_reels() -> tuple[dict, ...]:
     return tuple(_reel(r) for r in _con().execute("SELECT * FROM reels"))
 
 
+@cache
+def valores(campo: str) -> tuple[str, ...]:
+    """Valores que o campo assume na base (como texto), para validar o que o LLM pede."""
+    return tuple(sorted({str(r[campo]) for r in todos_reels()}))
+
+
 def rotulo(campo: str, valor) -> str:
     nome = CAMPOS.get(campo, campo)
     if campo in BOOLEANOS or str(valor) in ("True", "False"):

@@ -18,6 +18,9 @@ REGRAS_DADOS = """Regras sobre os dados:
 - Robustez: "robusto" = diferença consistente entre top e controle; "fragil" = indício, apresente como hipótese
   a testar; "insuficiente" = poucos Reels, não dá para afirmar nada. Diga isso em linguagem simples.
 - São padrões observados em Reels de alto engajamento, não garantia de resultado nem previsão.
+- Para exemplificar um achado, use os Reels listados como "exemplos" daquele achado; não apresente um Reel
+  como exemplo de uma característica que a lista não mostra que ele tem.
 - Ao mencionar um Reel no texto, escreva o shortCode entre colchetes, ex.: [DbnuKRmRJ_H]. Não escreva no texto
-  os ids dos achados (ex.: duracao_faixa=mais_90s); eles vão só em achados_citados.
+  os ids dos achados (A1, A2...); eles vão só em achados_citados.
+- "Aparece mais no top" não é "aparece em X% do top": compare sempre top × controle.
 - Escreva números no padrão brasileiro: vírgula decimal (lift 1,96) e porcentagem sem casas (32%)."""
