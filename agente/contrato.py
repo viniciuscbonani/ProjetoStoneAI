@@ -82,19 +82,22 @@ class Perfil(BaseModel):
 
 class Cena(BaseModel):
     tempo: str = Field(description="ex.: 0–3 s")
-    descricao: str
+    descricao: str = Field(description="o que se fala e o que aparece na cena")
+    texto_na_tela: str = Field("", description="texto sobreposto ao vídeo, se houver")
+    prompt_imagem: str = Field("", description="prompt (em inglês) para gerar uma imagem de referência da cena")
 
 
 class Criativo(BaseModel):
     titulo: str
     formato: str
     duracao_alvo: str
-    gancho: str
+    gancho: str = Field(description="o que se diz ou mostra nos primeiros 3 segundos")
     roteiro: list[Cena]
     legenda: str
     cta: str
+    prompt_capa: str = Field("", description="prompt (em inglês) da capa vertical 9:16 do Reel")
     inspirado_em: list[str] = Field(description="shortCodes dos Reels de referência")
-    achados_usados: list[str] = Field(description="achados aplicados, como campo=valor")
+    achados_usados: list[str] = Field(description="achados aplicados, em linguagem simples")
 
 
 class Ponto(BaseModel):

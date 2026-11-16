@@ -1,11 +1,13 @@
 """Nós do grafo do agente (cada caixa do desenho de arquitetura é uma função daqui).
 
-orquestrador → (ferramentas ⇄ orquestrador) → coletar → redator → revisor → montar_saida
+orquestrador → (ferramentas ⇄ orquestrador) → coletar → redator | gerador → revisor → montar_saida
 
 - orquestrador: o Gemini com as ferramentas; decide quais chamar e com quais argumentos.
 - coletar: copia os dados devolvidos pelas ferramentas (artifacts) para o estado.
 - redator: escreve a resposta (analisar | recomendar) a partir do estado, citando achados e Reels por id.
-- revisor: confere por código que tudo o que foi citado veio das ferramentas; se não, pede nova redação (1×).
+- gerador: escreve 3 criativos (gerar_criativo), cada um com os achados e os Reels que o inspiraram.
+- revisor: confere por código que tudo o que foi citado veio das ferramentas e, nos criativos, o tom pela
+  persona (LLM); se algo falhar, pede nova versão (1×).
 - montar_saida: monta a Saida com os dados do estado, nunca com números do texto do LLM.
 """
 
@@ -22,7 +24,7 @@ from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 
 from . import dados
-from .contrato import Entrada, Saida
+from .contrato import Cena, Criativo, Entrada, Saida
 from .ferramentas import FERRAMENTAS, buscar_referencias, id_achado
 from .persona import PERSONA, REGRAS_DADOS
 
@@ -50,6 +52,28 @@ class Redacao(BaseModel):
                                       description="perfis da lista PERFIS EM DESTAQUE recomendados, sem @")
 
 
+class CriativoRascunho(BaseModel):
+    titulo: str
+    formato: str = Field(description="ex.: explicativo, talking head, lista de dicas, bastidores")
+    duracao_alvo: str = Field(description="ex.: 90 a 120 s")
+    gancho: str = Field(description="o que se fala ou mostra nos 3 primeiros segundos")
+    roteiro: list[Cena] = Field(description="4 a 7 cenas, na ordem")
+    legenda: str
+    cta: str = Field(description="o convite final para se inscrever ou participar do Impulso Stone")
+    prompt_capa: str = Field(description="prompt em inglês da capa vertical 9:16 do Reel")
+    inspirado_em: list[str] = Field(description="shortCodes dos Reels de referência que inspiraram o criativo")
+    achados_usados: list[str] = Field(description="ids curtos (A1, A2...) dos achados aplicados")
+
+
+class Criativos(BaseModel):
+    explanation: str = Field(description="2 a 4 frases: por que estes criativos, com os números dos achados")
+    criativos: list[CriativoRascunho]
+
+
+class RevisaoTom(BaseModel):
+    problemas: list[str] = Field(description="problemas claros a corrigir, no máximo 5; vazio se estiver bom")
+
+
 class Estado(TypedDict, total=False):
     run_id: str
     entrada: Entrada
@@ -60,6 +84,7 @@ class Estado(TypedDict, total=False):
     exemplos: dict[str, list[str]]
     campos_pergunta: list[str]  # campos que o orquestrador consultou ou buscou explicitamente
     redacao: Redacao | None
+    rascunho: Criativos | None
     problemas: list[str]
     redacoes: int
     tokens: int
@@ -113,6 +138,8 @@ Como trabalhar:
 3. Chame buscar_referencias para as 1 a 3 características mais relevantes e robustas, para ter Reels reais
    que as exemplifiquem.
 4. No modo recomendar, ou se a pergunta for sobre criadores, chame perfis_em_destaque.
+5. No modo gerar_criativo, junte o que aparece mais no top e Reels de referência dessas características
+   (do setor pedido, se houver), que vão inspirar os criativos.
 Pode chamar várias ferramentas de uma vez. No máximo {maximo} chamadas no total (já usou {usadas}).
 Quando tiver dados suficientes, responda só "pronto", sem chamar ferramentas."""
 
@@ -216,7 +243,9 @@ def visiveis(estado: Estado) -> dict[str, dict]:
     uteis = [a for a in estado["achados"].values() if max(a["n_top"], a["n_controle"]) >= MIN_REELS]
     ordem = lambda a: (ORDEM_ROBUSTEZ.index(a["robustez"]), -abs(a["dif_pp"]))
     if estado["entrada"].mode != "analisar":
-        claros = [a for a in uteis if a["robustez"] != "sem_diferenca" and a["dif_pp"] and a["lift"] is not None]
+        # Para criar, só diferenças claras e indícios; para recomendar, também os de poucos dados (com aviso).
+        fora = {"sem_diferenca", "insuficiente"} if estado["entrada"].mode == "gerar_criativo" else {"sem_diferenca"}
+        claros = [a for a in uteis if a["robustez"] not in fora and a["dif_pp"] and a["lift"] is not None]
         mais = sorted((a for a in claros if a["dif_pp"] > 0), key=ordem)[:15]
         menos = sorted((a for a in claros if a["dif_pp"] < 0), key=ordem)[:10]
         return {f"A{i}": a for i, a in enumerate(mais + menos, 1)}
@@ -281,23 +310,56 @@ def _contexto(estado: Estado) -> str:
     return "\n".join(linhas)
 
 
-def redator(estado: Estado) -> dict:
-    e = estado["entrada"]
-    sistema = f"{PERSONA}\n\n{REGRAS_DADOS}\n\nTarefa ({e.mode}): {INSTRUCOES_MODO[e.mode]}"
+def _escrever(estado: Estado, no: str, esquema: type[BaseModel], tarefa: str) -> tuple[BaseModel | None, dict]:
+    """Chama o modelo de redação com saída estruturada; se a cota dele acabar, segue com o modelo padrão."""
+    sistema = f"{PERSONA}\n\n{REGRAS_DADOS}\n\nTarefa ({estado['entrada'].mode}): {tarefa}"
     pedido = _contexto(estado)
     if estado.get("problemas"):
         pedido += "\n\nCORRIJA na nova versão:\n" + "\n".join(f"- {p}" for p in estado["problemas"])
     mensagens = [SystemMessage(sistema), HumanMessage(pedido)]
     modelo = MODELO_REDATOR
     try:
-        r = llm(modelo).with_structured_output(Redacao, include_raw=True).invoke(mensagens)
+        r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
     except GoogleRateLimitError:
         if modelo == MODELO:
             raise
         modelo = MODELO  # cota do modelo do redator esgotada: segue com o modelo padrão
-        r = llm(modelo).with_structured_output(Redacao, include_raw=True).invoke(mensagens)
-    return {"redacao": r["parsed"], "redacoes": estado.get("redacoes", 0) + 1,
-            "tokens": estado.get("tokens", 0) + _tokens(r["raw"]), **_contar(estado, "redator", modelo)}
+        r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
+    return r["parsed"], {"redacoes": estado.get("redacoes", 0) + 1,
+                         "tokens": estado.get("tokens", 0) + _tokens(r["raw"]), **_contar(estado, no, modelo)}
+
+
+def redator(estado: Estado) -> dict:
+    redacao, extras = _escrever(estado, "redator", Redacao, INSTRUCOES_MODO[estado["entrada"].mode])
+    return {"redacao": redacao, **extras}
+
+
+INSTRUCOES_CRIATIVO = """Escreva 3 criativos de Reels para a @impulsostone atender ao pedido, diferentes entre si
+(no formato, no gancho ou no pilar). Em cada criativo:
+- Apoie-se em 1 a 3 achados da lista "aparecem MAIS no top" (prefira os de selo robusto; achados_usados = ids)
+  e em 1 a 3 Reels de referência (inspirado_em = shortCodes listados). Adapte o que funciona neles para o
+  programa; não copie.
+- Respeite os achados: se usar "mais de 90 s", a duração do roteiro tem de passar de 90 s. Evite o que aparece
+  MENOS no top.
+- gancho: concreto, nos 3 primeiros segundos, com uma dor real ou uma curiosidade do dia a dia do negócio;
+  nada de frase motivacional genérica.
+- roteiro: 4 a 7 cenas com tempo ("0–3 s", "3–20 s"...), o que se fala e o que aparece; texto_na_tela quando
+  houver. A última cena é o convite claro para se inscrever ou participar do Impulso Stone.
+- legenda: até uns 600 caracteres, no tom da persona, terminando com o mesmo convite; poucas hashtags.
+- cta: o convite, em uma frase.
+- prompt_capa e prompt_imagem de cada cena: em inglês, descrevendo uma foto realista de referência
+  (quem aparece, ambiente de um pequeno negócio brasileiro do setor, ação, enquadramento, luz), formato
+  vertical 9:16, sem texto na imagem, sem logotipos ou marcas e sem pessoas famosas.
+- Se o pedido citar um setor, use o ambiente e os exemplos desse setor.
+- Não escreva shortCodes nem ids de achado no roteiro, no gancho ou na legenda; eles vão só em inspirado_em
+  e achados_usados.
+explanation: 2 a 4 frases sobre por que estes criativos, com os números dos achados principais (top × controle).
+Não prometa resultado nem use números que não estejam nos achados."""
+
+
+def gerador(estado: Estado) -> dict:
+    rascunho, extras = _escrever(estado, "gerador", Criativos, INSTRUCOES_CRIATIVO)
+    return {"rascunho": rascunho, **extras}
 
 
 # ---------------------------------------------------------------- revisor e saída
@@ -310,6 +372,8 @@ IDS_POR_EXTENSO = r",?\s*conforme(?: visto)?\s+n?o\s+achado A\d{1,2}\b"
 
 
 def revisar(estado: Estado) -> list[str]:
+    if estado["entrada"].mode == "gerar_criativo":
+        return revisar_criativos(estado)
     red = estado.get("redacao")
     if red is None:
         return ["a resposta não veio no formato pedido"]
@@ -336,12 +400,70 @@ def revisar(estado: Estado) -> list[str]:
     return problemas
 
 
+def revisar_criativos(estado: Estado) -> list[str]:
+    """Checagem por código: estrutura, Reels de inspiração vindos da base e achados que aparecem mais no top."""
+    rasc = estado.get("rascunho")
+    if rasc is None:
+        return ["a resposta não veio no formato pedido"]
+    vis = visiveis(estado)
+    problemas = [] if len(rasc.criativos) == 3 else [f"são pedidos 3 criativos, vieram {len(rasc.criativos)}"]
+    for n, c in enumerate(rasc.criativos, 1):
+        if not c.inspirado_em:
+            problemas.append(f"criativo {n}: falta inspirado_em (Reels de referência)")
+        problemas += [f"criativo {n}: Reel de inspiração não veio das ferramentas: {s}"
+                      for s in c.inspirado_em if s not in estado["referencias"]]
+        if not c.achados_usados:
+            problemas.append(f"criativo {n}: falta achados_usados")
+        problemas += [f"criativo {n}: achado inexistente: {a} (use os ids A1, A2... da lista)"
+                      for a in c.achados_usados if a not in vis]
+        problemas += [f"criativo {n}: {a} aparece MENOS no top e não pode inspirar o criativo"
+                      for a in c.achados_usados if a in vis and vis[a]["dif_pp"] < 0]
+        if len(c.roteiro) < 3:
+            problemas.append(f"criativo {n}: o roteiro precisa de pelo menos 3 cenas")
+        if not c.cta.strip() or not c.prompt_capa.strip():
+            problemas.append(f"criativo {n}: faltam o CTA ou o prompt da capa")
+    return problemas
+
+
+PROMPT_TOM = f"""Você revisa criativos de Reels da @impulsostone antes de irem para a equipe da Stone.
+{PERSONA}
+
+Aponte só problemas claros, que um editor da Stone exigiria corrigir (no máximo 5, cada um dizendo o criativo):
+- tom fora da persona (frio, técnico, com jargão) ou linguagem que exclua quem empreende ("empreendedor(a)");
+- promessa exagerada ou garantia de resultado ("fature o dobro", "venda garantida");
+- frase motivacional genérica ou mensagem sem gancho;
+- final sem convite claro para se inscrever ou participar do programa;
+- depoimento ou história sem chamada para ação.
+Se estiver bom, devolva a lista vazia."""
+
+
+def _texto_criativos(rasc: Criativos) -> str:
+    return "\n\n".join(
+        f"CRIATIVO {n}: {c.titulo}\nGancho: {c.gancho}\nRoteiro:\n"
+        + "\n".join(f"- {cena.tempo}: {cena.descricao}" for cena in c.roteiro)
+        + f"\nLegenda: {c.legenda}\nCTA: {c.cta}" for n, c in enumerate(rasc.criativos, 1))
+
+
 def revisor(estado: Estado) -> dict:
-    return {"problemas": revisar(estado)}
+    problemas = revisar(estado)
+    if estado["entrada"].mode != "gerar_criativo" or problemas:
+        return {"problemas": problemas}
+    # Só com a estrutura certa vale gastar uma chamada (flash-lite) para revisar o tom.
+    r = llm().with_structured_output(RevisaoTom, include_raw=True).invoke(
+        [SystemMessage(PROMPT_TOM), HumanMessage(_texto_criativos(estado["rascunho"]))])
+    tom = [f"tom: {p}" for p in (r["parsed"].problemas if r["parsed"] else [])]
+    return {"problemas": tom, "tokens": estado.get("tokens", 0) + _tokens(r["raw"]),
+            **_contar(estado, "revisor_tom", MODELO)}
+
+
+ESCRITOR_POR_MODO = {"analisar": "redator", "recomendar": "redator", "gerar_criativo": "gerador"}
 
 
 def decidir_revisao(estado: Estado) -> str:
-    return "refazer" if estado["problemas"] and estado["redacoes"] < MAX_REDACOES else "ok"
+    """Volta ao nó que escreveu (redator ou gerador) se houver problemas e ainda couber nova versão."""
+    if estado["problemas"] and estado["redacoes"] < MAX_REDACOES:
+        return ESCRITOR_POR_MODO[estado["entrada"].mode]
+    return "montar_saida"
 
 
 def _confianca(a: dict) -> str:
@@ -352,15 +474,60 @@ def _confianca(a: dict) -> str:
     return "robusto" if EQUIVALENCIA[0] <= a["ic95_min"] and a["ic95_max"] <= EQUIVALENCIA[1] else "fragil"
 
 
+def _limpar(texto: str, vis: dict[str, dict]) -> str:
+    """Tira do texto os ids de achado que o modelo deixou ([A1], (A2), "conforme o achado A3"...)."""
+    texto = re.sub(IDS_NO_TEXTO, "", texto)
+    texto = re.sub(IDS_POR_EXTENSO, "", texto)
+    return re.sub(r"\bA\d{1,2}\b", lambda m: f"“{dados.rotulo(vis[m[0]]['campo'], vis[m[0]]['valor'])}”"
+                  if m[0] in vis else m[0], texto)
+
+
+def _avisos(estado: Estado, achados: list[dict], resolvidos: tuple[str, ...] = ()) -> list[str]:
+    avisos = [f"revisão: {p}" for p in estado.get("problemas", []) if not p.startswith(resolvidos)]
+    if any(a["robustez"] == "insuficiente" for a in achados):
+        avisos.append("parte dos achados se apoia em poucos Reels (insuficiente); trate como indício")
+    recorte = _recorte(estado["entrada"])
+    if recorte != "amostra inteira" and any(a["recorte"] is None for a in achados):
+        avisos.append(f"parte dos achados vem da amostra inteira, não do recorte pedido ({recorte})")
+    return avisos
+
+
+def _limpar_criativo(texto: str, vis: dict[str, dict]) -> str:
+    # No criativo, os Reels de inspiração ficam em inspirado_em; o texto que vai para produção não leva códigos.
+    return re.sub(r"\s*" + SHORTCODE_NO_TEXTO, "", _limpar(texto, vis)).strip()
+
+
+def _saida_criativos(estado: Estado) -> Saida:
+    """Criativos com Reels e achados filtrados pelo que veio da base; findings e reference_posts são a união
+    do que os criativos usaram."""
+    vis = visiveis(estado)
+    rasc = estado.get("rascunho") or Criativos(explanation="Não foi possível gerar os criativos.", criativos=[])
+    criativos, achados, refs = [], {}, {}
+    for c in rasc.criativos:
+        usados = [vis[a] for a in c.achados_usados if a in vis and vis[a]["dif_pp"] > 0]
+        inspiracao = [s for s in c.inspirado_em if s in estado["referencias"]]
+        achados.update({id_achado(a): a for a in usados})
+        refs.update({s: estado["referencias"][s] for s in inspiracao})
+        criativos.append(Criativo(
+            titulo=c.titulo, formato=c.formato, duracao_alvo=c.duracao_alvo, gancho=_limpar_criativo(c.gancho, vis),
+            roteiro=[cena.model_copy(update={"descricao": _limpar_criativo(cena.descricao, vis)}) for cena in c.roteiro],
+            legenda=_limpar_criativo(c.legenda, vis), cta=_limpar_criativo(c.cta, vis), prompt_capa=c.prompt_capa, inspirado_em=inspiracao,
+            achados_usados=[f"{a['descricao'].split(' — ')[0]} ({dados.vezes(a['lift'])})" for a in usados]))
+    achados = list(achados.values())
+    flag = min((_confianca(a) for a in achados), key=PIOR.index, default="insuficiente")
+    return Saida(run_id=estado["run_id"], mode="gerar_criativo", findings=achados, reference_posts=list(refs.values()),
+                 creatives=criativos, confidence_flag=flag, explanation=_limpar(rasc.explanation, vis),
+                 warnings=_avisos(estado, achados))
+
+
 def montar_saida(estado: Estado) -> dict:
+    if estado["entrada"].mode == "gerar_criativo":
+        return {"saida": _saida_criativos(estado)}
     red = estado.get("redacao") or Redacao(explanation="Não foi possível redigir a resposta.", achados_citados=[],
                                             achados_principais=[], referencias_citadas=[])
     vis = visiveis(estado)
     achados = [vis[a] for a in dict.fromkeys(red.achados_citados) if a in vis]
-    texto = re.sub(IDS_NO_TEXTO, "", red.explanation)
-    texto = re.sub(IDS_POR_EXTENSO, "", texto)
-    texto = re.sub(r"\bA\d{1,2}\b", lambda m: f"“{dados.rotulo(vis[m[0]]['campo'], vis[m[0]]['valor'])}”"
-                   if m[0] in vis else m[0], texto)
+    texto = _limpar(red.explanation, vis)
     refs = [estado["referencias"][s] for s in dict.fromkeys(red.referencias_citadas) if s in estado["referencias"]]
     refs += [estado["referencias"][s] for s in dict.fromkeys(re.findall(SHORTCODE_NO_TEXTO, texto))
              if s in estado["referencias"] and estado["referencias"][s] not in refs]
@@ -372,12 +539,7 @@ def montar_saida(estado: Estado) -> dict:
             f"- {a['descricao']} ({a['robustez'].replace('_', ' ')}; base: {a['recorte'] or 'amostra inteira'})"
             for a in sem_numero)
     resolvidos = ["faltam no texto os números"] + ([] if re.search(r"\bA\d{1,2}\b", texto) else ["o texto menciona ids"])
-    avisos = [f"revisão: {p}" for p in estado.get("problemas", []) if not p.startswith(tuple(resolvidos))]
-    if any(a["robustez"] == "insuficiente" for a in achados):
-        avisos.append("parte dos achados se apoia em poucos Reels (insuficiente); trate como indício")
-    recorte = _recorte(estado["entrada"])
-    if recorte != "amostra inteira" and any(a["recorte"] is None for a in achados):
-        avisos.append(f"parte dos achados vem da amostra inteira, não do recorte pedido ({recorte})")
+    avisos = _avisos(estado, achados, tuple(resolvidos))
     # A flag segue o achado mais fraco entre os que sustentam a conclusão (não entre todos os citados).
     principais = [vis[a] for a in red.achados_principais if a in vis] or achados
     flag = min((_confianca(a) for a in principais), key=PIOR.index, default="insuficiente")

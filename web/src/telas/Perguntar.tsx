@@ -10,6 +10,7 @@ const EXEMPLOS: { mode: Modo; query: string; segment?: string }[] = [
   { mode: "analisar", query: "Que duração de Reels mais aparece entre os de alto engajamento?" },
   { mode: "recomendar", query: "Como a @impulsostone deveria fazer Reels para empreendedoras de alimentação?", segment: "alimentacao" },
   { mode: "analisar", query: "Que tipo de gancho aparece mais nos Reels de alto engajamento?" },
+  { mode: "gerar_criativo", query: "Preciso de um Reels para atrair donos e donas de salão de beleza para o programa", segment: "beleza" },
 ];
 
 export default function Perguntar() {
@@ -45,12 +46,15 @@ export default function Perguntar() {
             data={[
               { value: "analisar", label: "Analisar" },
               { value: "recomendar", label: "Recomendar" },
-              { value: "gerar_criativo", label: "Gerar criativo (em breve)", disabled: true },
+              { value: "gerar_criativo", label: "Gerar criativo" },
               { value: "avaliar", label: "Avaliar vídeo (em breve)", disabled: true },
             ]}
           />
           <Textarea
-            label={modo === "analisar" ? "O que você quer saber sobre os Reels de alto engajamento?" : "Para que público ou objetivo você quer recomendações?"}
+            label={{ analisar: "O que você quer saber sobre os Reels de alto engajamento?",
+                     recomendar: "Para que público ou objetivo você quer recomendações?",
+                     gerar_criativo: "Que Reels você precisa? Diga o público, o objetivo ou o tema.",
+                     avaliar: "" }[modo]}
             placeholder="Ex.: que formato de vídeo aparece mais entre os Reels de alto engajamento?"
             autosize minRows={2} value={query} onChange={(e) => setQuery(e.currentTarget.value)}
           />
@@ -69,7 +73,7 @@ export default function Perguntar() {
               ))}
             </Group>
             <Button onClick={enviar} loading={carregando} disabled={query.trim().length < 3}>
-              {modo === "analisar" ? "Analisar" : "Recomendar"}
+              {{ analisar: "Analisar", recomendar: "Recomendar", gerar_criativo: "Gerar 3 criativos", avaliar: "Avaliar" }[modo]}
             </Button>
           </Group>
         </Stack>
@@ -78,7 +82,11 @@ export default function Perguntar() {
       {carregando && (
         <Group justify="center" py="xl">
           <Loader size="sm" />
-          <Text c="dimmed" size="sm">Consultando a base e escrevendo a resposta (5 a 30 s)…</Text>
+          <Text c="dimmed" size="sm">
+            {modo === "gerar_criativo"
+              ? "Consultando a base, escrevendo os 3 criativos e revisando o tom (1 a 2 min)…"
+              : "Consultando a base e escrevendo a resposta (5 a 30 s)…"}
+          </Text>
         </Group>
       )}
       {erro && <Alert color="red" title="Não foi possível responder">{erro}</Alert>}

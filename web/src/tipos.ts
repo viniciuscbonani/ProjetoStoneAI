@@ -56,11 +56,32 @@ export interface Perfil {
   taxa_mediana: number;
 }
 
+export interface Cena {
+  tempo: string;
+  descricao: string;
+  texto_na_tela: string;
+  prompt_imagem: string;
+}
+
+export interface Criativo {
+  titulo: string;
+  formato: string;
+  duracao_alvo: string;
+  gancho: string;
+  roteiro: Cena[];
+  legenda: string;
+  cta: string;
+  prompt_capa: string;
+  inspirado_em: string[];
+  achados_usados: string[];
+}
+
 export interface Saida {
   run_id: string;
   mode: Modo;
   findings: Achado[];
   reference_posts: ReferencePost[];
+  creatives: Criativo[];
   profiles: Perfil[];
   confidence_flag: Confianca;
   explanation: string;

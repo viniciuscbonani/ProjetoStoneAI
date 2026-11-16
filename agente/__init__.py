@@ -14,7 +14,7 @@ from langchain_core.messages import HumanMessage
 
 from .contrato import Entrada, Saida
 
-IMPLEMENTADOS = {"analisar", "recomendar"}
+IMPLEMENTADOS = {"analisar", "recomendar", "gerar_criativo"}
 
 
 def executar(entrada: Entrada | dict) -> Saida:

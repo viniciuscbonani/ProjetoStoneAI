@@ -84,7 +84,8 @@ Exigências do documento do projeto:
   log gravado.
 
 Implementação (pacote `agente/`, branch `agente`): um agente que recebe o modo. Grafo em `grafo.py`:
-orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator → revisor (refaz 1×) → montar_saida.
+orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (analisar, recomendar) ou gerador
+(gerar_criativo) → revisor (refaz 1×) → montar_saida.
 - `ferramentas.py`: `consultar_caracteristicas`, `buscar_referencias`, `perfis_em_destaque`; cada `@tool`
   devolve texto para o LLM e os dados à parte (`content_and_artifact`). `findings`, `reference_posts` e
   `profiles` são montados desses dados, nunca do texto do LLM; o revisor rejeita citação que não veio deles.
@@ -97,8 +98,14 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator �
 - Modo analisar responde primeiro à pergunta feita (o valor mais comum no top) e depois se isso diferencia
   o top; os exemplos são dos valores perguntados (com e sem rosto, por exemplo). O recomendar usa só o que
   aparece mais no top (para fazer) e menos (para evitar), sem os "sem diferença".
-- Modos prontos: analisar, recomendar. Faltam gerar_criativo e servidor MCP (#14), API FastAPI (#28) e
-  front React + Mantine (#29).
+- Modos prontos: analisar, recomendar e **gerar_criativo**. O gerador (flash) escreve 3 criativos com gancho,
+  roteiro em cenas (texto na tela e prompt de imagem por cena), legenda, CTA, prompt da capa 9:16, Reels de
+  inspiração e achados usados (só selo robusto ou fragil que aparecem mais no top). O revisor confere por
+  código e depois o tom pela persona (flash-lite). ~45 s e 4 a 6 chamadas por execução.
+- Imagem: só prompts copiáveis (em inglês). A cota grátis de imagem do Gemini é zero e o Groq não gera
+  imagem; o caminho grátis previsto é o Cloudflare Workers AI (FLUX-1-schnell), quando houver conta e token.
+- Servidor MCP: `agente/servidor_mcp.py` com o pacote `fastmcp` (o SDK `mcp` 2.x renomeou o FastMCP para
+  MCPServer); ferramentas analisar, recomendar e gerar_criativo. Rodar com `.venv/bin/python -m agente.servidor_mcp`.
 - Modo **avaliar** (#27, acréscimo do projeto ao documento): a pessoa envia o próprio vídeo, ou só o roteiro
   em texto, e recebe pontos fortes e pontos a melhorar. Fluxo: `ler_video` (quadros, cortes, transcrição
   local e rubrica v2) → comparação por código com os achados → redator, cada ponto com achado, robustez e

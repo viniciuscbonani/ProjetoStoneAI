@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { useAbrirReel } from "../App";
 import { CONFIANCA, num, pct, ROBUSTEZ, vezes } from "../formato";
 import type { Achado, Confianca, Saida } from "../tipos";
+import CartaoCriativo from "./CartaoCriativo";
 import CartaoReel from "./CartaoReel";
 
 export function SeloRobustez({ robustez }: { robustez: Achado["robustez"] }) {
@@ -67,7 +68,7 @@ export default function Resultado({ saida }: { saida: Saida }) {
     <Stack gap="lg">
       <Card withBorder padding="lg">
         <Group justify="space-between" mb="sm">
-          <Title order={4}>Resposta</Title>
+          <Title order={4}>{saida.mode === "gerar_criativo" ? "Por que estes criativos" : "Resposta"}</Title>
           <Group gap="xs">
             <Text size="xs" c="dimmed">Confiança</Text>
             <SeloConfianca confianca={saida.confidence_flag} />
@@ -92,6 +93,12 @@ export default function Resultado({ saida }: { saida: Saida }) {
         ))}
         <Text size="xs" c="dimmed" mt="sm">Execução {saida.run_id} · padrões observados, não garantia de resultado</Text>
       </Card>
+
+      {saida.creatives?.length > 0 && (
+        <Stack gap="md">
+          {saida.creatives.map((c, i) => <CartaoCriativo key={c.titulo} c={c} n={i + 1} />)}
+        </Stack>
+      )}
 
       {mais.length > 0 && (
         <div>
