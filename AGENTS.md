@@ -90,5 +90,8 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator �
   local e rubrica v2) → comparação por código com os achados → redator, cada ponto com achado, robustez e
   Reels de referência. Sem nota de engajamento (modelo preditivo está fora do escopo); fala-se em aderência
   aos padrões observados. Desenhado no FigJam (seção Agente).
+- API e front básico (para testar): `.venv/bin/uvicorn agente.api:app --port 8000` e, em `web/`,
+  `npm install && npm run dev` (http://localhost:5173; o Vite repassa `/api` para a porta 8000). Front em
+  React + Vite + Mantine 9: telas Perguntar, Panorama e Histórico, e gaveta com os quadros de cada Reel.
 - Uso: `from agente import executar; executar({"mode": "analisar", "query": "..."})`. Log em
   `data/logs/agente.jsonl`.

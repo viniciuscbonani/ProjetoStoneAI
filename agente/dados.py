@@ -8,6 +8,7 @@ bootstrap por perfil do lift.py.
 import json
 import random
 import sqlite3
+import threading
 from collections import defaultdict
 from datetime import date
 from functools import cache
@@ -47,6 +48,15 @@ def _con() -> sqlite3.Connection:
     return con
 
 
+_TRAVA = threading.Lock()
+
+
+def _consultar(sql: str, params: tuple = ()) -> list[sqlite3.Row]:
+    # A API atende pedidos em várias threads; a conexão é única, então cada consulta roda sob a trava.
+    with _TRAVA:
+        return _con().execute(sql, params).fetchall()
+
+
 def _reel(row: sqlite3.Row) -> dict:
     r = dict(row)
     for c in BOOLEANOS:
@@ -57,7 +67,12 @@ def _reel(row: sqlite3.Row) -> dict:
 
 @cache
 def todos_reels() -> tuple[dict, ...]:
-    return tuple(_reel(r) for r in _con().execute("SELECT * FROM reels"))
+    return tuple(_reel(r) for r in _consultar("SELECT * FROM reels"))
+
+
+@cache
+def _por_shortcode() -> dict[str, dict]:
+    return {r["shortCode"]: r for r in todos_reels()}
 
 
 @cache
@@ -80,7 +95,7 @@ def descrever(campo: str, valor, freq_top: float, freq_controle: float) -> str:
 def achados(campos: list[str] | None = None) -> list[dict]:
     """Achados do lift na amostra inteira (tabela achados)."""
     linhas = []
-    for r in _con().execute("SELECT * FROM achados"):
+    for r in _consultar("SELECT * FROM achados"):
         if campos and r["campo"] not in campos:
             continue
         f = lambda c: float(r[c]) if r[c] not in ("", None) else None
@@ -153,10 +168,9 @@ def comparar(reels: list[dict], campos: list[str], recorte: str, semente: int = 
 
 
 def perfis(faixas: list[str] | None = None) -> list[dict]:
-    linhas = [dict(r) for r in _con().execute("SELECT * FROM perfis ORDER BY n_top DESC, taxa_mediana DESC")]
+    linhas = [dict(r) for r in _consultar("SELECT * FROM perfis ORDER BY n_top DESC, taxa_mediana DESC")]
     return [p for p in linhas if not faixas or p["faixa"] in faixas]
 
 
 def reel(short_code: str) -> dict | None:
-    row = _con().execute("SELECT * FROM reels WHERE shortCode = ?", (short_code,)).fetchone()
-    return _reel(row) if row else None
+    return _por_shortcode().get(short_code)
