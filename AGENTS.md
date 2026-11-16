@@ -83,7 +83,12 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator �
   devolve texto para o LLM e os dados à parte (`content_and_artifact`). `findings`, `reference_posts` e
   `profiles` são montados desses dados, nunca do texto do LLM; o revisor rejeita citação que não veio deles.
 - `confidence_flag`: robusto | fragil | insuficiente, pelo achado mais fraco entre os principais.
-- Modos prontos: analisar, recomendar. Faltam gerar_criativo, avaliar (vídeo ou roteiro; inclui a
-  ferramenta `ler_video`), servidor MCP, API FastAPI e front React + Mantine.
+- Modos prontos: analisar, recomendar. Faltam gerar_criativo e servidor MCP (#14), API FastAPI (#28) e
+  front React + Mantine (#29).
+- Modo **avaliar** (#27, acréscimo do projeto ao documento): a pessoa envia o próprio vídeo, ou só o roteiro
+  em texto, e recebe pontos fortes e pontos a melhorar. Fluxo: `ler_video` (quadros, cortes, transcrição
+  local e rubrica v2) → comparação por código com os achados → redator, cada ponto com achado, robustez e
+  Reels de referência. Sem nota de engajamento (modelo preditivo está fora do escopo); fala-se em aderência
+  aos padrões observados. Desenhado no FigJam (seção Agente).
 - Uso: `from agente import executar; executar({"mode": "analisar", "query": "..."})`. Log em
   `data/logs/agente.jsonl`.
