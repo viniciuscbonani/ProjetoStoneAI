@@ -226,6 +226,8 @@ def redator(estado: Estado) -> dict:
 SHORTCODE_NO_TEXTO = r"\[([A-Za-z0-9_-]{9,})\]"
 # ids de achado que o modelo às vezes deixa no texto: [A1], [A1, A3], (A2), [duracao_faixa=mais_90s]
 IDS_NO_TEXTO = r"\s*[\[(]\s*(?:A\d+(?:\s*,\s*A\d+)*|[a-z_]+=[^\])]*)\s*[\])]"
+# ... e por extenso como aposto: ", conforme visto no achado A1" (o resto é trocado pelo nome do achado)
+IDS_POR_EXTENSO = r",?\s*conforme(?: visto)?\s+n?o\s+achado A\d{1,2}\b"
 
 
 def revisar(estado: Estado) -> list[str]:
@@ -269,11 +271,20 @@ def montar_saida(estado: Estado) -> dict:
     vis = visiveis(estado)
     achados = [vis[a] for a in dict.fromkeys(red.achados_citados) if a in vis]
     texto = re.sub(IDS_NO_TEXTO, "", red.explanation)
+    texto = re.sub(IDS_POR_EXTENSO, "", texto)
+    texto = re.sub(r"\bA\d{1,2}\b", lambda m: f"“{dados.rotulo(vis[m[0]]['campo'], vis[m[0]]['valor'])}”"
+                   if m[0] in vis else m[0], texto)
     refs = [estado["referencias"][s] for s in dict.fromkeys(red.referencias_citadas) if s in estado["referencias"]]
     refs += [estado["referencias"][s] for s in dict.fromkeys(re.findall(SHORTCODE_NO_TEXTO, texto))
              if s in estado["referencias"] and estado["referencias"][s] not in refs]
     perfis = [estado["perfis"][p.lstrip("@")] for p in red.perfis_citados if p.lstrip("@") in estado["perfis"]]
-    avisos = [f"revisão: {p}" for p in estado.get("problemas", [])]
+    # Se o texto final ainda não traz os números dos achados principais, eles entram por código, da base.
+    sem_numero = [vis[a] for a in red.achados_principais if a in vis and f"{vis[a]['freq_top']:.0%}" not in texto]
+    if sem_numero:
+        texto += "\n\nNúmeros dos achados principais:\n" + "\n".join(
+            f"- {a['descricao']} ({a['robustez']}; base: {a['recorte'] or 'amostra inteira'})" for a in sem_numero)
+    resolvidos = ["faltam no texto os números"] + ([] if re.search(r"\bA\d{1,2}\b", texto) else ["o texto menciona ids"])
+    avisos = [f"revisão: {p}" for p in estado.get("problemas", []) if not p.startswith(tuple(resolvidos))]
     if any(a["robustez"] == "insuficiente" for a in achados):
         avisos.append("parte dos achados se apoia em poucos Reels (insuficiente); trate como indício")
     recorte = _recorte(estado["entrada"])
