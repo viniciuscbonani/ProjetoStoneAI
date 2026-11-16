@@ -102,8 +102,18 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
   roteiro em cenas (texto na tela e prompt de imagem por cena), legenda, CTA, prompt da capa 9:16, Reels de
   inspiração e achados usados (só selo robusto ou fragil que aparecem mais no top). O revisor confere por
   código e depois o tom pela persona (flash-lite). ~45 s e 4 a 6 chamadas por execução.
-- Imagem: só prompts copiáveis (em inglês). A cota grátis de imagem do Gemini é zero e o Groq não gera
-  imagem; o caminho grátis previsto é o Cloudflare Workers AI (FLUX-1-schnell), quando houver conta e token.
+- Imagens do criativo, em dois modos. O gerador descreve a **personagem** (uma vez) e o **visual** de cada
+  cena; o código monta os prompts com o estilo fixo `ESTILO_VISUAL` (`persona.py`: verde Stone #00A868 em
+  detalhes, foto documental, 30–60 anos, terço de cima livre, sem texto nem logo; não há guia de marca).
+  - **Copiar**: um prompt único com capa e cenas, para colar no Gemini ou no ChatGPT.
+  - **Gerar** (`agente/imagens.py`, rotas `/imagens`): Cloudflare Workers AI, `flux-2-klein-4b`, 864×1536 (9:16),
+    sob demanda e em ordem; a capa sai sem referência e cada cena usa **só um recorte do rosto e do tronco da
+    capa** como referência. Com a capa inteira ou a cena anterior como referência, o modelo copiava pose e
+    fundo e as cenas saíam iguais (testado em 16/11). ~5–10 s e ~140 neurons por imagem; o plano grátis
+    (10.000 neurons/dia) dá ~10 criativos completos. Credenciais `CLOUDFLARE_ACCOUNT_ID` e
+    `CLOUDFLARE_API_TOKEN` no `.env`; imagens em `data/imagens/` e log em `data/logs/imagens.jsonl`.
+  - Pesquisa (16/11): a cota grátis de imagem do Gemini é zero; o Groq não gera imagem; o `flux-1-schnell`
+    (mais barato) não aceita 9:16 nem referência.
 - Servidor MCP: `agente/servidor_mcp.py` com o pacote `fastmcp` (o SDK `mcp` 2.x renomeou o FastMCP para
   MCPServer); ferramentas analisar, recomendar e gerar_criativo. Rodar com `.venv/bin/python -m agente.servidor_mcp`.
 - Modo **avaliar** (#27, acréscimo do projeto ao documento): a pessoa envia o próprio vídeo, ou só o roteiro

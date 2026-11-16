@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 from . import dados
 from .contrato import Cena, Criativo, Entrada, Saida
 from .ferramentas import FERRAMENTAS, buscar_referencias, id_achado
-from .persona import PERSONA, REGRAS_DADOS
+from .persona import ESTILO_VISUAL, PERSONA, REGRAS_DADOS
 
 # flash-lite: ~500 requisições/dia no plano grátis; o gemini-3.5-flash tem só 20/dia, pouco para 4 a 7
 # chamadas por execução. O redator pode usar outro modelo (AGENTE_MODELO_REDATOR); se a cota dele acabar,
@@ -52,15 +52,25 @@ class Redacao(BaseModel):
                                       description="perfis da lista PERFIS EM DESTAQUE recomendados, sem @")
 
 
+class CenaRascunho(BaseModel):
+    tempo: str = Field(description="ex.: 0–3 s")
+    descricao: str = Field(description="o que se fala e o que aparece na cena, em português")
+    texto_na_tela: str = Field("", description="texto sobreposto ao vídeo, se houver")
+    visual: str = Field(description="em inglês: o que a imagem da cena mostra (ação, enquadramento, ambiente), "
+                                    "sem repetir a descrição da personagem")
+
+
 class CriativoRascunho(BaseModel):
     titulo: str
     formato: str = Field(description="ex.: explicativo, talking head, lista de dicas, bastidores")
     duracao_alvo: str = Field(description="ex.: 90 a 120 s")
     gancho: str = Field(description="o que se fala ou mostra nos 3 primeiros segundos")
-    roteiro: list[Cena] = Field(description="4 a 7 cenas, na ordem")
+    roteiro: list[CenaRascunho] = Field(description="4 a 7 cenas, na ordem")
     legenda: str
     cta: str = Field(description="o convite final para se inscrever ou participar do Impulso Stone")
-    prompt_capa: str = Field(description="prompt em inglês da capa vertical 9:16 do Reel")
+    personagem: str = Field(description="em inglês, uma frase: quem aparece em todas as imagens (idade entre 30 e "
+                                        "60, aparência, roupa com um detalhe verde, o negócio)")
+    capa: str = Field(description="em inglês: o que a capa vertical do Reel mostra")
     inspirado_em: list[str] = Field(description="shortCodes dos Reels de referência que inspiraram o criativo")
     achados_usados: list[str] = Field(description="ids curtos (A1, A2...) dos achados aplicados")
 
@@ -347,9 +357,10 @@ INSTRUCOES_CRIATIVO = """Escreva 3 criativos de Reels para a @impulsostone atend
   houver. A última cena é o convite claro para se inscrever ou participar do Impulso Stone.
 - legenda: até uns 600 caracteres, no tom da persona, terminando com o mesmo convite; poucas hashtags.
 - cta: o convite, em uma frase.
-- prompt_capa e prompt_imagem de cada cena: em inglês, descrevendo uma foto realista de referência
-  (quem aparece, ambiente de um pequeno negócio brasileiro do setor, ação, enquadramento, luz), formato
-  vertical 9:16, sem texto na imagem, sem logotipos ou marcas e sem pessoas famosas.
+- Imagens (em inglês; o estilo visual é aplicado depois, por código): personagem = quem aparece em todas
+  as imagens do criativo, sempre a mesma pessoa; capa = o que a capa mostra; visual de cada cena = o que a
+  imagem daquela cena mostra (ação, enquadramento, ambiente do negócio do setor), sem repetir a personagem.
+  Sem pessoas famosas.
 - Se o pedido citar um setor, use o ambiente e os exemplos desse setor.
 - Não escreva shortCodes nem ids de achado no roteiro, no gancho ou na legenda; eles vão só em inspirado_em
   e achados_usados.
@@ -422,8 +433,10 @@ def revisar_criativos(estado: Estado) -> list[str]:
                       for a in c.achados_usados if a in vis and vis[a]["dif_pp"] < 0]
         if len(c.roteiro) < 3:
             problemas.append(f"criativo {n}: o roteiro precisa de pelo menos 3 cenas")
-        if not c.cta.strip() or not c.prompt_capa.strip():
-            problemas.append(f"criativo {n}: faltam o CTA ou o prompt da capa")
+        if not c.cta.strip() or not c.personagem.strip() or not c.capa.strip():
+            problemas.append(f"criativo {n}: faltam o CTA, a personagem ou a capa")
+        if any(not cena.visual.strip() for cena in c.roteiro):
+            problemas.append(f"criativo {n}: falta o visual de alguma cena")
     return problemas
 
 
@@ -494,6 +507,24 @@ def _avisos(estado: Estado, achados: list[dict], resolvidos: tuple[str, ...] = (
     return avisos
 
 
+def prompts_imagem(personagem: str, capa: str, cenas: list[tuple[str, str]]) -> tuple[str, list[str], str]:
+    """Monta, a partir da personagem e do visual de cada cena, os prompts dos dois modos de imagem:
+    - gerar (Cloudflare): um prompt para a capa e um por cena; as cenas usam um recorte da capa como referência,
+      então o texto pede a mesma pessoa, mas uma foto nova (sem copiar pose nem enquadramento);
+    - copiar: um prompt único com todas as imagens, para colar numa ferramenta de chat (Gemini, ChatGPT),
+      que mantém a personagem ao longo da conversa.
+    O estilo e a personagem saem idênticos em todos os prompts porque vêm daqui, não do LLM."""
+    prompt_capa = f"{ESTILO_VISUAL}\nMain character: {personagem}\nThis image (Reel cover): {capa}"
+    prompts_cenas = [f"{ESTILO_VISUAL}\nThe reference image is a close-up of the main character: keep the same "
+                     f"person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\n"
+                     f"Main character: {personagem}\nNew photo: {visual}" for _, visual in cenas]
+    lista = [f"1. Cover: {capa}"] + [f"{i}. Scene {tempo}: {visual}" for i, (tempo, visual) in enumerate(cenas, 2)]
+    prompt_copiar = (f"Create {len(lista)} vertical 9:16 images for an Instagram Reel storyboard, one image at a "
+                     f"time, in this order. Keep the SAME person, clothes and place in every image.\n\n"
+                     f"{ESTILO_VISUAL}\n\nMain character: {personagem}\n\n" + "\n".join(lista))
+    return prompt_capa, prompts_cenas, prompt_copiar
+
+
 def _limpar_criativo(texto: str, vis: dict[str, dict]) -> str:
     # No criativo, os Reels de inspiração ficam em inspirado_em; o texto que vai para produção não leva códigos.
     return re.sub(r"\s*" + SHORTCODE_NO_TEXTO, "", _limpar(texto, vis)).strip()
@@ -510,10 +541,15 @@ def _saida_criativos(estado: Estado) -> Saida:
         inspiracao = [s for s in c.inspirado_em if s in estado["referencias"]]
         achados.update({id_achado(a): a for a in usados})
         refs.update({s: estado["referencias"][s] for s in inspiracao})
+        prompt_capa, prompts_cenas, prompt_copiar = prompts_imagem(
+            c.personagem, c.capa, [(cena.tempo, cena.visual) for cena in c.roteiro])
         criativos.append(Criativo(
             titulo=c.titulo, formato=c.formato, duracao_alvo=c.duracao_alvo, gancho=_limpar_criativo(c.gancho, vis),
-            roteiro=[cena.model_copy(update={"descricao": _limpar_criativo(cena.descricao, vis)}) for cena in c.roteiro],
-            legenda=_limpar_criativo(c.legenda, vis), cta=_limpar_criativo(c.cta, vis), prompt_capa=c.prompt_capa, inspirado_em=inspiracao,
+            roteiro=[Cena(tempo=cena.tempo, descricao=_limpar_criativo(cena.descricao, vis),
+                          texto_na_tela=cena.texto_na_tela, visual=cena.visual, prompt_imagem=prompt)
+                     for cena, prompt in zip(c.roteiro, prompts_cenas)],
+            legenda=_limpar_criativo(c.legenda, vis), cta=_limpar_criativo(c.cta, vis), personagem=c.personagem,
+            prompt_capa=prompt_capa, prompt_copiar=prompt_copiar, inspirado_em=inspiracao,
             achados_usados=[f"{a['descricao'].split(' — ')[0]} ({dados.vezes(a['lift'])})" for a in usados]))
     achados = list(achados.values())
     flag = min((_confianca(a) for a in achados), key=PIOR.index, default="insuficiente")

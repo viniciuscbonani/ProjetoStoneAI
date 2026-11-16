@@ -60,6 +60,7 @@ export interface Cena {
   tempo: string;
   descricao: string;
   texto_na_tela: string;
+  visual?: string;
   prompt_imagem: string;
 }
 
@@ -71,7 +72,9 @@ export interface Criativo {
   roteiro: Cena[];
   legenda: string;
   cta: string;
+  personagem?: string;
   prompt_capa: string;
+  prompt_copiar?: string;
   inspirado_em: string[];
   achados_usados: string[];
 }

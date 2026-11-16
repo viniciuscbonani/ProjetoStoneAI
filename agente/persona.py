@@ -35,6 +35,15 @@ Nos anúncios da Stone (Meta Ads, fev–out/2026, medido por clique):
 Parceiros do programa: @rodrigofinancas (educação financeira), @indiacorrea (empreendedorismo e beleza),
 @chefrut (gastronomia), @wr_walterrodrigues (moda), @oijedai (empreendedorismo social)."""
 
+# Estilo fixo das imagens dos criativos, colado por código em todo prompt de imagem. Não há guia de marca da
+# Stone: o verde é o da marca e o estilo segue os aprendizados das campanhas (pessoas reais funcionam).
+# Logo e texto entram depois, na edição; geradores de imagem escrevem texto errado e deformam marcas.
+ESTILO_VISUAL = " ".join("""Impulso Stone visual style: bright, warm documentary photography of real small businesses in
+Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone
+green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy
+advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text,
+letters, logos or watermarks in the image.""".split())
+
 REGRAS_DADOS = """Regras sobre os dados:
 - Use SÓ os achados, Reels e perfis fornecidos. Todo número que você escrever tem de estar em um achado.
   Não invente percentuais, Reels, perfis nem resultados.

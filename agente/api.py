@@ -5,6 +5,7 @@ Rotas:
 - GET /panorama: achados do lift e perfis em destaque, sem LLM
 - GET /reels/{shortCode} e /reels/{shortCode}/quadros/{nome}: detalhe e quadros de um Reel da base
 - GET /execucoes e /execucoes/{run_id}: histórico, lido do log do agente
+- POST /imagens e GET /imagens/{run_id}: imagens dos criativos (Cloudflare Workers AI), geradas sob demanda
 
 Uso:
     .venv/bin/uvicorn agente.api:app --port 8000
@@ -16,8 +17,9 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from langchain_google_genai.chat_models import GoogleRateLimitError
+from pydantic import BaseModel
 
-from . import IMPLEMENTADOS, dados, executar
+from . import IMPLEMENTADOS, dados, executar, imagens
 from .contrato import Entrada, Saida
 from .registro import LOG
 
@@ -94,3 +96,50 @@ def execucao(run_id: str) -> dict:
         if l["run_id"] == run_id:
             return l
     raise HTTPException(404, "execução não encontrada")
+
+
+class PedidoImagem(BaseModel):
+    run_id: str
+    criativo: int  # 1 a 3
+    indice: int  # 0 = capa; 1..n = cenas do roteiro
+
+
+@app.post("/imagens")
+def gerar_imagem(pedido: PedidoImagem) -> dict:
+    """Gera uma imagem do criativo. O front pede na ordem (capa, cena 1, cena 2...), porque cada cena usa a capa
+    e a cena anterior como referência."""
+    saida = execucao(pedido.run_id).get("saida") or {}
+    criativos = saida.get("creatives") or []
+    if not 1 <= pedido.criativo <= len(criativos):
+        raise HTTPException(404, "criativo não encontrado nesta execução")
+    try:
+        caminho = imagens.gerar_do_criativo(pedido.run_id, pedido.criativo, pedido.indice,
+                                            criativos[pedido.criativo - 1])
+    except imagens.SemCredenciais as e:
+        raise HTTPException(503, f"geração de imagem indisponível: {e}")
+    except (IndexError, ValueError) as e:
+        raise HTTPException(409, str(e))
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"indice": pedido.indice, "url": f"/imagens/{pedido.run_id}/{caminho.name}"}
+
+
+RUN_ID = re.compile(r"^[0-9]{8}-[0-9]{6}-[0-9a-f]{6}$")
+ARQUIVO_IMAGEM = re.compile(r"^criativo[1-9]_(capa|cena[0-9]{1,2})\.jpg$")
+
+
+@app.get("/imagens/{run_id}")
+def imagens_da_execucao(run_id: str) -> dict[str, str]:
+    """Imagens já geradas de uma execução, por nome (criativo1_capa, criativo1_cena2...)."""
+    if not RUN_ID.match(run_id):
+        raise HTTPException(404, "execução não encontrada")
+    pasta = imagens.PASTA / run_id
+    return {p.stem: f"/imagens/{run_id}/{p.name}" for p in sorted(pasta.glob("*.jpg"))} if pasta.exists() else {}
+
+
+@app.get("/imagens/{run_id}/{nome}")
+def imagem(run_id: str, nome: str) -> FileResponse:
+    caminho = imagens.PASTA / run_id / nome
+    if not RUN_ID.match(run_id) or not ARQUIVO_IMAGEM.match(nome) or not caminho.exists():
+        raise HTTPException(404, "imagem não encontrada")
+    return FileResponse(caminho, media_type="image/jpeg")

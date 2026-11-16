@@ -84,7 +84,8 @@ class Cena(BaseModel):
     tempo: str = Field(description="ex.: 0–3 s")
     descricao: str = Field(description="o que se fala e o que aparece na cena")
     texto_na_tela: str = Field("", description="texto sobreposto ao vídeo, se houver")
-    prompt_imagem: str = Field("", description="prompt (em inglês) para gerar uma imagem de referência da cena")
+    visual: str = Field("", description="o que aparece na imagem da cena, em inglês")
+    prompt_imagem: str = Field("", description="prompt completo da imagem da cena (estilo + personagem + visual)")
 
 
 class Criativo(BaseModel):
@@ -95,7 +96,9 @@ class Criativo(BaseModel):
     roteiro: list[Cena]
     legenda: str
     cta: str
-    prompt_capa: str = Field("", description="prompt (em inglês) da capa vertical 9:16 do Reel")
+    personagem: str = Field("", description="quem aparece em todas as imagens do criativo, em inglês")
+    prompt_capa: str = Field("", description="prompt completo da capa vertical 9:16 (estilo + personagem + capa)")
+    prompt_copiar: str = Field("", description="prompt único de todas as imagens, para colar numa ferramenta de chat")
     inspirado_em: list[str] = Field(description="shortCodes dos Reels de referência")
     achados_usados: list[str] = Field(description="achados aplicados, em linguagem simples")
 

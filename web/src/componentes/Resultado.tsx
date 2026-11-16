@@ -96,7 +96,7 @@ export default function Resultado({ saida }: { saida: Saida }) {
 
       {saida.creatives?.length > 0 && (
         <Stack gap="md">
-          {saida.creatives.map((c, i) => <CartaoCriativo key={c.titulo} c={c} n={i + 1} />)}
+          {saida.creatives.map((c, i) => <CartaoCriativo key={c.titulo} c={c} n={i + 1} runId={saida.run_id} />)}
         </Stack>
       )}
 
