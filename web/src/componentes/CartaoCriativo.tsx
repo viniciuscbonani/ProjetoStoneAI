@@ -28,7 +28,7 @@ function emTexto(c: Criativo) {
   ].join("\n");
 }
 
-// Selo da revisão de uma imagem gerada: nota do revisor e, se reprovada nas 3 tentativas, os problemas.
+// Selo da revisão de uma imagem gerada: nota do revisor e, se reprovada nas duas versões, os problemas.
 function SeloRevisao({ img }: { img?: ImagemGerada }) {
   const r = img?.revisao;
   if (!img) return null;
@@ -163,7 +163,7 @@ export default function CartaoCriativo({ c, n, runId }: { c: Criativo; n: number
           </Group>
           <Text size="xs" c="dimmed" mt={4}>
             Copiar: cole no Gemini ou no ChatGPT. Gerar: capa e cenas em 9:16 pelo Cloudflare; cada cena usa o rosto da capa
-            como base, para manter a mesma pessoa; um revisor confere cada imagem e, se reprovar, gera de novo (até 3 vezes).
+            como base, para manter a mesma pessoa; um revisor confere cada imagem e, se reprovar, gera uma segunda versão.
           </Text>
           <Collapse expanded={verPrompt}>
             <Code block mt="xs" style={{ whiteSpace: "pre-wrap" }}>{c.prompt_copiar}</Code>

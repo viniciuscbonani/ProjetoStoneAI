@@ -8,8 +8,8 @@ do criativo (nos.prompts_imagem).
 
 Cada imagem passa por um revisor com visão (Gemini flash-lite): anatomia, texto ou rabiscos na imagem, objetos
 deformados, pose artificial, cena diferente do pedido, espaço livre no topo da capa e, nas cenas, se é a mesma
-pessoa da capa. Reprovada, a imagem é gerada de novo (outra seed, com os problemas no prompt), até 3 tentativas;
-fica a de maior nota. Se o revisor estiver fora do ar, a imagem segue sem revisão.
+pessoa da capa. Reprovada, a imagem ganha uma segunda versão (outra seed, com os problemas no prompt); fica a de
+maior nota. Mais tentativas não compensavam: o que o modelo não sabe fazer falha em todas. Se o revisor estiver fora do ar, a imagem segue sem revisão.
 
 Credenciais no .env: CLOUDFLARE_ACCOUNT_ID e CLOUDFLARE_API_TOKEN (token com permissão de Workers AI).
 O plano grátis dá 10.000 neurons/dia; uma imagem 864×1536 custa ~130 neurons (~140 com o recorte de
@@ -170,7 +170,7 @@ Dê nota de 0 a 10 para o quanto a IMAGEM 1 está pronta para uso e liste só os
 em português; em `evitar`, os mesmos problemas em inglês, curtos."""
 
 
-MAX_TENTATIVAS = 3
+MAX_TENTATIVAS = 2  # a original e uma segunda, corrigida pela revisão
 
 
 class RevisaoImagem(BaseModel):
