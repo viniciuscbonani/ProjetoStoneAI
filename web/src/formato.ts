@@ -10,7 +10,7 @@ export const compacto = (x: number) => new Intl.NumberFormat("pt-BR", { notation
 export const ROBUSTEZ: Record<Robustez, { rotulo: string; cor: string; ajuda: string }> = {
   robusto: { rotulo: "Diferença clara", cor: "stone", ajuda: "diferença consistente entre top e controle" },
   fragil: { rotulo: "Indício", cor: "yellow", ajuda: "diferença que ainda não se sustenta em todos os testes; hipótese a testar" },
-  sem_diferenca: { rotulo: "Sem diferença", cor: "gray", ajuda: "top e controle têm proporção parecida: não diferencia os Reels de alto engajamento" },
+  sem_diferenca: { rotulo: "Sem diferença", cor: "gray", ajuda: "a diferença entre top e controle não é confiável (pode ser variação entre criadores): não diferencia os Reels de alto engajamento" },
   insuficiente: { rotulo: "Poucos dados", cor: "orange", ajuda: "menos de 20 Reels no top; não dá para afirmar" },
 };
 
@@ -22,7 +22,7 @@ export const CONFIANCA: Record<Confianca, { rotulo: string; cor: string; ajuda: 
 
 // O lift em linguagem simples, como no agente (dados.vezes).
 export const vezes = (lift: number | null, robustez: Robustez) => {
-  if (robustez === "sem_diferenca") return "proporção parecida no top e no controle";
+  if (robustez === "sem_diferenca") return "diferença não confiável entre top e controle";
   if (lift == null) return "só aparece no top";
   if (lift >= 1) return `${num(lift, 1)}× mais comum no top`;
   return lift > 0 ? `${num(1 / lift, 1)}× menos comum no top` : "não aparece no top";

@@ -116,7 +116,7 @@ export default function Resultado({ saida }: { saida: Saida }) {
       {semDiferenca.length > 0 && (
         <div>
           <Title order={5}>Sem diferença entre top e controle</Title>
-          <Text size="sm" c="dimmed" mb="xs">Aparecem em proporção parecida nos dois grupos: não explicam o engajamento.</Text>
+          <Text size="sm" c="dimmed" mb="xs">A diferença entre os dois grupos não é confiável: não explicam o engajamento.</Text>
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>{semDiferenca.map((a) => <CartaoAchado key={a.campo + a.valor + a.recorte} a={a} />)}</SimpleGrid>
         </div>
       )}

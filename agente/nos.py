@@ -221,8 +221,8 @@ INSTRUCOES_MODO = {
    (ex.: "Sim: 81% dos Reels de alto engajamento mostram o rosto").
 2. DEPOIS, se isso diferencia o top dos Reels comuns (controle), conforme o selo de cada valor:
    robusto = diferença consistente; fragil = indício, hipótese a testar; sem_diferenca = NÃO diferencia,
-   os Reels comuns têm proporção parecida; insuficiente = poucos Reels para dizer.
-   Com selo sem_diferenca, nunca diga que o valor "aparece mais", "se destaca" ou "é indício".
+   a diferença entre top e controle não é confiável (pode ser variação entre criadores); insuficiente = poucos
+   Reels para dizer. Com selo sem_diferenca, nunca diga que o valor "aparece mais", "se destaca" ou "é indício".
 3. Exemplos: 1 ou 2 Reels listados no próprio valor de que você está falando.
 Traga outras características só se ajudarem a responder à pergunta.""",
     "recomendar": """Escreva de 3 a 6 recomendações práticas e numeradas para a @impulsostone produzir Reels.
@@ -273,7 +273,7 @@ def _contexto(estado: Estado) -> str:
     exemplos = estado.get("exemplos", {})
 
     def linha(i: str, a: dict) -> str:
-        comparacao = ("proporção parecida no top e no controle" if a["robustez"] == "sem_diferenca"
+        comparacao = ("diferença não confiável entre top e controle" if a["robustez"] == "sem_diferenca"
                       else dados.vezes(a["lift"]))
         return (f"- {i}: {a['descricao']}; {comparacao}; selo: {a['robustez']} (n_top={a['n_top']})"
                 + (f"; exemplos: {', '.join(f'[{s}]' for s in exemplos[id_achado(a)])}"
@@ -395,6 +395,8 @@ def revisar(estado: Estado) -> list[str]:
         problemas.append(f"faltam no texto os números (top × controle) dos achados principais: {', '.join(sem_numero)}")
     if re.search(r"\bA\d{1,2}\b", red.explanation):
         problemas.append("o texto menciona ids de achado (A1, A2...); descreva o achado em palavras")
+    if re.search(r"sem_diferenca|selo (?:robusto|fragil|insuficiente)", red.explanation):
+        problemas.append("o texto usa nomes internos de selo; explique a força da evidência em palavras")
     if vis and not red.achados_citados:
         problemas.append("nenhum achado citado; a resposta precisa se apoiar nos achados")
     return problemas

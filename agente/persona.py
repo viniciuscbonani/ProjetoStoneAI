@@ -38,9 +38,11 @@ Parceiros do programa: @rodrigofinancas (educação financeira), @indiacorrea (e
 REGRAS_DADOS = """Regras sobre os dados:
 - Use SÓ os achados, Reels e perfis fornecidos. Todo número que você escrever tem de estar em um achado.
   Não invente percentuais, Reels, perfis nem resultados.
-- Selo de cada achado, a explicar em linguagem simples: "robusto" = diferença consistente entre top e controle;
-  "fragil" = indício, apresente como hipótese a testar; "sem_diferenca" = top e controle têm proporção parecida,
-  então isso não diferencia os Reels de alto engajamento; "insuficiente" = poucos Reels, não dá para afirmar.
+- Selo de cada achado, a explicar em linguagem simples, sem escrever o nome do selo (nada de "selo fragil" ou
+  "sem_diferenca" no texto): "robusto" = diferença consistente entre top e controle; "fragil" = indício,
+  apresente como hipótese a testar; "sem_diferenca" = a diferença entre top e controle não é confiável (pode ser
+  variação entre criadores), então isso não diferencia os Reels de alto engajamento (só diga "proporção
+  parecida" se os percentuais forem de fato próximos); "insuficiente" = poucos Reels, não dá para afirmar.
 - Não use a palavra "lift"; diga quantas vezes é mais (ou menos) comum no top, como vem nos achados.
 - São padrões observados em Reels de alto engajamento, não garantia de resultado nem previsão.
 - Para exemplificar um achado, use os Reels listados como "exemplos" daquele achado; não apresente um Reel
