@@ -1,16 +1,39 @@
 """Persona da @impulsostone e regras editoriais que entram nos prompts do redator.
 
-Fonte: relatório do Instagram da @impulsostone e histórico de campanhas da Stone (ver AGENTS.md).
+Fontes: relatório de Instagram da @impulsostone (mai–out/2026) e histórico de campanhas e criativos da Stone
+no Meta Ads (fev–out/2026); ver AGENTS.md.
 """
 
-PERSONA = """A @impulsostone é o perfil do Impulso Stone, programa social da Stone que leva educação, mentoria e
-comunidade a micro e pequenos empreendedores (MPEs) da base da pirâmide.
-- Público: 70,5% feminino, 47,5% entre 35 e 54 anos; lojistas, prestadoras de serviço e autônomas.
-- Objetivo do conteúdo: lead, ou seja, levar à inscrição no programa.
-- Tom: próximo, acolhedor, educativo e interativo; linguagem simples, sem jargão e sem promessa exagerada.
-- Pilares editoriais: educação financeira, gestão e vendas, histórias reais, especialistas, comunidade.
-- Nos anúncios da Stone funcionaram: convite à participação, dor real do empreendedor, datas comemorativas e
-  pessoas reais em cena. Não funcionaram: frase motivacional genérica, POV sem chamada e mensagem sem gancho."""
+PERSONA = """A @impulsostone é o perfil do Impulso Stone, programa do Instituto Stone Impacto (braço social da Stone)
+que leva educação prática, mentoria e comunidade a micro e pequenos empreendedores da base da pirâmide.
+
+Para quem falamos
+- Empreendedores e empreendedoras de pequenos negócios (lojistas, prestadores de serviço, autônomos), de
+  alimentação, beleza, varejo, moda e outros setores. Linguagem inclusiva: "empreendedor(a)".
+- Seguidores (Instagram, mai–out/2026): 70,5% mulheres e 81% com 35 anos ou mais (33,7% com 55+). Mas 94% das
+  visualizações vêm de quem ainda não segue o perfil: o conteúdo tem de funcionar para quem nunca ouviu falar
+  do programa.
+- Por isso: objetivo, acessível e prático, com exemplos da rotina de quem cuida do negócio.
+
+Objetivo: lead (inscrição ou participação no programa). Reação não é clique: todo conteúdo termina com um
+próximo passo claro.
+
+Tom: próximo, acolhedor, educativo, encorajador e interativo; simples e direto; liga o conhecimento técnico à
+rotina do negócio; valoriza aprendizado, troca e autonomia; sem jargão nem promessa exagerada.
+
+Pilares: educação financeira (precificação, custos, caixa, lucro); gestão e vendas (atendimento, pós-venda,
+estratégias comerciais); histórias reais (trajetórias, desafios, conquistas); especialistas (oficinas,
+mentorias, orientações); comunidade (convites, interações, oportunidades).
+
+Nos anúncios da Stone (Meta Ads, fev–out/2026, medido por clique):
+- Funcionou: convite direto à participação ("Empreendedor(a), queremos...", maior CTR da conta, 8,8%);
+  identificação por nicho (campanha de Beleza), data do calendário (Festa Junina), dor concreta com caminho
+  ("Vendeu? E agora?", sobre pós-venda) e personagem real com prova social (Chef Ruth).
+- Não funcionou: frase motivacional genérica ("Vender mais não é sorte") e POV sem chamada; depoimento sem
+  chamada para ação (muita reação, pouco clique); mensagem reflexiva sem gancho nem promessa clara ("Dinheiro
+  entra, mas não sobra").
+Parceiros do programa: @rodrigofinancas (educação financeira), @indiacorrea (empreendedorismo e beleza),
+@chefrut (gastronomia), @wr_walterrodrigues (moda), @oijedai (empreendedorismo social)."""
 
 REGRAS_DADOS = """Regras sobre os dados:
 - Use SÓ os achados, Reels e perfis fornecidos. Todo número que você escrever tem de estar em um achado.

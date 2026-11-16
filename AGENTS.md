@@ -58,11 +58,17 @@ Métrica principal: **taxa de engajamento = (curtidas + comentários) ÷ seguido
   formato_video; moderados — abordagem, tipo_hook; **fraco — criador_e_empreendedor_real (não usar)**.
 
 ## Persona da @impulsostone (criativos)
-Público 70,5% feminino, 47,5% entre 35 e 54 anos. Objetivo: **lead** (inscrição no programa). Tom
-próximo, acolhedor, educativo e interativo, linguagem simples, sem jargão nem promessa exagerada.
-Pilares: educação financeira, gestão e vendas, histórias reais, especialistas, comunidade. Nos
-anúncios da Stone funcionaram convite à participação, dor real, datas comemorativas e pessoas reais;
-não funcionaram frase motivacional genérica, POV sem chamada e mensagem sem gancho.
+Texto completo em `agente/persona.py` (fontes: relatório de Instagram e histórico de campanhas do Meta Ads).
+- Fala com **empreendedores e empreendedoras de pequenos negócios** em geral ("empreendedor(a)"), não com
+  um gênero. Os 70,5% de mulheres e os 81% com 35+ anos (33,7% com 55+) são dos **seguidores**; 94% das
+  visualizações vêm de não seguidores, então o criativo tem de funcionar para quem não conhece o programa.
+- Objetivo: **lead** (inscrição/participação). Os aprendizados dos anúncios são medidos por **clique (CTR)**:
+  "reação não é clique", então todo criativo termina com um próximo passo claro.
+- Tom próximo, acolhedor, educativo, encorajador e interativo; simples e direto; sem jargão nem promessa
+  exagerada. Pilares: educação financeira, gestão e vendas, histórias reais, especialistas, comunidade.
+- Funcionou: convite à participação (CTR 8,8%), nicho (Beleza), data do calendário, dor concreta com caminho,
+  personagem real com prova social. Não funcionou: motivacional genérica, POV sem chamada, **depoimento sem
+  CTA** (pessoa real sozinha não basta) e mensagem reflexiva sem promessa clara.
 
 ## Agente (issue #14)
 Exigências do documento do projeto:
