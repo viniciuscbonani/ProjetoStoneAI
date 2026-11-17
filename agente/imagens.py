@@ -31,7 +31,7 @@ from dotenv import load_dotenv
 from PIL import Image
 from pydantic import BaseModel, Field
 
-from .dados import RAIZ
+from .dados import RAIZ, TEMPO_LIMITE_S
 
 MODELO_IMAGEM = os.environ.get("AGENTE_MODELO_IMAGEM", "@cf/black-forest-labs/flux-2-klein-4b")
 LARGURA, ALTURA = 864, 1536  # 9:16, múltiplos de 16 (exigência do FLUX)
@@ -183,10 +183,12 @@ class RevisaoImagem(BaseModel):
 def revisar(imagem: bytes, pedido: str, referencia: Path | None = None) -> RevisaoImagem:
     """Revisa a imagem com o Gemini (visão). Nas cenas, compara com a capa para conferir se é a mesma pessoa."""
     from google import genai
+    import httpx2
     from google.genai import errors, types
 
     load_dotenv(RAIZ / ".env")
-    cliente = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    cliente = genai.Client(api_key=os.environ["GEMINI_API_KEY"],
+                           http_options=types.HttpOptions(timeout=TEMPO_LIMITE_S * 1000))
     texto = PROMPT_REVISOR.format(
         pedido=pedido,
         sobre_referencia=("\nA IMAGEM 2 é a capa do mesmo criativo e serve SÓ para conferir a pessoa; não avalie a cena "
@@ -205,8 +207,8 @@ def revisar(imagem: bytes, pedido: str, referencia: Path | None = None) -> Revis
                 config=types.GenerateContentConfig(response_mime_type="application/json",
                                                    response_schema=RevisaoImagem))
             break
-        except errors.APIError as e:
-            if e.code not in (429, 503) or espera is None:
+        except (errors.APIError, httpx2.TimeoutException) as e:
+            if getattr(e, "code", 503) not in (429, 503) or espera is None:  # tempo esgotado conta como 503
                 raise
             time.sleep(espera)
     revisao = RevisaoImagem.model_validate_json(resp.text)

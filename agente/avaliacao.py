@@ -23,7 +23,8 @@ from pydantic import BaseModel, Field
 from . import dados, midia
 from .contrato import Avaliacao, Ponto, Saida
 from .ferramentas import buscar_referencias, id_achado
-from .nos import MODELO, PIOR, SHORTCODE_NO_TEXTO, Estado, _confianca, _contar, _escrever, _limpar
+from .nos import (MODELO, PIOR, PROBLEMA_ACENTO, SHORTCODE_NO_TEXTO, Estado, _confianca, _contar, _escrever,
+                  _limpar, sem_acentos)
 
 PASTA_UPLOADS = dados.RAIZ / "data" / "uploads"
 PALAVRAS_POR_SEGUNDO = 2.5  # fala corrida em português (~150 palavras por minuto)
@@ -39,8 +40,10 @@ CAMPOS_AVALIADOS = ["duracao_faixa", "formato_video", "tipo_hook", "hook_visual"
 
 def _cliente():
     from google import genai
+    from google.genai import types
     load_dotenv(dados.RAIZ / ".env")
-    return genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    return genai.Client(api_key=os.environ["GEMINI_API_KEY"],
+                        http_options=types.HttpOptions(timeout=dados.TEMPO_LIMITE_S * 1000))
 
 
 def ler(estado: Estado) -> dict:
@@ -132,9 +135,15 @@ engajamento da base. A lista de pontos e os números já estão decididos abaixo
 - forte: o que o vídeo já faz e por que isso conta (com o número top × controle do achado);
 - melhorar: uma sugestão concreta do que mudar, inspirada na alternativa e nos Reels de exemplo (pode citar
   o gancho deles), com o número do achado; se o achado depende de poucos criadores, diga que é para testar;
-- sem_efeito: diga que isso não diferencia os Reels de alto engajamento, então não precisa mudar.
+- sem_efeito: diga que a diferença entre top e controle não é confiável, então isso não diferencia os Reels de
+  alto engajamento e não precisa mudar. Não escreva "proporção parecida" quando os percentuais forem distantes
+  (ex.: 19% × 11%).
 Ao citar um Reel de exemplo, escreva o shortCode entre colchetes, ex.: [DbnuKRmRJ_H].
-explanation: o resumo em 2 ou 3 frases, começando pelo principal ponto forte e pela principal melhoria.
+explanation: o resumo em 2 ou 3 frases, começando pelo principal ponto forte e pela principal melhoria. Recomende
+só o que está nos pontos "melhorar"; sem nenhum, confirme os pontos fortes e não sugira mudanças. Nunca sugira
+testar algo que o vídeo já tem (os pontos "forte"). Sem pontos "forte", comece pela principal melhoria: o que está
+em "sem_efeito" não é ponto forte.
+Escreva em português com acentuação correta (vídeo, não, você, duração).
 Nunca dê nota nem diga quanto o vídeo vai engajar: são padrões observados, não previsão."""
 
 
@@ -175,6 +184,17 @@ def revisar_avaliacao(estado: Estado) -> list[str]:
                   if s not in estado["referencias"]]
     if re.search(r"\bnota\b|\d+\s*/\s*10|vai (?:engajar|viralizar|bombar)", textos, re.I):
         problemas.append("não dê nota nem previsão de engajamento")
+    if sem_acentos(textos):
+        problemas.append(PROBLEMA_ACENTO)
+    if not any(p["tipo"] == "melhorar" for p in estado["pontos"]) and re.search(
+            r"vale (?:a pena )?(?:testar|incluir|usar)|experiment|potencializ|sugerimos|considere (?:incluir|usar)",
+            red.explanation, re.I):
+        problemas.append("não há pontos a melhorar: o resumo só confirma os pontos fortes, sem sugerir mudanças")
+    # "Proporção parecida" só quando os percentuais são próximos (até 5 pontos); fora disso, "diferença não confiável".
+    problemas += [f"{p['id']}: {p['achado']['freq_top']:.0%} × {p['achado']['freq_controle']:.0%} não é proporção parecida; "
+                  "diga que a diferença entre top e controle não é confiável"
+                  for p in estado["pontos"] if p["tipo"] == "sem_efeito" and abs(p["achado"]["dif_pp"]) > 5
+                  and re.search(r"parecid", escritos.get(p["id"], ""), re.I)]
     return problemas
 
 

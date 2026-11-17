@@ -19,6 +19,9 @@ RAIZ = Path(__file__).resolve().parent.parent
 BASE = RAIZ / "data" / "processed" / "agente.db"
 MIN_N_TOP = 20  # mesmo corte do lift.py: abaixo disso o achado é "insuficiente"
 REPETICOES_RECORTE = 500
+# Tempo máximo de uma chamada ao Gemini, em segundos. Sem limite, com o Google sobrecarregado uma chamada ficou
+# esperando para sempre (17/11) e a execução travou sem erro.
+TEMPO_LIMITE_S = 90
 
 # Campos que o agente pode citar (rubrica v2 + calculados). criador_e_empreendedor_real ficou fora da base.
 CAMPOS = {

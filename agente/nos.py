@@ -16,6 +16,7 @@ import re
 from functools import cache
 from typing import Annotated, TypedDict
 
+import httpx2
 from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -110,7 +111,8 @@ class Estado(TypedDict, total=False):
 def llm(modelo: str = MODELO) -> ChatGoogleGenerativeAI:
     # Sem temperature: os modelos Gemini 3.5 usam amostragem fixa e ignoram o parâmetro.
     load_dotenv(dados.RAIZ / ".env")
-    return ChatGoogleGenerativeAI(model=modelo, max_retries=2, google_api_key=os.environ["GEMINI_API_KEY"])
+    return ChatGoogleGenerativeAI(model=modelo, max_retries=2, timeout=dados.TEMPO_LIMITE_S,
+                                  google_api_key=os.environ["GEMINI_API_KEY"])
 
 
 def _contar(estado: Estado, no: str, modelo: str) -> dict:
@@ -327,8 +329,8 @@ def _contexto(estado: Estado) -> str:
 
 def _escrever(estado: Estado, no: str, esquema: type[BaseModel], tarefa: str,
               contexto: str | None = None) -> tuple[BaseModel | None, dict]:
-    """Chama o modelo de redação com saída estruturada; se a cota dele acabar ou ele estiver sobrecarregado
-    (503), segue com o modelo padrão."""
+    """Chama o modelo de redação com saída estruturada; se a cota dele acabar, ele estiver sobrecarregado (503) ou
+    não responder no tempo limite, segue com o modelo padrão."""
     sistema = f"{PERSONA}\n\n{REGRAS_DADOS}\n\nTarefa ({estado['entrada'].mode}): {tarefa}"
     pedido = contexto or _contexto(estado)
     if estado.get("problemas"):
@@ -337,11 +339,12 @@ def _escrever(estado: Estado, no: str, esquema: type[BaseModel], tarefa: str,
     modelo = MODELO_REDATOR
     try:
         r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
-    except (GoogleRateLimitError, GoogleAPIError) as e:
-        indisponivel = isinstance(e, GoogleRateLimitError) or "503" in str(e) or "UNAVAILABLE" in str(e)
+    except (GoogleRateLimitError, GoogleAPIError, httpx2.TimeoutException) as e:
+        indisponivel = (isinstance(e, (GoogleRateLimitError, httpx2.TimeoutException))
+                        or "503" in str(e) or "UNAVAILABLE" in str(e))
         if modelo == MODELO or not indisponivel:
             raise
-        modelo = MODELO  # cota esgotada ou modelo sobrecarregado: segue com o modelo padrão
+        modelo = MODELO  # cota esgotada, modelo sobrecarregado ou sem resposta: segue com o modelo padrão
         r = llm(modelo).with_structured_output(esquema, include_raw=True).invoke(mensagens)
     return r["parsed"], {"redacoes": estado.get("redacoes", 0) + 1,
                          "tokens": estado.get("tokens", 0) + _tokens(r["raw"]), **_contar(estado, no, modelo)}
@@ -391,6 +394,17 @@ IDS_NO_TEXTO = r"\s*[\[(]\s*(?:A\d+(?:\s*,\s*A\d+)*|[a-z_]+=[^\])]*)\s*[\])]"
 IDS_POR_EXTENSO = r",?\s*conforme(?: visto)?\s+n?o\s+achado A\d{1,2}\b"
 
 
+# Palavras comuns que só aparecem sem acento quando o modelo escreve sem acentuação (visto no flash-lite em 17/11).
+SEM_ACENTO = re.compile(r"\b(nao|voce|voces|video|videos|conteudo|conteudos|duracao|publico|tambem|entao|alem|"
+                        r"proporcao|diferenca|frequencia|hipotese|pratica|gestao|presenca|ausencia|acao|sao|ate)\b",
+                        re.I)
+PROBLEMA_ACENTO = "o texto está sem acentos; reescreva em português com acentuação correta"
+
+
+def sem_acentos(texto: str) -> bool:
+    return len(SEM_ACENTO.findall(texto)) >= 2
+
+
 def revisar(estado: Estado) -> list[str]:
     if estado["entrada"].mode == "gerar_criativo":
         return revisar_criativos(estado)
@@ -422,6 +436,8 @@ def revisar(estado: Estado) -> list[str]:
         problemas.append("o texto usa nomes internos de selo; explique a força da evidência em palavras")
     if vis and not red.achados_citados:
         problemas.append("nenhum achado citado; a resposta precisa se apoiar nos achados")
+    if sem_acentos(red.explanation):
+        problemas.append(PROBLEMA_ACENTO)
     return problemas
 
 
@@ -449,6 +465,9 @@ def revisar_criativos(estado: Estado) -> list[str]:
             problemas.append(f"criativo {n}: faltam o CTA, a personagem ou a capa")
         if any(not cena.visual.strip() for cena in c.roteiro):
             problemas.append(f"criativo {n}: falta o visual de alguma cena")
+    textos = " ".join(f"{c.gancho} {c.legenda} {c.cta}" for c in rasc.criativos)
+    if sem_acentos(textos):
+        problemas.append(PROBLEMA_ACENTO)
     return problemas
 
 

@@ -26,6 +26,9 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
   `gemini-3.5-flash` só **20/dia**. A anotação usa o flash-lite. O agente faz 3 a 5 chamadas por execução:
   orquestrador no flash-lite (`AGENTE_MODELO`) e redação no flash (`AGENTE_MODELO_REDATOR`), que volta sozinha
   para o flash-lite quando a cota do flash acaba. A cota zera ~05h (horário de Brasília).
+- Toda chamada ao Gemini tem tempo limite de 90 s (`dados.TEMPO_LIMITE_S`): com o Google sobrecarregado, uma
+  chamada sem limite ficou presa para sempre (17/11). Estourado, o redator segue com o flash-lite; a leitura do
+  vídeo e o revisor de imagem esperam e tentam de novo; nos outros nós, a execução termina com erro.
 - ffmpeg vem do pacote `imageio-ffmpeg` (`imageio_ffmpeg.get_ffmpeg_exe()`); não há ffmpeg no sistema.
 - Processos longos: rodar desacoplados (`setsid nohup ... &`), porque a sessão pode encerrar.
 

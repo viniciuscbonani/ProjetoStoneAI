@@ -110,6 +110,7 @@ def montar_conteudo(pasta: Path, legenda: str) -> list:
 
 
 def _anotar_partes(client, modelo: str, partes: list) -> dict:
+    import httpx2
     from google.genai import errors, types
 
     for espera in ESPERA_429 + [None]:
@@ -120,11 +121,13 @@ def _anotar_partes(client, modelo: str, partes: list) -> dict:
                                                    response_schema=Anotacao, temperature=0),
             )
             return Anotacao.model_validate_json(resp.text).model_dump()
-        except errors.APIError as e:
-            # 429 = limite de cota por minuto; 503 = modelo sobrecarregado. Os dois passam com espera.
-            if e.code not in (429, 503) or espera is None:
+        except (errors.APIError, httpx2.TimeoutException) as e:
+            # 429 = limite de cota por minuto; 503 = modelo sobrecarregado; tempo esgotado (cliente com timeout)
+            # costuma vir junto do 503. Os três passam com espera.
+            codigo = getattr(e, "code", "tempo esgotado")
+            if codigo not in (429, 503, "tempo esgotado") or espera is None:
                 raise
-            print(f"  {e.code}, esperando {espera}s")
+            print(f"  {codigo}, esperando {espera}s")
             time.sleep(espera)
     raise RuntimeError("inalcançável")
 
