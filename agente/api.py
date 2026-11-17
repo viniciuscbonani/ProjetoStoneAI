@@ -12,19 +12,25 @@ Uso:
     .venv/bin/uvicorn agente.api:app --port 8000
 """
 
+import io
 import json
 import re
 import threading
+import unicodedata
 import uuid
+import zipfile
+from functools import lru_cache
+from typing import Annotated
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
+from fastapi.responses import FileResponse, Response
 from langchain_google_genai.chat_models import GoogleRateLimitError
 from pydantic import BaseModel
 
 from . import IMPLEMENTADOS, dados, executar, imagens
 from .avaliacao import salvar_upload
 from .contrato import Entrada, Saida
+from .ferramentas import buscar_referencias, consultar_caracteristicas, perfis_em_destaque
 from .registro import LOG
 
 app = FastAPI(title="Agente Impulso Stone", version="0.1")
@@ -49,11 +55,34 @@ def consultar(entrada: Entrada) -> Saida:
 
 
 @app.get("/panorama")
-def panorama() -> dict:
-    reels = dados.todos_reels()
+def panorama(segmento: str | None = None, faixa: Annotated[list[str] | None, Query()] = None) -> dict:
+    """Top x controle por característica, sem LLM. Com setor (segmento do público) ou tamanho do perfil, recalcula
+    dentro do recorte (como a ferramenta do agente); num recorte o melhor selo é "fragil"."""
+    return _panorama(segmento or None, tuple(sorted(faixa)) if faixa else None)
+
+
+@app.get("/panorama/exemplos")
+def panorama_exemplos(campo: str, valor: str, segmento: str | None = None,
+                      faixa: Annotated[list[str] | None, Query()] = None, n: int = 6) -> list[dict]:
+    """Reels do top com campo=valor (os mesmos critérios da busca do agente: por taxa, no máximo 2 por perfil)."""
+    if campo not in dados.CAMPOS:
+        raise HTTPException(404, "característica desconhecida")
+    refs = buscar_referencias({campo: valor}, n=max(1, min(n, 12)), segmento=segmento or None, faixas=faixa or None)
+    return [{k: v for k, v in r.items() if not k.startswith("_")} for r in refs]
+
+
+@lru_cache(maxsize=64)
+def _panorama(segmento: str | None, faixas: tuple[str, ...] | None) -> dict:
+    reels = dados.filtrar(segmento=segmento, faixas=list(faixas) if faixas else None)
+    if segmento or faixas:
+        campos = sorted({a["campo"] for a in dados.achados()})
+        achados = consultar_caracteristicas(campos, segmento=segmento, faixas=list(faixas) if faixas else None)
+    else:
+        achados = dados.achados()
     return {"totais": {"reels": len(reels), "top": sum(r["grupo"] == "top" for r in reels),
                        "perfis": len({r["perfil"] for r in reels})},
-            "achados": dados.achados(), "perfis": dados.perfis()[:20]}
+            "recorte": bool(segmento or faixas),
+            "achados": achados, "perfis": perfis_em_destaque(20, segmento, list(faixas) if faixas else None)}
 
 
 def _validar(short_code: str) -> dict:
@@ -151,6 +180,39 @@ def imagem(run_id: str, nome: str) -> FileResponse:
     if not RUN_ID.match(run_id) or not ARQUIVO_IMAGEM.match(nome) or not caminho.exists():
         raise HTTPException(404, "imagem não encontrada")
     return FileResponse(caminho, media_type="image/jpeg")
+
+
+def _criativo_em_texto(c: dict) -> str:
+    cenas = [f"{cena['tempo']}: {cena['descricao']}" + (f" [na tela: {cena['texto_na_tela']}]" if cena.get("texto_na_tela") else "")
+             for cena in c["roteiro"]]
+    return "\n".join([
+        c["titulo"], f"{c['formato']} · {c['duracao_alvo']}", "", f"GANCHO: {c['gancho']}", "", "ROTEIRO:", *cenas,
+        "", f"LEGENDA:\n{c['legenda']}", "", f"CTA: {c['cta']}", "",
+        "Inspirado em: " + " ".join(f"https://www.instagram.com/reel/{s}/" for s in c["inspirado_em"]),
+        "Achados usados: " + "; ".join(c["achados_usados"]), "",
+    ])
+
+
+@app.get("/execucoes/{run_id}/criativos/{n}.zip")
+def baixar_criativo(run_id: str, n: int) -> Response:
+    """O criativo n em .zip: o texto (gancho, roteiro, legenda, CTA e Reels de inspiração), o prompt das imagens e
+    as imagens já geradas (capa.jpg, cena1.jpg...)."""
+    if not RUN_ID.match(run_id):
+        raise HTTPException(404, "execução não encontrada")
+    criativos = (execucao(run_id).get("saida") or {}).get("creatives") or []
+    if not 1 <= n <= len(criativos):
+        raise HTTPException(404, "criativo não encontrado nesta execução")
+    c = criativos[n - 1]
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        z.writestr("criativo.txt", _criativo_em_texto(c))
+        if c.get("prompt_copiar"):
+            z.writestr("prompt-imagens.txt", c["prompt_copiar"])
+        for img in sorted((imagens.PASTA / run_id).glob(f"criativo{n}_*.jpg")):
+            z.write(img, img.name.removeprefix(f"criativo{n}_"))
+    nome = re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", c["titulo"]).encode("ascii", "ignore").decode().lower())
+    return Response(buf.getvalue(), media_type="application/zip",
+                    headers={"Content-Disposition": f'attachment; filename="criativo-{n}-{nome.strip("-")[:40]}.zip"'})
 
 
 # ---------------------------------------------------------------- avaliar (em segundo plano)

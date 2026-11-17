@@ -1,4 +1,4 @@
-import type { Confianca, Robustez } from "./tipos";
+import type { Confianca, Modo, Robustez } from "./tipos";
 
 const br = (n: number, casas = 0) => n.toLocaleString("pt-BR", { maximumFractionDigits: casas, minimumFractionDigits: casas });
 
@@ -44,3 +44,28 @@ export const FAIXAS = [
 
 export const rotuloValor = (v: unknown) =>
   v === true ? "sim" : v === false ? "não" : String(v).replaceAll("_", " ");
+
+export const rotuloSegmento = (s: string | null | undefined) => SEGMENTOS.find((x) => x.value === (s ?? ""))?.label ?? s ?? "";
+
+export const ROTULO_MODO: Record<Modo, string> = {
+  analisar: "Analisar", recomendar: "Recomendar", gerar_criativo: "Criar", avaliar: "Avaliar",
+};
+
+// Cada modo tem a sua tela; o resultado de uma execução abre em /<tela>/<run_id>.
+export const rotaDoModo = (modo: Modo) =>
+  ({ analisar: "/perguntar", recomendar: "/perguntar", gerar_criativo: "/criar", avaliar: "/avaliar" })[modo];
+
+// "quando" vem do log do agente (ISO, horário local).
+export function tempoRelativo(iso: string) {
+  const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 1) return "agora";
+  if (min < 60) return `há ${min} min`;
+  if (min < 24 * 60) return `há ${Math.round(min / 60)} h`;
+  return new Date(iso).toLocaleDateString("pt-BR", { day: "numeric", month: "short" });
+}
+
+export const nomeAchado = (descricao: string) => descricao.split(" — ")[0];
+
+// Recorte de um achado ("segmento=beleza", "faixa=micro") em texto.
+export const rotuloRecorte = (recorte: string) =>
+  recorte.replace(/segmento=(\w+)/, (_, s) => `setor ${rotuloSegmento(s).toLowerCase()}`).replace(/faixa=(\w+)/, "perfis $1");

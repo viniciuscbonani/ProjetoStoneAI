@@ -155,7 +155,38 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
   data comemorativa) chegam ao redator, ao gerador e ao avaliador com esse aviso.
 - API e front básico (para testar): `.venv/bin/uvicorn agente.api:app --port 8000` e, em `web/`,
   `npm install && npm run dev` (http://localhost:5173; o Vite repassa `/api` para a porta 8000). Front em
-  React + Vite + Mantine 9: telas Perguntar (os 4 modos), Panorama e Histórico, e gaveta com os quadros de cada
-  Reel.
+  React + Vite + Mantine 9 + React Router, redesenhado em 17/11 com referências de ChatGPT/Gemini (barra lateral
+  com Recentes, tela inicial com sugestões), Perplexity (Reels-fonte no alto e citações numeradas com prévia),
+  NotebookLM (gaveta do Reel ao lado) e Jasper/Canva (briefing fixo e variações lado a lado).
+  - Telas, cada uma com URL própria e resultado em `/<tela>/<run_id>`: **Perguntar** (analisar e recomendar),
+    **Criar** (briefing + 3 criativos com storyboard de cenas 9:16), **Avaliar** (vídeo ou roteiro, progresso por
+    etapa) e **Panorama** (top × controle em halteres: ponto verde = top, cinza = controle).
+  - A API não manda o progresso das consultas: as etapas de Perguntar e Criar avançam pelo tempo médio
+    (`Trabalhando` em `componentes/Comum.tsx`); só Avaliar tem a etapa real.
+  - Tema claro e escuro; cores de superfície em `src/estilos.css` (variáveis `--fundo`, `--linha`, `--verde-suave`).
+  - Cores do design system Odin de stone.com.br (`src/main.tsx`): verde da marca #00DB00 (tom 6, também no logo) com
+    texto escuro por cima; texto verde #005700; fundo verde translúcido do site nas variantes "light"; cinzas "sage"
+    (puxados para o verde, texto #1B221F) no lugar dos cinzas azulados do Mantine, e o escuro com o mesmo matiz.
+  - Estilo limpo (pedido do Vinícius, 17/11): navegação apagada como no Linear (item ativo só com fundo cinza),
+    espaço em vez de bordas (`Paper` sem borda por padrão; borda só em campos e listas), telas iniciais
+    centralizadas na vertical como no ChatGPT (`Inicio` e `Compositor`), opções discretas (`Escolha`) e sugestões
+    em linhas com ícone (`componentes/Comum.tsx`). Fonte Geist.
+  - Logo: wordmark da Stone em `web/public/stone-logo.svg` (de stone.com.br) e o símbolo (o "o" do wordmark) em
+    `stone-simbolo.svg`, também favicon. Barra lateral recolhível (lembrada no navegador): recolhida, mostra só o
+    símbolo, que vira o botão de expandir ao passar o mouse.
+  - Execuções em andamento ficam fora das telas (`rodar` e `useTarefa` em `contexto.tsx`): seguem ao trocar de tela,
+    aparecem em "Em andamento" nos Recentes, e o resultado só abre sozinho se a pessoa continuar na tela.
+  - Capa de Reel (`Capa` em `CartaoReel.tsx`): se um quadro faltar, tenta o próximo da lista.
+  - Panorama: filtros de setor e tamanho (`GET /panorama?segmento=&faixa=`, sem LLM, recalcula o lift no recorte
+    como `consultar_caracteristicas`; ~1 s, com cache). Em formato de dashboard: Destaques (até 3 do que fazer e 1 do
+    que evitar, com o multiplicador grande e Reels de exemplo), grade "Explorar por característica" (uma peça por
+    campo, com barras top e controle; ou "Lista", com os halteres de `componentes/Achados.tsx`) e painel de detalhe
+    ao clicar (todos os valores, Reels do top de cada valor via `GET /panorama/exemplos` e "Criar Reels com isso",
+    que abre Criar preenchido). Em campos sim/não, destaques e peças mostram só o "sim".
+  - Criar: "Baixar .zip" por criativo (`GET /execucoes/{run_id}/criativos/{n}.zip`): `criativo.txt`,
+    `prompt-imagens.txt` e as imagens já geradas (capa.jpg, cena1.jpg...).
+  - Evitar sinais de "interface feita por IA": barra grossa colorida ao lado de cartões, selos em pílulas coloridas
+    (os selos são texto; verde só em "Diferença clara"), avatares de iniciais, ✓/⚠ e emoji como ícone, fileira de
+    cartões de métrica, grade de três passos com números em círculos, cartões dentro de cartões.
 - Uso: `from agente import executar; executar({"mode": "analisar", "query": "..."})`. Log em
   `data/logs/agente.jsonl`.

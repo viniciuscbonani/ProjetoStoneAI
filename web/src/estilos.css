@@ -1,0 +1,346 @@
+/* Superfícies: fundo cinza claro, barra lateral e cartões brancos; no escuro, a escala dark do Mantine.
+   (light-dark() não serve aqui: o atributo do tema fica no próprio :root.) */
+:root {
+  --fundo: var(--mantine-color-gray-0);
+  --lateral: var(--mantine-color-white);
+  --linha: var(--mantine-color-gray-2);
+  --suave: var(--mantine-color-gray-1);
+  --nav-ativo: var(--mantine-color-gray-2);
+  --nav-hover: var(--mantine-color-gray-1);
+  --texto-nav: var(--mantine-color-gray-7);
+  --verde-suave: var(--mantine-color-stone-0);
+  --verde-texto: var(--mantine-color-stone-8);
+  --verde-icone: var(--mantine-color-stone-7);
+  --composer: var(--mantine-color-white);
+}
+:root[data-mantine-color-scheme="dark"] {
+  --fundo: var(--mantine-color-dark-8);
+  --lateral: var(--mantine-color-dark-7);
+  --linha: var(--mantine-color-dark-5);
+  --suave: var(--mantine-color-dark-6);
+  --nav-ativo: var(--mantine-color-dark-5);
+  --nav-hover: var(--mantine-color-dark-6);
+  --texto-nav: var(--mantine-color-dark-1);
+  --verde-suave: rgba(0, 219, 0, 0.12);
+  --verde-texto: var(--mantine-color-stone-4);
+  --verde-icone: var(--mantine-color-stone-6);
+  --composer: var(--mantine-color-dark-6);
+}
+
+body {
+  background: var(--fundo);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Citação de um Reel no texto: número numa pílula, como no Perplexity. */
+.citacao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin: 0 2px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: 2px;
+  color: var(--texto-nav);
+  background: var(--suave);
+  border: 0;
+  cursor: pointer;
+}
+.citacao:hover {
+  background: var(--mantine-color-stone-7);
+  color: white;
+}
+
+/* Quadro vertical 9:16 (capa de Reel, cena do storyboard). */
+.quadro {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
+  flex-shrink: 0;
+}
+.quadro > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.quadro-texto {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 12%;
+  text-align: center;
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.25;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.45);
+}
+.quadro-canto {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+.quadro-rodape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 18px 8px 6px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+}
+
+.clicavel {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.clicavel:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+/* Lista agrupada: um cartão com divisórias entre as linhas. */
+.lista > * + * {
+  border-top: 1px solid var(--linha);
+}
+
+/* Achados top × controle: grade de 4 colunas (nome, trilho 0–100%, números, selo), linhas separadas por um fio. */
+.achado-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(140px, 1fr) 112px 104px;
+  column-gap: 24px;
+  align-items: center;
+}
+.achado-linha {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--linha);
+}
+.achado-eixo {
+  padding: 6px 0 4px;
+}
+.achado-col-selo {
+  display: flex;
+  justify-content: flex-end;
+}
+.eixo-marcas {
+  position: relative;
+  height: 14px;
+  font-size: 11px;
+  color: var(--mantine-color-dimmed);
+}
+.eixo-marcas span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+.eixo-marcas span:first-child {
+  transform: none;
+}
+.eixo-marcas span:last-child {
+  transform: translateX(-100%);
+}
+.trilho {
+  position: relative;
+  height: 22px;
+  /* linhas de grade a cada 25% */
+  background-image: linear-gradient(to right, var(--linha) 1px, transparent 1px);
+  background-size: 25% 100%;
+  border-right: 1px solid var(--linha);
+}
+.trilho-ligacao {
+  position: absolute;
+  top: 9px;
+  height: 4px;
+  border-radius: 2px;
+  opacity: 0.35;
+}
+.trilho-ponto {
+  position: absolute;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--fundo);
+}
+.achado-selo-abaixo {
+  display: none;
+}
+.achados-compactos .achado-grade {
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.9fr) 96px;
+  column-gap: 16px;
+}
+.achados-compactos .achado-col-selo {
+  display: none;
+}
+.achados-compactos .achado-selo-abaixo {
+  display: block;
+}
+
+/* Peça da grade do Panorama: uma característica com duas barras finas (top e controle). */
+.peca {
+  display: block;
+  padding: 14px 16px;
+  border-radius: var(--mantine-radius-lg);
+  background: var(--mantine-color-body);
+}
+.peca-barra {
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 2px;
+  background: var(--suave);
+  overflow: hidden;
+}
+.peca-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+}
+
+@media (max-width: 48em) {
+  .achado-selo-abaixo {
+    display: block;
+  }
+  .achado-grade {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    column-gap: 12px;
+  }
+  .achado-col-trilho,
+  .eixo-marcas,
+  .achado-col-selo {
+    display: none;
+  }
+}
+
+/* Navegação apagada (como no Linear): item ativo só com fundo cinza, sem cor forte. */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: var(--mantine-radius-md);
+  color: var(--texto-nav);
+  font-size: var(--mantine-font-size-sm);
+  text-decoration: none;
+}
+.nav:hover {
+  background: var(--nav-hover);
+}
+.nav[data-ativo] {
+  background: var(--nav-ativo);
+  color: var(--mantine-color-text);
+  font-weight: 500;
+}
+.nav[data-ativo] svg {
+  color: var(--verde-icone);
+}
+.nav-recente {
+  padding: 5px 10px;
+  color: var(--mantine-color-dimmed);
+}
+.nav-recente span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Sugestão em pílula (tela inicial). */
+.pilula {
+  padding: 7px 14px;
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--texto-nav);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.pilula:hover {
+  background: var(--nav-hover);
+  color: var(--mantine-color-text);
+}
+
+/* Compositor: superfície um tom acima do fundo, borda fina, sem brilho no foco (como no ChatGPT). */
+.compositor {
+  background: var(--composer);
+  border: 1px solid var(--linha);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.compositor:focus-within {
+  border-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+}
+
+/* Tela inicial: o bloco título + compositor no meio da área visível. */
+.inicio {
+  min-height: calc(100dvh - var(--app-shell-header-offset, 0rem));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 6vh;
+}
+.inicio > * {
+  min-width: 0;
+}
+.inicio-abaixo {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* Sugestão: linha com ícone e texto, sem borda. */
+.sugestao {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: var(--mantine-radius-md);
+  color: var(--texto-nav);
+  font-size: 15px;
+}
+.sugestao svg {
+  color: var(--mantine-color-dimmed);
+}
+.sugestao:hover {
+  background: var(--nav-hover);
+  color: var(--mantine-color-text);
+}
+
+/* Barra recolhida: itens só com o ícone, centralizados. */
+.nav[data-recolhido] {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+/* Símbolo da Stone na barra recolhida; com o mouse em cima, vira o botão de expandir. */
+.logo-recolhido {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mantine-radius-md);
+  color: var(--texto-nav);
+}
+.logo-simbolo {
+  width: 26px;
+  height: 26px;
+}
+.logo-expandir {
+  display: none;
+}
+.logo-recolhido:hover {
+  background: var(--nav-hover);
+}
+.logo-recolhido:hover .logo-simbolo {
+  display: none;
+}
+.logo-recolhido:hover .logo-expandir {
+  display: block;
+}

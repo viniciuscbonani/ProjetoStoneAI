@@ -130,6 +130,7 @@ export interface Saida {
 
 export interface Panorama {
   totais: { reels: number; top: number; perfis: number };
+  recorte: boolean;
   achados: Achado[];
   perfis: Perfil[];
 }
@@ -162,4 +163,14 @@ export interface ExecucaoResumo {
   duracao_s: number;
   erro: string | null;
   confidence_flag: Confianca | null;
+}
+
+// Uma linha do log do agente (GET /execucoes/{run_id}).
+export interface Execucao {
+  run_id: string;
+  quando: string;
+  duracao_s: number;
+  entrada: Entrada & { roteiro?: string | null; video_path?: string | null };
+  erro: string | null;
+  saida: Saida | null;
 }

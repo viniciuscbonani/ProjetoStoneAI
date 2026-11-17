@@ -1,49 +1,40 @@
-import { AppShell, Badge, Container, Group, Tabs, Text, Title } from "@mantine/core";
-import { createContext, useContext, useState } from "react";
+import { useWindowEvent } from "@mantine/hooks";
+import { useCallback, useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router";
 
-import Historico from "./telas/Historico";
+import { api } from "./api";
+import Layout from "./componentes/Layout";
+import ReelDrawer from "./componentes/ReelDrawer";
+import { RecentesContexto, ReelContexto } from "./contexto";
+import Avaliar from "./telas/Avaliar";
+import Criar from "./telas/Criar";
 import Panorama from "./telas/Panorama";
 import Perguntar from "./telas/Perguntar";
-import ReelDrawer from "./componentes/ReelDrawer";
-
-// Qualquer componente abre a gaveta de um Reel com abrirReel(shortCode).
-const ReelContexto = createContext<(shortCode: string) => void>(() => {});
-export const useAbrirReel = () => useContext(ReelContexto);
+import type { ExecucaoResumo } from "./tipos";
 
 export default function App() {
   const [reel, setReel] = useState<string | null>(null);
-  const [aba, setAba] = useState<string | null>("perguntar");
+  const [recentes, setRecentes] = useState<ExecucaoResumo[] | null>(null);
+  const atualizar = useCallback(() => { api.execucoes().then(setRecentes).catch(() => setRecentes([])); }, []);
+  useEffect(atualizar, [atualizar]);
+  // Ao voltar para a aba do navegador, os Recentes se atualizam (uma execução pode ter terminado em outra aba).
+  useWindowEvent("focus", atualizar);
 
   return (
     <ReelContexto.Provider value={setReel}>
-      <AppShell header={{ height: 64 }} padding="md">
-        <AppShell.Header>
-          <Container size="lg" h="100%">
-            <Group h="100%" justify="space-between">
-              <Group gap="sm">
-                <Title order={3} c="stone.7">Impulso Stone</Title>
-                <Text c="dimmed" size="sm">Agente de conteúdo para MPEs</Text>
-              </Group>
-              <Badge variant="light" color="gray">944 Reels analisados · top 10% × controle</Badge>
-            </Group>
-          </Container>
-        </AppShell.Header>
-        <AppShell.Main bg="gray.0">
-          <Container size="lg" py="md">
-            <Tabs value={aba} onChange={setAba} keepMounted>
-              <Tabs.List mb="lg">
-                <Tabs.Tab value="perguntar">Perguntar</Tabs.Tab>
-                <Tabs.Tab value="panorama">Panorama</Tabs.Tab>
-                <Tabs.Tab value="historico">Histórico</Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel value="perguntar"><Perguntar /></Tabs.Panel>
-              <Tabs.Panel value="panorama"><Panorama /></Tabs.Panel>
-              <Tabs.Panel value="historico"><Historico ativo={aba === "historico"} /></Tabs.Panel>
-            </Tabs>
-          </Container>
-        </AppShell.Main>
-      </AppShell>
-      <ReelDrawer shortCode={reel} onClose={() => setReel(null)} />
+      <RecentesContexto.Provider value={{ recentes, atualizar }}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Navigate to="/perguntar" replace />} />
+            <Route path="perguntar/:runId?" element={<Perguntar />} />
+            <Route path="criar/:runId?" element={<Criar />} />
+            <Route path="avaliar/:runId?" element={<Avaliar />} />
+            <Route path="panorama" element={<Panorama />} />
+            <Route path="*" element={<Navigate to="/perguntar" replace />} />
+          </Route>
+        </Routes>
+        <ReelDrawer shortCode={reel} onClose={() => setReel(null)} />
+      </RecentesContexto.Provider>
     </ReelContexto.Provider>
   );
 }

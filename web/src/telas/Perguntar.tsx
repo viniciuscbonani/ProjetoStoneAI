@@ -1,163 +1,198 @@
-import { Alert, Button, Card, FileInput, Group, Loader, MultiSelect, SegmentedControl, Select, Stack, Text, Textarea } from "@mantine/core";
-import { useState } from "react";
+import { Anchor, Box, Group, Loader, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import {
+  IconArrowRight, IconBolt, IconBuildingStore, IconChartDots3, IconClock, IconSparkles, IconToolsKitchen2, IconUserCircle,
+  IconUsers, IconWand, type Icon,
+} from "@tabler/icons-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { useNavigate, useParams } from "react-router";
 
 import { api } from "../api";
-import Resultado from "../componentes/Resultado";
+import { AchadosDaResposta } from "../componentes/Achados";
+import { FaixaReels } from "../componentes/CartaoReel";
+import { numerarCitacoes, TextoComCitacoes } from "../componentes/Citacoes";
+import { Avisos, Compositor, Erro, Escolha, Inicio, MetaExecucao, Secao, Sugestoes, Tela, Trabalhando } from "../componentes/Comum";
+import { limparTarefa, rodar, useExecucao, useRecentes, useTarefa, useTitulo } from "../contexto";
 import { FAIXAS, SEGMENTOS } from "../formato";
-import type { Modo, Saida } from "../tipos";
+import type { Entrada, Execucao } from "../tipos";
 
-const EXEMPLOS: { mode: Modo; query: string; segment?: string }[] = [
-  { mode: "analisar", query: "Que duração de Reels mais aparece entre os de alto engajamento?" },
-  { mode: "recomendar", query: "Como a @impulsostone deveria fazer Reels para empreendedoras de alimentação?", segment: "alimentacao" },
-  { mode: "analisar", query: "Que tipo de gancho aparece mais nos Reels de alto engajamento?" },
-  { mode: "gerar_criativo", query: "Preciso de um Reels para atrair donos e donas de salão de beleza para o programa", segment: "beleza" },
+type ModoPergunta = "analisar" | "recomendar";
+interface Rascunho { mode: ModoPergunta; query: string; segment: string; faixas: string[] }
+
+const SUGESTOES: (Rascunho & { curto: string; icone: Icon })[] = [
+  { icone: IconClock, curto: "Que duração aparece mais no top", mode: "analisar", query: "Que duração de Reels mais aparece entre os de alto engajamento?", segment: "", faixas: [] },
+  { icone: IconBolt, curto: "Que tipo de gancho aparece mais", mode: "analisar", query: "Que tipo de gancho aparece mais nos Reels de alto engajamento?", segment: "", faixas: [] },
+  { icone: IconUserCircle, curto: "Mostrar o rosto faz diferença?", mode: "analisar", query: "Os vídeos de maior engajamento mostram o rosto?", segment: "", faixas: [] },
+  { icone: IconToolsKitchen2, curto: "Recomendações para alimentação", mode: "recomendar", query: "Como a @impulsostone deveria fazer Reels para empreendedoras de alimentação?", segment: "alimentacao", faixas: [] },
 ];
 
-const ROTEIRO_EXEMPLO = `Cena 1 (dona da loja de roupas falando para a câmera): "Sabe por que sua loja vende muito em dezembro e mesmo assim falta dinheiro em janeiro?"
-Cena 2: ela mostra o caderno de vendas e explica que o dinheiro do Natal entra, mas os boletos dos fornecedores vencem depois.
-Cena 3: dica prática: separar toda semana uma parte do que entra para pagar os fornecedores de janeiro.
-Cena 4: "Quer aprender a organizar o caixa da sua loja? O Impulso Stone tem curso gratuito. Link na bio."`;
+const MODOS = [
+  { value: "analisar", label: "Analisar", descricao: "O que aparece nos Reels de alto engajamento" },
+  { value: "recomendar", label: "Recomendar", descricao: "O que fazer e o que evitar" },
+];
 
-const espera = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const PLACEHOLDER: Record<ModoPergunta, string> = {
+  analisar: "Pergunte sobre os Reels de alto engajamento…",
+  recomendar: "Para que público ou objetivo você quer recomendações?",
+};
 
-export default function Perguntar() {
-  const [modo, setModo] = useState<Modo>("analisar");
-  const [query, setQuery] = useState("");
-  const [segmento, setSegmento] = useState("");
-  const [faixas, setFaixas] = useState<string[]>([]);
-  const [material, setMaterial] = useState<"video" | "roteiro">("video");
-  const [video, setVideo] = useState<File | null>(null);
-  const [roteiro, setRoteiro] = useState("");
-  const [carregando, setCarregando] = useState(false);
-  const [etapa, setEtapa] = useState<string | null>(null);
-  const [erro, setErro] = useState<string | null>(null);
-  const [saida, setSaida] = useState<Saida | null>(null);
-  const avaliando = modo === "avaliar";
+function CaixaPergunta({ r, setR, enviar, ocupado, autoFocus }: {
+  r: Rascunho; setR: (r: Rascunho) => void; enviar: () => void; ocupado: boolean; autoFocus?: boolean;
+}) {
+  return (
+    <Compositor
+      valor={r.query}
+      onChange={(query) => setR({ ...r, query })}
+      onEnviar={enviar}
+      placeholder={PLACEHOLDER[r.mode]}
+      pronto={r.query.trim().length >= 3}
+      ocupado={ocupado}
+      autoFocus={autoFocus}
+      opcoes={(
+        <>
+          <Escolha opcoes={MODOS} valor={r.mode} onChange={(v) => setR({ ...r, mode: v as ModoPergunta })} />
+          <Escolha icone={IconBuildingStore} opcoes={SEGMENTOS} valor={r.segment} onChange={(v) => setR({ ...r, segment: v as string })} />
+          <Escolha icone={IconUsers} opcoes={FAIXAS} valor={r.faixas} multiplo vazio="Todos os tamanhos"
+            onChange={(v) => setR({ ...r, faixas: v as string[] })} />
+        </>
+      )}
+    />
+  );
+}
 
-  // Avaliar roda em segundo plano na API (a leitura do vídeo leva minutos): envia e consulta o progresso.
-  async function avaliar() {
-    const dados = new FormData();
-    dados.append("query", query.trim() || "Avaliar meu vídeo");
-    if (segmento) dados.append("segment", segmento);
-    if (material === "video" && video) dados.append("arquivo", video);
-    else dados.append("roteiro", roteiro);
-    const { id } = await api.avaliar(dados);
-    for (;;) {
-      const estado = await api.estadoAvaliacao(id);
-      setEtapa(estado.etapa);
-      if (estado.pronto) {
-        if (estado.erro) throw new Error(estado.erro);
-        return estado.saida!;
-      }
-      await espera(2000);
-    }
-  }
+// Próximo passo depois da resposta: uma linha de texto com seta, sem caixa.
+function Passo({ icone: Icone, children, onClick }: { icone: typeof IconSparkles; children: string; onClick: () => void }) {
+  return (
+    <UnstyledButton onClick={onClick} className="pilula">
+      <Group gap={8} wrap="nowrap">
+        <Icone size={15} stroke={1.7} />
+        {children}
+        <IconArrowRight size={14} />
+      </Group>
+    </UnstyledButton>
+  );
+}
 
-  async function enviar() {
-    setCarregando(true);
-    setErro(null);
-    setEtapa(null);
-    setSaida(null);
-    try {
-      setSaida(avaliando ? await avaliar() : await api.consultar({
-        mode: modo, query, segment: segmento || null, filters: faixas.length ? { faixa: faixas } : null,
-      }));
-    } catch (e) {
-      setErro((e as Error).message);
-    } finally {
-      setCarregando(false);
-    }
-  }
-
-  const pronto = avaliando ? (material === "video" ? Boolean(video) : roteiro.trim().length > 20) : query.trim().length >= 3;
+function Resposta({ e, novaPergunta, caixa }: { e: Execucao; novaPergunta: (r: Rascunho) => void; caixa: ReactNode }) {
+  const navigate = useNavigate();
+  const s = e.saida!;
+  const numeros = numerarCitacoes(s.reference_posts, s.explanation);
+  const segment = e.entrada.segment ?? "";
 
   return (
-    <Stack gap="lg">
-      <Card withBorder padding="lg">
-        <Stack>
-          <SegmentedControl
-            value={modo}
-            onChange={(v) => setModo(v as Modo)}
-            data={[
-              { value: "analisar", label: "Analisar" },
-              { value: "recomendar", label: "Recomendar" },
-              { value: "gerar_criativo", label: "Gerar criativo" },
-              { value: "avaliar", label: "Avaliar vídeo" },
-            ]}
-          />
-          {avaliando ? (
-            <>
-              <SegmentedControl size="xs" w="fit-content" value={material} onChange={(v) => setMaterial(v as "video" | "roteiro")}
-                data={[{ value: "video", label: "Enviar vídeo" }, { value: "roteiro", label: "Colar roteiro" }]} />
-              {material === "video" ? (
-                <FileInput label="Vídeo do Reel" description="MP4 ou MOV, até 300 MB. A leitura leva de 1 a 3 minutos."
-                  placeholder="Escolher arquivo" accept="video/*" value={video} onChange={setVideo} clearable />
-              ) : (
-                <Textarea label="Roteiro" description="Ainda não gravou? Cole o roteiro: a duração é estimada pelo texto e o visual não é avaliado."
-                  autosize minRows={5} value={roteiro} onChange={(e) => setRoteiro(e.currentTarget.value)}
-                  placeholder={ROTEIRO_EXEMPLO} />
-              )}
-              <Textarea label="Contexto (opcional)" placeholder="Ex.: Reels para atrair lojistas de roupa para o programa"
-                autosize minRows={1} value={query} onChange={(e) => setQuery(e.currentTarget.value)} />
-              <Group grow align="flex-start">
-                <Select label="Setor (para os Reels de exemplo)" data={SEGMENTOS} value={segmento} onChange={(v) => setSegmento(v ?? "")} allowDeselect={false} />
-              </Group>
-              <Group justify="space-between">
-                {material === "roteiro" ? (
-                  <Button size="compact-xs" variant="subtle" color="gray" onClick={() => { setRoteiro(ROTEIRO_EXEMPLO); setSegmento("varejo"); }}>
-                    Usar roteiro de exemplo
-                  </Button>
-                ) : <span />}
-                <Button onClick={enviar} loading={carregando} disabled={!pronto}>Avaliar</Button>
-              </Group>
-            </>
-          ) : (
-            <>
-              <Textarea
-                label={{ analisar: "O que você quer saber sobre os Reels de alto engajamento?",
-                         recomendar: "Para que público ou objetivo você quer recomendações?",
-                         gerar_criativo: "Que Reels você precisa? Diga o público, o objetivo ou o tema.",
-                         avaliar: "" }[modo]}
-                placeholder="Ex.: que formato de vídeo aparece mais entre os Reels de alto engajamento?"
-                autosize minRows={2} value={query} onChange={(e) => setQuery(e.currentTarget.value)}
-              />
-              <Group grow align="flex-start">
-                <Select label="Setor do empreendedor" data={SEGMENTOS} value={segmento} onChange={(v) => setSegmento(v ?? "")} allowDeselect={false} />
-                <MultiSelect label="Tamanho do perfil" placeholder="Todos" data={FAIXAS} value={faixas} onChange={setFaixas} clearable />
-              </Group>
-              <Group justify="space-between">
-                <Group gap="xs">
-                  <Text size="xs" c="dimmed">Exemplos:</Text>
-                  {EXEMPLOS.map((ex) => (
-                    <Button key={ex.query} size="compact-xs" variant="subtle" color="gray"
-                      onClick={() => { setModo(ex.mode); setQuery(ex.query); setSegmento(ex.segment ?? ""); setFaixas([]); }}>
-                      {ex.query.length > 48 ? `${ex.query.slice(0, 48)}…` : ex.query}
-                    </Button>
-                  ))}
-                </Group>
-                <Button onClick={enviar} loading={carregando} disabled={!pronto}>
-                  {{ analisar: "Analisar", recomendar: "Recomendar", gerar_criativo: "Gerar 3 criativos", avaliar: "Avaliar" }[modo]}
-                </Button>
-              </Group>
-            </>
-          )}
-        </Stack>
-      </Card>
+    <Tela largura={860}>
+      <Stack gap={48}>
+        <div>
+          <Title order={1} fz={{ base: 22, sm: 27 }} fw={600} lh={1.3} mb="sm">{e.entrada.query}</Title>
+          <MetaExecucao e={e} />
+        </div>
 
-      {carregando && (
-        <Group justify="center" py="xl">
-          <Loader size="sm" />
-          <Text c="dimmed" size="sm">
-            {avaliando
-              ? `${etapa ?? "Enviando"}…`
-              : modo === "gerar_criativo"
-                ? "Consultando a base, escrevendo os 3 criativos e revisando o tom (1 a 2 min)…"
-                : "Consultando a base e escrevendo a resposta (5 a 30 s)…"}
-          </Text>
-        </Group>
-      )}
-      {erro && <Alert color="red" title="Não foi possível responder">{erro}</Alert>}
-      {saida && !carregando && <Resultado saida={saida} />}
-    </Stack>
+        {s.reference_posts.length > 0 && (
+          <Secao titulo="Reels em que a resposta se apoia">
+            <FaixaReels refs={s.reference_posts} numeros={numeros} />
+          </Secao>
+        )}
+
+        <div>
+          <TextoComCitacoes texto={s.explanation} refs={s.reference_posts} numeros={numeros} size="16px" />
+          <Box mt="md"><Avisos avisos={s.warnings} /></Box>
+          <Group gap={8} mt="xl">
+            <Passo icone={IconSparkles} onClick={() => navigate("/criar", { state: { query: e.entrada.query, segment } })}>
+              Criar Reels a partir disto
+            </Passo>
+            {e.entrada.mode === "analisar" && (
+              <Passo icone={IconWand}
+                onClick={() => novaPergunta({ mode: "recomendar", query: e.entrada.query, segment, faixas: e.entrada.filters?.faixa ?? [] })}>
+                Transformar em recomendações
+              </Passo>
+            )}
+            <Passo icone={IconChartDots3} onClick={() => navigate("/panorama")}>Ver todas as características</Passo>
+          </Group>
+        </div>
+
+        <AchadosDaResposta achados={s.findings} />
+
+        {s.profiles.length > 0 && (
+          <Secao titulo="Perfis para acompanhar">
+            <Stack gap={10}>
+              {s.profiles.map((p) => (
+                <Group key={p.perfil} gap="sm">
+                  <Anchor href={`https://www.instagram.com/${p.perfil}/`} target="_blank" fw={500} size="sm">@{p.perfil}</Anchor>
+                  <Text size="sm" c="dimmed">
+                    {p.n_top} de {p.n_amostra} Reels no top · {p.tema_predominante.replaceAll("_", " ")} · {p.formato_predominante.replaceAll("_", " ")}
+                  </Text>
+                </Group>
+              ))}
+            </Stack>
+          </Secao>
+        )}
+
+        <div>
+          <Text size="sm" c="dimmed" mb="sm">Fazer outra pergunta</Text>
+          {caixa}
+        </div>
+      </Stack>
+    </Tela>
   );
+}
+
+const VAZIO: Rascunho = { mode: "analisar", query: "", segment: "", faixas: [] };
+
+export default function Perguntar() {
+  const { runId } = useParams();
+  const navigate = useNavigate();
+  const { atualizar } = useRecentes();
+  const { execucao, erro: erroCarga } = useExecucao(runId);
+  const tarefa = useTarefa("perguntar");
+  const [r, setR] = useState<Rascunho>(VAZIO);
+  useTitulo(tarefa?.rodando ? tarefa.titulo : runId ? execucao?.entrada.query : "Perguntar");
+
+  // Ao abrir um resultado, o campo de "outra pergunta" começa vazio e um erro anterior some.
+  useEffect(() => {
+    setR((x) => ({ ...x, query: "" }));
+    if (runId) limparTarefa("perguntar");
+  }, [runId]);
+
+  function enviar(pedido: Rascunho = r) {
+    const entrada: Entrada = {
+      mode: pedido.mode, query: pedido.query.trim(), segment: pedido.segment || null,
+      filters: pedido.faixas.length ? { faixa: pedido.faixas } : null,
+    };
+    setR(pedido);
+    rodar("perguntar", { titulo: entrada.query }, async () => {
+      const inicio = Date.now();
+      const saida = await api.consultar(entrada);
+      return { run_id: saida.run_id, quando: new Date().toISOString(), duracao_s: (Date.now() - inicio) / 1000, entrada, erro: null, saida };
+    }, navigate, atualizar);
+  }
+
+  const caixa = <CaixaPergunta r={r} setR={setR} enviar={() => enviar()} ocupado={Boolean(tarefa?.rodando)} />;
+
+  if (tarefa?.rodando) {
+    return (
+      <Tela largura={720}>
+        <Title order={1} fz={{ base: 22, sm: 27 }} fw={600} lh={1.3} mb={40}>{tarefa.titulo}</Title>
+        <Trabalhando
+          etapas={["Escolhendo as consultas à base", "Consultando os achados e os Reels de referência", "Escrevendo a resposta", "Revisando as citações"]}
+          limites={[3, 8, 16]}
+          inicio={tarefa.inicio}
+          previsao="5 a 30 s"
+        />
+      </Tela>
+    );
+  }
+
+  if (!runId || tarefa?.erro) {
+    return (
+      <Inicio titulo="O que engaja nos Reels de pequenos negócios?"
+        abaixo={<Sugestoes itens={SUGESTOES} rotulo={(s) => s.curto} icone={(s) => s.icone} onEscolher={(s) => enviar(s)} />}>
+        {tarefa?.erro && <Box mb="md"><Erro>{tarefa.erro}</Erro></Box>}
+        <CaixaPergunta r={r} setR={setR} enviar={() => enviar()} ocupado={false} autoFocus />
+      </Inicio>
+    );
+  }
+  if (erroCarga) return <Tela><Erro titulo="Não foi possível abrir esta execução">{erroCarga}</Erro></Tela>;
+  if (!execucao) return <Tela><Loader size="sm" /></Tela>;
+  if (!execucao.saida) return <Tela><Erro titulo="Esta execução não terminou">{execucao.erro}</Erro></Tela>;
+
+  return <Resposta e={execucao} novaPergunta={(p) => enviar(p)} caixa={caixa} />;
 }

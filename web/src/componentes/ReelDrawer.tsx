@@ -1,8 +1,11 @@
-import { Anchor, Badge, Drawer, Group, Image, Loader, SimpleGrid, Stack, Table, Text } from "@mantine/core";
+import {
+  Box, Button, Drawer, Group, Loader, Paper, ScrollArea, SimpleGrid, Spoiler, Stack, Text,
+} from "@mantine/core";
+import { IconBrandInstagram } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 import { api, urlQuadro } from "../api";
-import { inteiro, pct, rotuloValor } from "../formato";
+import { compacto, inteiro, pct, rotuloValor } from "../formato";
 import type { ReelDetalhe } from "../tipos";
 
 const CATEGORIAS: [string, string][] = [
@@ -13,6 +16,15 @@ const CATEGORIAS: [string, string][] = [
 const NOMES_QUADROS: Record<string, string> = {
   gancho_0s: "0 s", gancho_1s: "1 s", gancho_2s: "2 s", gancho_3s: "3 s", meio_40: "40%", meio_60: "60%", final_2s: "fim −2 s", final_0s: "fim",
 };
+
+function Metrica({ rotulo, valor }: { rotulo: string; valor: string }) {
+  return (
+    <Paper p="sm" bg="var(--suave)" withBorder={false}>
+      <Text size="xs" c="dimmed">{rotulo}</Text>
+      <Text fw={600}>{valor}</Text>
+    </Paper>
+  );
+}
 
 export default function ReelDrawer({ shortCode, onClose }: { shortCode: string | null; onClose: () => void }) {
   const [reel, setReel] = useState<ReelDetalhe | null>(null);
@@ -25,45 +37,81 @@ export default function ReelDrawer({ shortCode, onClose }: { shortCode: string |
   }, [shortCode]);
 
   return (
-    <Drawer opened={!!shortCode} onClose={onClose} position="right" size="lg" title={reel ? `@${reel.perfil}` : shortCode}>
+    <Drawer
+      opened={!!shortCode}
+      onClose={onClose}
+      position="right"
+      size={520}
+      title={reel ? (
+        <div>
+          <Text fw={600}>@{reel.perfil}</Text>
+          <Text size="xs" c="dimmed">{reel.faixa} · {compacto(reel.seguidores)} seguidores · {reel.publicado_em}</Text>
+        </div>
+      ) : shortCode}
+    >
       {!reel && !erro && <Loader size="sm" />}
       {erro && <Text c="red">{erro}</Text>}
       {reel && (
-        <Stack>
-          <Group gap="xs">
-            <Badge color={reel.grupo === "top" ? "stone" : "gray"}>{reel.grupo === "top" ? "Top 10%" : "Controle"}</Badge>
-            <Badge variant="light" color="gray">{reel.faixa}</Badge>
-            <Anchor href={reel.url} target="_blank" size="sm">Abrir no Instagram</Anchor>
-          </Group>
-          <Text fw={600}>“{reel.hook_texto}”</Text>
-          <SimpleGrid cols={4} spacing={6}>
-            {reel.quadros.map((q) => (
-              <div key={q}>
-                <Image src={urlQuadro(reel.shortCode, q)} radius="sm" alt={`Quadro em ${NOMES_QUADROS[q]}`} />
-                <Text size="xs" c="dimmed" ta="center">{NOMES_QUADROS[q]}</Text>
-              </div>
-            ))}
+        <Stack gap="lg">
+          <div>
+            <Text size="sm" c="dimmed" mb={4}>
+              {reel.grupo === "top" ? "Top 10% de engajamento" : "Grupo de controle"} · {Math.round(reel.duracao_s)} s · gancho
+            </Text>
+            <Text fz={18} fw={500} lh={1.4}>“{reel.hook_texto}”</Text>
+          </div>
+
+          <div>
+            <Text size="sm" fw={600} mb={8}>Quadros do vídeo</Text>
+            <ScrollArea type="auto" offsetScrollbars scrollbarSize={6}>
+              <Group gap={8} wrap="nowrap" pb={4}>
+                {reel.quadros.map((q) => (
+                  <Box key={q} w={104} style={{ flexShrink: 0 }}>
+                    <div className="quadro" style={{ borderRadius: "var(--mantine-radius-sm)" }}>
+                      <img src={urlQuadro(reel.shortCode, q)} alt={`Quadro em ${NOMES_QUADROS[q]}`} loading="lazy" />
+                    </div>
+                    <Text size="xs" c="dimmed" ta="center" mt={2}>{NOMES_QUADROS[q]}</Text>
+                  </Box>
+                ))}
+              </Group>
+            </ScrollArea>
+          </div>
+
+          <SimpleGrid cols={2} spacing="xs">
+            <Metrica rotulo="Taxa de engajamento" valor={pct(reel.taxa_engajamento, 1)} />
+            <Metrica rotulo="Visualizações" valor={inteiro(reel.visualizacoes)} />
+            <Metrica rotulo="Curtidas" valor={inteiro(reel.curtidas)} />
+            <Metrica rotulo="Comentários" valor={inteiro(reel.comentarios)} />
           </SimpleGrid>
-          <Table withRowBorders={false} verticalSpacing={2}>
-            <Table.Tbody>
-              <Table.Tr><Table.Td c="dimmed">Taxa de engajamento</Table.Td><Table.Td>{pct(reel.taxa_engajamento, 1)}</Table.Td></Table.Tr>
-              <Table.Tr><Table.Td c="dimmed">Curtidas · comentários</Table.Td><Table.Td>{inteiro(reel.curtidas)} · {inteiro(reel.comentarios)}</Table.Td></Table.Tr>
-              <Table.Tr><Table.Td c="dimmed">Visualizações</Table.Td><Table.Td>{inteiro(reel.visualizacoes)}</Table.Td></Table.Tr>
-              <Table.Tr><Table.Td c="dimmed">Seguidores</Table.Td><Table.Td>{inteiro(reel.seguidores)}</Table.Td></Table.Tr>
-              <Table.Tr><Table.Td c="dimmed">Duração · publicado em</Table.Td><Table.Td>{Math.round(reel.duracao_s)} s · {reel.publicado_em}</Table.Td></Table.Tr>
+
+          <div>
+            <Text size="sm" fw={600} mb={8}>Como o Reel foi anotado</Text>
+            <Paper className="lista" style={{ overflow: "hidden" }}>
               {CATEGORIAS.map(([campo, nome]) => (
-                <Table.Tr key={campo}><Table.Td c="dimmed">{nome}</Table.Td><Table.Td>{rotuloValor(reel[campo])}</Table.Td></Table.Tr>
+                <Group key={campo} justify="space-between" px="sm" py={7} wrap="nowrap">
+                  <Text size="sm" c="dimmed">{nome}</Text>
+                  <Text size="sm" fw={500} ta="right">{rotuloValor(reel[campo])}</Text>
+                </Group>
               ))}
-            </Table.Tbody>
-          </Table>
-          <div>
-            <Text size="sm" fw={600}>Elementos de destaque</Text>
-            <Group gap={4} mt={4}>{reel.elementos_top5.map((e) => <Badge key={e} variant="outline" color="gray">{e}</Badge>)}</Group>
+            </Paper>
           </div>
+
+          {reel.elementos_top5.length > 0 && (
+            <div>
+              <Text size="sm" fw={600} mb={6}>Elementos de destaque</Text>
+              <Text size="sm" c="dimmed">{reel.elementos_top5.join(" · ")}</Text>
+            </div>
+          )}
+
           <div>
-            <Text size="sm" fw={600}>Legenda</Text>
-            <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>{reel.legenda || "(sem legenda)"}</Text>
+            <Text size="sm" fw={600} mb={4}>Legenda</Text>
+            <Spoiler maxHeight={96} showLabel="Ver mais" hideLabel="Ver menos">
+              <Text size="sm" c="dimmed" style={{ whiteSpace: "pre-wrap" }}>{reel.legenda || "(sem legenda)"}</Text>
+            </Spoiler>
           </div>
+
+          <Button component="a" href={reel.url} target="_blank" variant="default" leftSection={<IconBrandInstagram size={17} />}>
+            Abrir no Instagram
+          </Button>
         </Stack>
       )}
     </Drawer>
