@@ -1,10 +1,10 @@
 import {
-  ActionIcon, Alert, Box, Button, Group, Loader, Menu, Paper, Stack, Text, Textarea, Title, UnstyledButton,
+  ActionIcon, Alert, Box, Button, Group, Loader, Menu, Paper, Stack, Switch, Text, Textarea, Title, UnstyledButton,
 } from "@mantine/core";
 import { IconAlertTriangle, IconArrowUp, IconCheck, IconChevronDown, type Icon } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
-import { useCronometro } from "../contexto";
+import { useComparacaoStone, useCronometro } from "../contexto";
 import { FAIXAS, rotuloSegmento, ROTULO_MODO, tempoRelativo } from "../formato";
 import type { Execucao } from "../tipos";
 import { SeloConfianca } from "./Selos";
@@ -230,5 +230,14 @@ export function Avisos({ avisos }: { avisos: string[] }) {
         </Group>
       ))}
     </Stack>
+  );
+}
+
+// Interruptor da comparação com a @impulsostone (vale para o app todo). `curto` para colunas estreitas.
+export function ComparadorStone({ curto = false }: { curto?: boolean }) {
+  const { ativo, setAtivo } = useComparacaoStone();
+  return (
+    <Switch size="xs" checked={ativo} onChange={(e) => setAtivo(e.currentTarget.checked)} color="orange"
+      label={<Text size="xs" c="dimmed" span>{curto ? "Comparar com a Stone" : "Comparar com a @impulsostone"}</Text>} />
   );
 }

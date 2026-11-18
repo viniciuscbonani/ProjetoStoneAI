@@ -5,10 +5,10 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { api } from "../api";
 import { corTop, Grupo, Legenda, LegendaBarras, ListaValores } from "../componentes/Achados";
 import CartaoReel, { MiniReel } from "../componentes/CartaoReel";
-import { Erro, Escolha, Secao, Tela, TituloTela } from "../componentes/Comum";
+import { ComparadorStone, Erro, Escolha, Secao, Tela, TituloTela } from "../componentes/Comum";
 import Glance from "../componentes/Glance";
 import { SeloRobustez } from "../componentes/Selos";
-import { useAbrirGanchos, useTitulo } from "../contexto";
+import { useAbrirGanchos, useComparacaoStone, useTitulo } from "../contexto";
 import { compacto, FAIXAS, inteiro, nomeAchado, num, pct, SEGMENTOS, vezes } from "../formato";
 import type { Achado, Panorama as TPanorama, ReferencePost } from "../tipos";
 import { TODOS } from "./Ganchos";
@@ -44,6 +44,7 @@ function Destaque({ a, evitar, segmento, faixas, abrir }: {
   a: Achado; evitar: boolean; segmento: string; faixas: string[]; abrir: (el: HTMLElement) => void;
 }) {
   const refs = useExemplos(evitar ? null : a, segmento, faixas, 3);
+  const stone = useComparacaoStone().de(a);
   return (
     <Paper p="lg" className="clicavel" onClick={(e) => abrir(e.currentTarget)} role="button" tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && abrir(e.currentTarget)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -56,6 +57,7 @@ function Destaque({ a, evitar, segmento, faixas, abrir }: {
       <Text size="sm" c="dimmed">
         {evitar ? "menos comum no top · " : ""}{pct(a.freq_top)} do top × {pct(a.freq_controle)} do controle
       </Text>
+      {stone && <Text size="sm" c="var(--barra-stone)">Na @impulsostone: {pct(stone.freq)}</Text>}
       <Box mt="sm" mih={evitar ? 0 : 76} onClick={(e) => e.stopPropagation()}>
         {!evitar && (refs ? (
           <Group gap={6}>{refs.map((r) => <MiniReel key={r.shortCode} codigo={r.shortCode} refs={refs} largura={42} />)}</Group>
@@ -71,6 +73,7 @@ function Peca({ itens, abrir }: { itens: Achado[]; abrir: (el: HTMLElement) => v
   const fortes = itens.filter(relevante).sort(porForca);
   const a = fortes[0] ?? [...itens].sort((x, y) => y.freq_top - x.freq_top)[0];
   const destaca = fortes.length > 0;
+  const stone = useComparacaoStone().de(a);
   return (
     <UnstyledButton onClick={(e) => abrir(e.currentTarget)} className="clicavel peca">
       <Text size="xs" c="dimmed" truncate>{rotuloCampo(a)}</Text>
@@ -80,6 +83,12 @@ function Peca({ itens, abrir }: { itens: Achado[]; abrir: (el: HTMLElement) => v
       </Text>
       <div className="peca-barra"><span style={{ width: `${a.freq_top * 100}%`, background: corTop(a) }} /></div>
       <div className="peca-barra"><span style={{ width: `${a.freq_controle * 100}%`, background: "var(--barra-controle)" }} /></div>
+      {stone && (
+        <>
+          <div className="peca-barra"><span style={{ width: `${stone.freq * 100}%`, background: "var(--barra-stone)" }} /></div>
+          <Text size="xs" c="var(--barra-stone)" mt={6}>Stone: {pct(stone.freq)} × {pct(a.freq_top)} no top</Text>
+        </>
+      )}
     </UnstyledButton>
   );
 }
@@ -221,6 +230,7 @@ export default function Panorama() {
           </Text>
         )}
         {carregando && <Loader size={14} ml="xs" />}
+        <Box ml="auto"><ComparadorStone /></Box>
       </Group>
 
       {erro && <Box mb="xl"><Erro titulo="Não foi possível carregar o panorama">{erro}</Erro></Box>}

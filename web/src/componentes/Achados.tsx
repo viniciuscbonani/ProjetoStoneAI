@@ -3,8 +3,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
+import { useComparacaoStone } from "../contexto";
 import { nomeAchado, num, pct, rotuloRecorte, vezes } from "../formato";
 import type { Achado } from "../tipos";
+import { ComparadorStone } from "./Comum";
 import { SeloRobustez } from "./Selos";
 
 // Gráfico de halteres com eixo fixo de 0 a 100% (o mesmo em todas as listas, para comparar de olho): ponto cinza =
@@ -12,15 +14,17 @@ import { SeloRobustez } from "./Selos";
 const x = (f: number) => `${Math.min(100, Math.max(0, f * 100))}%`;
 
 function Trilho({ a }: { a: Achado }) {
+  const stone = useComparacaoStone().de(a);
   const [ini, fim] = [Math.min(a.freq_top, a.freq_controle), Math.max(a.freq_top, a.freq_controle)];
   const destaque = a.robustez === "robusto" || a.robustez === "fragil";
   const cor = destaque ? "var(--mantine-color-stone-6)" : "var(--mantine-color-gray-5)";
   return (
-    <Tooltip label={`Top ${pct(a.freq_top)} × controle ${pct(a.freq_controle)}. Lift ${num(a.lift)}, intervalo de 95% de ${num(a.ic95_min)} a ${num(a.ic95_max)}.`}>
+    <Tooltip label={`Top ${pct(a.freq_top)} × controle ${pct(a.freq_controle)}${stone ? ` × @impulsostone ${pct(stone.freq)}` : ""}. Lift ${num(a.lift)}, intervalo de 95% de ${num(a.ic95_min)} a ${num(a.ic95_max)}.`}>
       <div className="trilho">
         <div className="trilho-ligacao" style={{ left: x(ini), width: `calc(${x(fim)} - ${x(ini)})`, background: cor }} />
         <div className="trilho-ponto" style={{ left: x(a.freq_controle), background: "var(--mantine-color-gray-5)" }} />
         <div className="trilho-ponto" style={{ left: x(a.freq_top), background: cor }} />
+        {stone && <div className="trilho-ponto trilho-stone" style={{ left: x(stone.freq) }} />}
       </div>
     </Tooltip>
   );
@@ -41,6 +45,7 @@ export function Eixo() {
 }
 
 function LinhaAchado({ a }: { a: Achado }) {
+  const stone = useComparacaoStone().de(a);
   return (
     <div className="achado-grade achado-linha">
       <div style={{ minWidth: 0 }}>
@@ -54,6 +59,7 @@ function LinhaAchado({ a }: { a: Achado }) {
           <Text span inherit fw={600}>{pct(a.freq_top)}</Text> <Text span inherit c="dimmed">× {pct(a.freq_controle)}</Text>
         </Text>
         <Text size="xs" c="dimmed">{a.robustez === "sem_diferenca" ? "sem diferença" : vezes(a.lift, a.robustez).replace(" no top", "")}</Text>
+        {stone && <Text size="xs" c="var(--barra-stone)">Stone {pct(stone.freq)}</Text>}
       </div>
       <div className="achado-col-selo"><SeloRobustez robustez={a.robustez} /></div>
     </div>
@@ -71,10 +77,15 @@ export function ListaAchados({ achados, eixo = true, compacto = false }: { achad
 }
 
 export function Legenda() {
+  const { stone } = useComparacaoStone();
   return (
     <Group gap="md">
       <Group gap={6}><Box w={10} h={10} bg="stone.6" style={{ borderRadius: 5 }} /><Text size="xs" c="dimmed">Top 10%</Text></Group>
       <Group gap={6}><Box w={10} h={10} bg="gray.5" style={{ borderRadius: 5 }} /><Text size="xs" c="dimmed">Controle sorteado</Text></Group>
+      {stone && (
+        <Group gap={6}><Box w={10} h={10} bg="var(--barra-stone)" style={{ borderRadius: 5 }} /><Text size="xs" c="dimmed">@impulsostone</Text></Group>
+      )}
+      <ComparadorStone />
     </Group>
   );
 }
@@ -129,12 +140,14 @@ export const corTop = (a: Achado) =>
   (a.robustez === "robusto" || a.robustez === "fragil") && a.dif_pp > 0 ? "var(--mantine-color-stone-6)" : "var(--barra-top)";
 
 // Com `verde`, explica também a cor do top quando o valor se destaca (nas listas agrupadas, o título do grupo já diz).
-export function LegendaBarras({ verde = false }: { verde?: boolean }) {
+export function LegendaBarras({ verde = false, curta = false }: { verde?: boolean; curta?: boolean }) {
+  const { stone } = useComparacaoStone();
   return (
     <Text size="xs" c="dimmed">
       <span className="amostra-barra" style={{ background: "var(--barra-top)" }} />top
       {verde && <><span className="amostra-barra" style={{ background: "var(--mantine-color-stone-6)", marginLeft: 12 }} />top, quando se destaca</>}
       <span className="amostra-barra" style={{ background: "var(--barra-controle)", marginLeft: 12 }} />controle
+      {stone && <><span className="amostra-barra" style={{ background: "var(--barra-stone)", marginLeft: 12 }} />{curta ? "Stone" : "@impulsostone"}</>}
     </Text>
   );
 }
@@ -144,6 +157,7 @@ export function LegendaBarras({ verde = false }: { verde?: boolean }) {
 function ValorSelecionavel({ a, rotulo, contagem, ativo, onClick }: {
   a: Achado; rotulo: string; contagem: string; ativo: boolean; onClick: () => void;
 }) {
+  const stone = useComparacaoStone().de(a);
   return (
     <UnstyledButton className="item-valor" data-ativo={ativo || undefined} onClick={onClick}>
       <Group justify="space-between" wrap="nowrap" gap="xs">
@@ -157,9 +171,10 @@ function ValorSelecionavel({ a, rotulo, contagem, ativo, onClick }: {
         <span style={{ width: x(a.freq_top), background: corTop(a) }} />
       </div>
       <div className="peca-barra"><span style={{ width: x(a.freq_controle), background: "var(--barra-controle)" }} /></div>
+      {stone && <div className="peca-barra"><span style={{ width: x(stone.freq), background: "var(--barra-stone)" }} /></div>}
       <Group justify="space-between" mt={4} gap="xs" wrap="nowrap">
         <SeloRobustez robustez={a.robustez} />
-        <Text size="xs" c="dimmed">{contagem}</Text>
+        {stone ? <Text size="xs" c="var(--barra-stone)">Stone {pct(stone.freq)}</Text> : <Text size="xs" c="dimmed">{contagem}</Text>}
       </Group>
     </UnstyledButton>
   );
@@ -180,7 +195,10 @@ export function ListaValores({ achados, rotulo, contagem, ativo, onEscolher, ant
 }) {
   return (
     <Stack gap="md">
-      <Box px={12}><LegendaBarras /></Box>
+      <Stack gap={8} px={12}>
+        <ComparadorStone curto />
+        <LegendaBarras curta />
+      </Stack>
       {antes}
       {GRUPOS_VALOR.map((g) => {
         const itens = achados.filter((a) => g.robustez.includes(a.robustez)).sort((a, b) => b.freq_top - a.freq_top);

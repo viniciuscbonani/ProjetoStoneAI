@@ -1,7 +1,8 @@
+import { useLocalStorage } from "@mantine/hooks";
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
 
 import { api } from "./api";
-import type { Execucao, ExecucaoResumo } from "./tipos";
+import type { Achado, Execucao, ExecucaoResumo, FrequenciaStone, FrequenciasStone } from "./tipos";
 
 // Qualquer componente abre um Reel num glance com abrirReel(shortCode, elemento clicado); o glance cresce a partir
 // desse elemento.
@@ -105,4 +106,19 @@ export function useTitulo(titulo: string | null | undefined) {
   useEffect(() => {
     document.title = titulo ? `${titulo} · Impulso Stone` : "Agente Impulso Stone";
   }, [titulo]);
+}
+
+// Comparação com a @impulsostone: um interruptor só para o app todo (lembrado no navegador). Ligado, as barras e os
+// números top x controle ganham a frequência nos Reels da Stone. As frequências vêm uma vez, na primeira vez que liga.
+let frequenciasStone: Promise<FrequenciasStone> | null = null;
+
+export function useComparacaoStone() {
+  const [ativo, setAtivo] = useLocalStorage({ key: "comparar-stone", defaultValue: false });
+  const [dados, setDados] = useState<FrequenciasStone | null>(null);
+  useEffect(() => {
+    if (ativo) (frequenciasStone ??= api.frequenciasStone()).then(setDados).catch(() => { frequenciasStone = null; });
+  }, [ativo]);
+  const stone = ativo ? dados : null;
+  const de = (a: Pick<Achado, "campo" | "valor">): FrequenciaStone | null => stone?.valores[`${a.campo}=${a.valor}`] ?? null;
+  return { ativo, setAtivo, stone, de };
 }
