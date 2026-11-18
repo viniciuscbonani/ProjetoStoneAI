@@ -9,6 +9,7 @@ data/raw/*.json
 data/raw/rowfinch_*/*.json
 data/midia/
 data/interim/links_videos_*.json
+data/interim/links_impulsostone_*.json
 data/interim/comentarios.csv
 data/interim/amostra_v1.csv
 data/interim/logs/
