@@ -4,6 +4,7 @@ Rotas:
 - POST /consultas: roda o agente (analisar | recomendar | gerar_criativo) e devolve a Saida
 - GET /panorama: achados do lift e perfis em destaque, sem LLM
 - GET /reels/{shortCode} e /reels/{shortCode}/quadros/{nome}: detalhe (com a transcrição) e quadros de um Reel da base
+- GET /diagnostico e /diagnostico/frequencias: os Reels da @impulsostone comparados ao top e ao controle, sem LLM
 - GET /busca e /busca/opcoes: busca nos Reels por características e texto, sem LLM (página Ganchos)
 - GET /execucoes e /execucoes/{run_id}: histórico, lido do log do agente
 - POST /imagens e GET /imagens/{run_id}: imagens dos criativos (Cloudflare Workers AI), geradas sob demanda
@@ -28,7 +29,7 @@ from fastapi.responses import FileResponse, Response
 from langchain_google_genai.chat_models import GoogleRateLimitError
 from pydantic import BaseModel
 
-from . import IMPLEMENTADOS, busca, dados, executar, imagens
+from . import IMPLEMENTADOS, busca, dados, diagnostico, executar, imagens
 from .avaliacao import salvar_upload
 from .contrato import Entrada, Saida
 from .ferramentas import buscar_referencias, consultar_caracteristicas, perfis_em_destaque
@@ -84,6 +85,18 @@ def _panorama(segmento: str | None, faixas: tuple[str, ...] | None) -> dict:
                        "perfis": len({r["perfil"] for r in reels})},
             "recorte": bool(segmento or faixas),
             "achados": achados, "perfis": perfis_em_destaque(20, segmento, list(faixas) if faixas else None)}
+
+
+@app.get("/diagnostico")
+def ver_diagnostico() -> dict:
+    """Lacunas, excessos, o que está em linha e o que não é alavanca, com Reels da Stone e do top."""
+    return diagnostico.diagnostico()
+
+
+@app.get("/diagnostico/frequencias")
+def frequencias_stone() -> dict:
+    """Frequência de cada valor (campo=valor) nos Reels da Stone, para comparar no Panorama e no banco de ganchos."""
+    return diagnostico.frequencias()
 
 
 @app.get("/busca")

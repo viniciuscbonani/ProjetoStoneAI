@@ -15,6 +15,7 @@
   /* Barras top x controle: top forte (verde quando se destaca), controle apagado, nos dois temas. */
   --barra-top: var(--mantine-color-gray-7);
   --barra-controle: var(--mantine-color-gray-4);
+  --barra-stone: var(--mantine-color-orange-6);
 }
 :root[data-mantine-color-scheme="dark"] {
   --fundo: var(--mantine-color-dark-8);
@@ -30,6 +31,7 @@
   --composer: var(--mantine-color-dark-6);
   --barra-top: var(--mantine-color-dark-0);
   --barra-controle: var(--mantine-color-dark-3);
+  --barra-stone: var(--mantine-color-orange-5);
 }
 
 body {
@@ -456,4 +458,11 @@ body {
   border-radius: 2px;
   vertical-align: middle;
   margin-right: 5px;
+}
+
+/* Ponto da @impulsostone no trilho (comparação ligada): losango laranja, para não se confundir com top e controle. */
+.trilho-ponto.trilho-stone {
+  background: var(--barra-stone);
+  transform: rotate(45deg);
+  border-radius: 2px;
 }

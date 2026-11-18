@@ -4,7 +4,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import {
-  IconChartDots3, IconClipboardCheck, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconMessageCircleSearch,
+  IconChartDots3, IconClipboardCheck, IconReportAnalytics, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconMessageCircleSearch,
   IconMoon, IconSparkles, IconSun, type Icon,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
@@ -19,6 +19,7 @@ const TELAS: { rota: string; rotulo: string; icone: Icon; tela?: TelaExecucao }[
   { rota: "/criar", rotulo: "Criar", icone: IconSparkles, tela: "criar" },
   { rota: "/avaliar", rotulo: "Avaliar", icone: IconClipboardCheck, tela: "avaliar" },
   { rota: "/panorama", rotulo: "Panorama", icone: IconChartDots3 },
+  { rota: "/diagnostico", rotulo: "Diagnóstico", icone: IconReportAnalytics },
 ];
 
 // Logo da Stone (wordmark de stone.com.br). Com a barra recolhida, fica só o símbolo (o "o" do wordmark), que vira o

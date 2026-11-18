@@ -196,3 +196,32 @@ export interface Execucao {
   erro: string | null;
   saida: Saida | null;
 }
+
+// Diagnóstico da @impulsostone (GET /diagnostico/frequencias e /diagnostico).
+export interface FrequenciaStone { k: number; freq: number; ic_min: number; ic_max: number }
+
+export interface FrequenciasStone {
+  perfil: string;
+  n: number;
+  valores: Record<string, FrequenciaStone>;
+}
+
+export interface PontoDiagnostico {
+  tipo: "lacuna" | "excesso" | "em_linha";
+  nivel: "claro" | "provavel" | "";
+  achado: Achado & { depende_de_poucos?: boolean };
+  stone: FrequenciaStone;
+  reels_stone: ReferencePost[];
+  reels_top: ReferencePost[];
+}
+
+export interface Diagnostico {
+  perfil: string;
+  n: number;
+  periodo: [string, string] | null;
+  posicao: { taxa_mediana: number; perfis_micro: number; abaixo: number; mediana_micro: number };
+  pontos: PontoDiagnostico[];
+  nao_alavanca: { achado: Achado; stone: FrequenciaStone }[];
+  retrato: { campo: string; rotulo: string; valores: { valor: string; rotulo: string; freq: number; freq_top: number | null }[] }[];
+  reels: ReferencePost[];
+}

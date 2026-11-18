@@ -1,6 +1,6 @@
 import type {
-  Entrada, EstadoAvaliacao, Execucao, ExecucaoResumo, FiltroBusca, ImagemGerada, Panorama, ReelDetalhe,
-  ReferencePost, ResultadoBusca, Saida,
+  Diagnostico, Entrada, EstadoAvaliacao, Execucao, ExecucaoResumo, FiltroBusca, FrequenciasStone, ImagemGerada,
+  Panorama, ReelDetalhe, ReferencePost, ResultadoBusca, Saida,
 } from "./tipos";
 
 const SEM_API = "A API não respondeu. Ela está rodando? Em outro terminal: .venv/bin/uvicorn agente.api:app --port 8000";
@@ -57,6 +57,8 @@ export const api = {
     q.set("inicio", String(inicio));
     return chamar<ResultadoBusca>(`/busca?${q}`);
   },
+  diagnostico: () => chamar<Diagnostico>("/diagnostico"),
+  frequenciasStone: () => chamar<FrequenciasStone>("/diagnostico/frequencias"),
   opcoesBusca: () => chamar<FiltroBusca[]>("/busca/opcoes"),
   imagens: (runId: string) => chamar<Record<string, ImagemGerada>>(`/imagens/${runId}`),
 };

@@ -40,7 +40,8 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
 `ler_impulsostone.py` lê os 56 Reels da @impulsostone (fora do top e do controle) do mesmo jeito: links novos (uma
 execução do esdrasdw só com o perfil), quadros em `data/midia/`, transcrição e rubrica em
-`data/processed/impulsostone.jsonl`; base do diagnóstico do perfil.
+`data/processed/impulsostone.jsonl`; base do diagnóstico do perfil. O `indexar_base.py` grava esses Reels na tabela
+`impulsostone` do agente.db (mesmas colunas de `reels`, grupo = "impulsostone"; `dados.reels_stone()`).
 
 ## Dados
 | Arquivo | Conteúdo |
@@ -200,6 +201,28 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
     por `abrirReel(shortCode, elemento)` de qualquer cartão, miniatura ou citação: quadro grande e os 8 quadros, gancho,
     métricas, fala, legenda e anotação) e o detalhe de uma característica no Panorama abrem em glance. Glances se
     empilham (um Reel aberto de dentro do banco de ganchos fica por cima); Esc fecha só o de cima.
+  - **Diagnóstico** (aba própria, `telas/Diagnostico.tsx`; `agente/diagnostico.py`, `GET /diagnostico`, sem LLM): os 56
+    Reels da @impulsostone (22/04 a 13/11) comparados ao top e ao controle, com IC de 95% de Wilson (n pequeno). Cada
+    achado com diferença clara ou indício vira lacuna (aparece mais no top e a Stone fica abaixo do ponto médio entre
+    top e controle), excesso (o espelho) ou em linha; "claro" quando o IC inteiro fica longe do top e o achado não
+    depende de poucos criadores, senão "provável" (seção "Para observar"). Resultado (17/11): lacunas claras em mais de
+    90 s (Stone 5% × top 32%) e gancho de curiosidade (7% × 36%); para observar: polêmica, 30–60 s e data comemorativa;
+    em linha: explicativo. As hipóteses da Stone sem diferença (rosto, CTA, dor real...) vão para "Não é alavanca".
+    Tela no padrão do Panorama (escolhida em 18/11 entre 5 versões de teste): linha de contexto (56 Reels, período, taxa
+    mediana de 0,8%, no meio dos 15 perfis micro, por perfil); "O que mudar" em linhas largas, cada uma com a
+    característica e um **veredito** ("6× menos / que o top", e embaixo "5% dos Reels da @impulsostone · 32% dos Reels do
+    top"), "Criar Reels com isso" e o selo no pé, e 4 Reels do top à direita; grade "Todas as características" agrupada
+    por situação (título e uma frase de ajuda por grupo), com um veredito curto em texto no lugar de barras (as barras de
+    valores pequenos ficavam ilegíveis, 18/11): a característica no alto, o campo embaixo dela e, no pé da peça, "Usa
+    pouco" ou "Usa demais" em laranja (Para observar), "Igual ao top" em verde (Já em linha) ou "Não faz diferença" em
+    cinza (Não é alavanca), com os dois números; detalhe em glance (frase "3 de 56 Reels da @impulsostone duram mais de 90 s", intervalo, valores mais
+    comuns na Stone para o campo, Reels do top e da Stone); no fim, os 56 Reels numa faixa. Todo número diz de onde vem
+    ("dos Reels da @impulsostone", "dos Reels do top"), sem repetir a mesma informação em dois lugares (pedido de 18/11);
+    as frases por campo ficam em `VERBOS` (`Diagnostico.tsx`).
+  - **Comparar com a @impulsostone**: interruptor único para o app todo (`ComparadorStone`, `useComparacaoStone` em
+    `contexto.tsx`, lembrado no navegador; `GET /diagnostico/frequencias`). Ligado, as barras ganham uma terceira em
+    laranja (`--barra-stone`), os halteres um losango e os números "Stone x%": Panorama (destaques, grade e detalhe),
+    banco de ganchos e achados do Perguntar.
   - Criar: "Baixar .zip" por criativo (`GET /execucoes/{run_id}/criativos/{n}.zip`): `criativo.txt`,
     `prompt-imagens.txt` e as imagens já geradas (capa.jpg, cena1.jpg...).
   - Evitar sinais de "interface feita por IA": barra grossa colorida ao lado de cartões, selos em pílulas coloridas

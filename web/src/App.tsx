@@ -10,6 +10,7 @@ import { GanchosContexto, RecentesContexto, ReelContexto } from "./contexto";
 import Avaliar from "./telas/Avaliar";
 import { PainelGanchos, rotuloGancho, TODOS } from "./telas/Ganchos";
 import Criar from "./telas/Criar";
+import Diagnostico from "./telas/Diagnostico";
 import Panorama from "./telas/Panorama";
 import Perguntar from "./telas/Perguntar";
 import type { ExecucaoResumo } from "./tipos";
@@ -40,6 +41,7 @@ export default function App() {
               <Route path="criar/:runId?" element={<Criar />} />
               <Route path="avaliar/:runId?" element={<Avaliar />} />
               <Route path="panorama" element={<Panorama />} />
+              <Route path="diagnostico" element={<Diagnostico />} />
               <Route path="*" element={<Navigate to="/perguntar" replace />} />
             </Route>
           </Routes>
