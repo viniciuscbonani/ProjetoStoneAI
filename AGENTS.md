@@ -38,6 +38,9 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 → `anotar_gemini.py` (rubrica em `agente/rubrica.py`) → `lift.py` → `gerar_validacao.py` / `concordancia.py`
 → `indexar_base.py` (gera `data/processed/agente.db`, a base do agente; rodar de novo se a anotação ou o lift mudarem).
 Toda execução na Apify fica registrada em `data/raw/coletas.csv`.
+`ler_impulsostone.py` lê os 56 Reels da @impulsostone (fora do top e do controle) do mesmo jeito: links novos (uma
+execução do esdrasdw só com o perfil), quadros em `data/midia/`, transcrição e rubrica em
+`data/processed/impulsostone.jsonl`; base do diagnóstico do perfil.
 
 ## Dados
 | Arquivo | Conteúdo |
@@ -157,7 +160,7 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
   `npm install && npm run dev` (http://localhost:5173; o Vite repassa `/api` para a porta 8000). Front em
   React + Vite + Mantine 9 + React Router, redesenhado em 17/11 com referências de ChatGPT/Gemini (barra lateral
   com Recentes, tela inicial com sugestões), Perplexity (Reels-fonte no alto e citações numeradas com prévia),
-  NotebookLM (gaveta do Reel ao lado) e Jasper/Canva (briefing fixo e variações lado a lado).
+  NotebookLM (detalhe do Reel sem sair da tela) e Jasper/Canva (briefing fixo e variações lado a lado).
   - Telas, cada uma com URL própria e resultado em `/<tela>/<run_id>`: **Perguntar** (analisar e recomendar),
     **Criar** (briefing + 3 criativos com storyboard de cenas 9:16), **Avaliar** (vídeo ou roteiro, progresso por
     etapa) e **Panorama** (top × controle em halteres: ponto verde = top, cinza = controle).
@@ -183,6 +186,20 @@ orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (a
     campo, com barras top e controle; ou "Lista", com os halteres de `componentes/Achados.tsx`) e painel de detalhe
     ao clicar (todos os valores, Reels do top de cada valor via `GET /panorama/exemplos` e "Criar Reels com isso",
     que abre Criar preenchido). Em campos sim/não, destaques e peças mostram só o "sim".
+  - **Banco de ganchos** (`PainelGanchos` em `telas/Ganchos.tsx`): à esquerda, fixa ao rolar, "Todos os ganchos" e os 7
+    tipos do mais ao menos usado no top, com barras top × controle e selo; à direita, as frases reais do tipo escolhido
+    (ou de todos, com o tipo em cada linha), com busca por palavra (frase, fala e legenda, sem acento), opção de incluir
+    a amostra comum e "Criar Reels com esse gancho". Abre só num **glance** (`componentes/Glance.tsx`, como o do Zen
+    Browser: janela por cima da tela, que cresce a partir do botão clicado e volta para ele ao fechar; Esc ou clique
+    fora fecham; sem botão de página inteira, pedido de 17/11) a partir de `abrirGanchos(tipo, elemento)`
+    (`contexto.tsx`). Entradas: no Perguntar, quando os achados da resposta incluem `tipo_hook`; no detalhe de "Tipo de
+    gancho" do Panorama ("Ver todos os ganchos", no alto, à direita do título); e no Reel ("Outros ganchos de...").
+    Busca em `agente/busca.py` (`GET /busca` e `/busca/opcoes`, sem LLM; filtros f=campo:valor). Uma aba
+    "Biblioteca" de Reels com filtros foi testada e descartada (17/11): repetia o Panorama e o Perguntar.
+  - **Glance no lugar de gavetas laterais** (pedido do Vinícius, 17/11): o Reel (`componentes/ReelGlance.tsx`, aberto
+    por `abrirReel(shortCode, elemento)` de qualquer cartão, miniatura ou citação: quadro grande e os 8 quadros, gancho,
+    métricas, fala, legenda e anotação) e o detalhe de uma característica no Panorama abrem em glance. Glances se
+    empilham (um Reel aberto de dentro do banco de ganchos fica por cima); Esc fecha só o de cima.
   - Criar: "Baixar .zip" por criativo (`GET /execucoes/{run_id}/criativos/{n}.zip`): `criativo.txt`,
     `prompt-imagens.txt` e as imagens já geradas (capa.jpg, cena1.jpg...).
   - Evitar sinais de "interface feita por IA": barra grossa colorida ao lado de cartões, selos em pílulas coloridas

@@ -105,14 +105,16 @@ export function Compositor({ valor, onChange, onEnviar, placeholder, opcoes, bot
 interface Opcao { value: string; label: string; descricao?: string }
 
 // Escolha discreta no compositor: um botão de texto que abre um menu (em vez de um select com caixa).
-export function Escolha({ icone: Icone, opcoes, valor, onChange, vazio, multiplo = false }: {
+// Com `prefixo`, o botão diz de que é a escolha também depois de marcada ("Gancho: pergunta").
+export function Escolha({ icone: Icone, opcoes, valor, onChange, vazio, prefixo, multiplo = false }: {
   icone?: Icon; opcoes: Opcao[]; valor: string | string[]; onChange: (v: string | string[]) => void; vazio?: string;
-  multiplo?: boolean;
+  prefixo?: string; multiplo?: boolean;
 }) {
   const marcados = Array.isArray(valor) ? valor : [valor];
   const curto = (l: string) => l.split(" (")[0];
-  const rotulo = marcados.filter(Boolean).length
-    ? opcoes.filter((o) => marcados.includes(o.value)).map((o) => curto(o.label)).join(", ")
+  const escolhidos = opcoes.filter((o) => o.value && marcados.includes(o.value)).map((o) => curto(o.label)).join(", ");
+  const rotulo = escolhidos
+    ? (prefixo ? `${prefixo}: ${escolhidos}` : escolhidos)
     : vazio ?? curto(opcoes.find((o) => o.value === "")?.label ?? "");
 
   function escolher(v: string) {

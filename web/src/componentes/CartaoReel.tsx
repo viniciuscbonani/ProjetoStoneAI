@@ -18,10 +18,10 @@ export function Capa({ codigo, alt = "" }: { codigo: string; alt?: string }) {
 }
 
 // Capa 9:16 do Reel com o número da citação, o perfil e a taxa de engajamento.
-export default function CartaoReel({ r, numero, largura = 150 }: { r: ReferencePost; numero?: number; largura?: number }) {
+export default function CartaoReel({ r, numero, largura = 150 }: { r: ReferencePost; numero?: number; largura?: number | string }) {
   const abrirReel = useAbrirReel();
   return (
-    <UnstyledButton onClick={() => abrirReel(r.shortCode)} w={largura} style={{ flexShrink: 0 }}>
+    <UnstyledButton onClick={(e) => abrirReel(r.shortCode, e.currentTarget)} w={largura} style={{ flexShrink: 0 }}>
       <div className="quadro clicavel">
         <Capa codigo={r.shortCode} alt={`Primeiro quadro do Reel de @${r.perfil}`} />
         {numero && <Badge className="quadro-canto" size="sm" circle color="dark" variant="filled">{numero}</Badge>}
@@ -58,7 +58,7 @@ export function MiniReel({ codigo, largura = 52, refs = [] }: { codigo: string; 
   const r = refs.find((x) => x.shortCode === codigo);
   return (
     <Tooltip label={r ? `@${r.perfil} · ${pct(r.taxa_engajamento, 1)} de engajamento` : `Reel ${codigo}`}>
-      <UnstyledButton onClick={() => abrirReel(codigo)} aria-label={`Abrir o Reel ${codigo}`}>
+      <UnstyledButton onClick={(e) => abrirReel(codigo, e.currentTarget)} aria-label={`Abrir o Reel ${codigo}`}>
         <Box w={largura} className="quadro clicavel" style={{ borderRadius: "var(--mantine-radius-sm)" }}>
           <Capa codigo={codigo} />
         </Box>

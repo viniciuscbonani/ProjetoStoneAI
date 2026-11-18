@@ -152,6 +152,28 @@ export interface ReelDetalhe extends Record<string, unknown> {
   legenda: string;
   elementos_top5: string[];
   quadros: string[];
+  transcricao: string;
+}
+
+// Busca nos Reels (GET /busca e /busca/opcoes), usada pela página Ganchos.
+export interface ReelBusca extends ReferencePost {
+  grupo: "top" | "controle";
+  oculta_parcial: boolean;
+  trecho: string | null;
+  fala_final: string;
+}
+
+export interface ResultadoBusca {
+  total: number;
+  n_top: number;
+  termos: string[];
+  itens: ReelBusca[];
+}
+
+export interface FiltroBusca {
+  campo: string;
+  rotulo: string;
+  valores: { valor: string; rotulo: string; n: number; n_top: number }[];
 }
 
 export interface ExecucaoResumo {

@@ -21,7 +21,7 @@ export function Citacao({ codigo, numero, refs }: { codigo: string; numero?: num
   return (
     <HoverCard width={280} shadow="md" openDelay={150} position="top">
       <HoverCard.Target>
-        <button type="button" className="citacao" onClick={() => abrirReel(codigo)} aria-label={`Reel ${codigo}`}>
+        <button type="button" className="citacao" onClick={(e) => abrirReel(codigo, e.currentTarget)} aria-label={`Reel ${codigo}`}>
           {numero ?? "↗"}
         </button>
       </HoverCard.Target>

@@ -1,5 +1,6 @@
 import type {
-  Entrada, EstadoAvaliacao, Execucao, ExecucaoResumo, ImagemGerada, Panorama, ReelDetalhe, ReferencePost, Saida,
+  Entrada, EstadoAvaliacao, Execucao, ExecucaoResumo, FiltroBusca, ImagemGerada, Panorama, ReelDetalhe,
+  ReferencePost, ResultadoBusca, Saida,
 } from "./tipos";
 
 const SEM_API = "A API não respondeu. Ela está rodando? Em outro terminal: .venv/bin/uvicorn agente.api:app --port 8000";
@@ -50,6 +51,13 @@ export const api = {
     }),
   avaliar: (dados: FormData) => chamar<{ id: string }>("/avaliacoes", { method: "POST", body: dados }),
   estadoAvaliacao: (id: string) => chamar<EstadoAvaliacao>(`/avaliacoes/${id}`),
+  // Busca nos Reels (q, f=campo:valor, faixa, grupo, ordem); usada pela página Ganchos.
+  busca: (consulta: URLSearchParams, inicio = 0) => {
+    const q = new URLSearchParams(consulta);
+    q.set("inicio", String(inicio));
+    return chamar<ResultadoBusca>(`/busca?${q}`);
+  },
+  opcoesBusca: () => chamar<FiltroBusca[]>("/busca/opcoes"),
   imagens: (runId: string) => chamar<Record<string, ImagemGerada>>(`/imagens/${runId}`),
 };
 

@@ -1,16 +1,17 @@
-import { Anchor, Box, Button, Drawer, Group, Loader, Paper, SegmentedControl, SimpleGrid, Stack, Text, UnstyledButton } from "@mantine/core";
-import { IconBuildingStore, IconSparkles, IconUsers } from "@tabler/icons-react";
+import { Anchor, Box, Button, Group, Loader, Paper, SegmentedControl, SimpleGrid, Stack, Text, UnstyledButton } from "@mantine/core";
+import { IconBuildingStore, IconQuote, IconUsers } from "@tabler/icons-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { useNavigate } from "react-router";
 
 import { api } from "../api";
-import { Grupo, Legenda, ListaAchados } from "../componentes/Achados";
+import { corTop, Grupo, Legenda, LegendaBarras, ListaValores } from "../componentes/Achados";
 import CartaoReel, { MiniReel } from "../componentes/CartaoReel";
 import { Erro, Escolha, Secao, Tela, TituloTela } from "../componentes/Comum";
+import Glance from "../componentes/Glance";
 import { SeloRobustez } from "../componentes/Selos";
-import { useTitulo } from "../contexto";
+import { useAbrirGanchos, useTitulo } from "../contexto";
 import { compacto, FAIXAS, inteiro, nomeAchado, num, pct, SEGMENTOS, vezes } from "../formato";
 import type { Achado, Panorama as TPanorama, ReferencePost } from "../tipos";
+import { TODOS } from "./Ganchos";
 
 const ORDEM = { robusto: 0, fragil: 1, sem_diferenca: 2, insuficiente: 3 };
 // Em campos sim/não, o "não" é o espelho do "sim" (data comemorativa: não 96% × 91% repete o "sim" 4% × 10%):
@@ -22,6 +23,7 @@ const porForca = (a: Achado, b: Achado) => ORDEM[a.robustez] - ORDEM[b.robustez]
 const nomeCampo = (a: Achado) => a.descricao.split(":")[0];
 const rotuloCampo = (a: Achado) => nomeCampo(a)[0].toUpperCase() + nomeCampo(a).slice(1);
 const rotuloValor = (a: Achado) => nomeAchado(a.descricao).split(": ").slice(1).join(": ");
+const maiuscula = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 const multiplicador = (a: Achado) => (a.lift == null ? "só no top" : `${num(a.lift >= 1 ? a.lift : 1 / a.lift, 1)}×`);
 
 function useExemplos(a: Achado | null, segmento: string, faixas: string[], n: number) {
@@ -39,12 +41,12 @@ function useExemplos(a: Achado | null, segmento: string, faixas: string[], n: nu
 
 // Cartão de destaque: o multiplicador grande, o que é, os números e (no que fazer) Reels do top que têm a característica.
 function Destaque({ a, evitar, segmento, faixas, abrir }: {
-  a: Achado; evitar: boolean; segmento: string; faixas: string[]; abrir: () => void;
+  a: Achado; evitar: boolean; segmento: string; faixas: string[]; abrir: (el: HTMLElement) => void;
 }) {
   const refs = useExemplos(evitar ? null : a, segmento, faixas, 3);
   return (
-    <Paper p="lg" className="clicavel" onClick={abrir} role="button" tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && abrir()} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <Paper p="lg" className="clicavel" onClick={(e) => abrir(e.currentTarget)} role="button" tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && abrir(e.currentTarget)} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       <Text size="xs" c="dimmed">{evitar ? "Evitar" : rotuloCampo(a)}</Text>
       <Text fz={34} fw={600} lh={1.1} c={a.robustez === "robusto" && !evitar ? "var(--verde-texto)" : undefined}
         style={{ letterSpacing: "-0.02em" }}>
@@ -65,29 +67,28 @@ function Destaque({ a, evitar, segmento, faixas, abrir }: {
 }
 
 // Peça da grade: uma característica, o valor que mais se destaca nela e duas barras (top e controle).
-function Peca({ itens, abrir }: { itens: Achado[]; abrir: () => void }) {
+function Peca({ itens, abrir }: { itens: Achado[]; abrir: (el: HTMLElement) => void }) {
   const fortes = itens.filter(relevante).sort(porForca);
   const a = fortes[0] ?? [...itens].sort((x, y) => y.freq_top - x.freq_top)[0];
   const destaca = fortes.length > 0;
   return (
-    <UnstyledButton onClick={abrir} className="clicavel peca">
+    <UnstyledButton onClick={(e) => abrir(e.currentTarget)} className="clicavel peca">
       <Text size="xs" c="dimmed" truncate>{rotuloCampo(a)}</Text>
       <Text size="sm" fw={500} truncate mt={2}>{destaca ? rotuloValor(a) : "Sem diferença clara"}</Text>
       <Text size="xs" c={destaca && a.robustez === "robusto" && a.dif_pp > 0 ? "var(--verde-texto)" : "dimmed"} mb={8}>
         {destaca ? vezes(a.lift, a.robustez).replace(" no top", "") : `mais comum: ${rotuloValor(a)}`}
       </Text>
-      <div className="peca-barra"><span style={{ width: `${a.freq_top * 100}%`, background: destaca ? "var(--mantine-color-stone-6)" : "var(--mantine-color-gray-6)" }} /></div>
-      <div className="peca-barra"><span style={{ width: `${a.freq_controle * 100}%`, background: "var(--mantine-color-gray-4)" }} /></div>
+      <div className="peca-barra"><span style={{ width: `${a.freq_top * 100}%`, background: corTop(a) }} /></div>
+      <div className="peca-barra"><span style={{ width: `${a.freq_controle * 100}%`, background: "var(--barra-controle)" }} /></div>
     </UnstyledButton>
   );
 }
 
-// Painel de detalhe (ao lado, como a gaveta do Reel): todos os valores da característica, Reels do top com o valor
-// escolhido e o atalho para criar Reels a partir dele.
-function Detalhe({ itens, inicial, segmento, faixas, fechar }: {
-  itens: Achado[]; inicial: string | null; segmento: string; faixas: string[]; fechar: () => void;
+// Detalhe de uma característica (num glance): todos os valores e os Reels do top com o valor escolhido. Ao lado do
+// título, só a `acao` (em tipo de gancho, "Ver todos os ganchos"), que recebe o valor escolhido na lista.
+function Detalhe({ itens, inicial, segmento, faixas, acao }: {
+  itens: Achado[]; inicial: string | null; segmento: string; faixas: string[]; acao?: (valor: string | null) => ReactNode;
 }) {
-  const navigate = useNavigate();
   const ordenados = [...itens].sort((x, y) => y.freq_top - x.freq_top);
   const padrao = inicial ?? (itens.filter(relevante).sort(porForca)[0] ?? ordenados[0])?.valor ?? null;
   const [valor, setValor] = useState(padrao);
@@ -97,30 +98,39 @@ function Detalhe({ itens, inicial, segmento, faixas, fechar }: {
   if (!itens.length) return null;
 
   return (
-    <Stack gap="xl">
-      <div>
-        <Text size="sm" c="dimmed" mb="xs">Quanto cada valor aparece no top e no controle.</Text>
-        <ListaAchados achados={ordenados} compacto />
-      </div>
-      <div>
-        <Text fw={600} mb="xs">Reels do top</Text>
-        <SegmentedControl size="xs" mb="md" value={valor ?? undefined} onChange={setValor} fullWidth={ordenados.length <= 3}
-          data={ordenados.filter((a) => a.n_top > 0).slice(0, 6).map((a) => ({ value: a.valor, label: rotuloValor(a) }))} />
-        {!refs && <Loader size="sm" />}
-        {refs?.length === 0 && <Text size="sm" c="dimmed">Nenhum Reel do top com esse valor.</Text>}
-        {refs && refs.length > 0 && (
-          <SimpleGrid cols={3} spacing="sm">{refs.map((r) => <CartaoReel key={r.shortCode} r={r} largura={140} />)}</SimpleGrid>
-        )}
-      </div>
-      {escolhido && (
-        <Button leftSection={<IconSparkles size={16} />} variant="default" onClick={() => {
-          fechar();
-          navigate("/criar", { state: { query: `Reels para a @impulsostone com ${nomeCampo(escolhido)}: ${rotuloValor(escolhido)}`, segment: segmento } });
-        }}>
-          Criar Reels com {rotuloValor(escolhido)}
-        </Button>
-      )}
-    </Stack>
+    <>
+      <Group justify="space-between" align="flex-start" gap="md" wrap="nowrap">
+        <div>
+          <Text size="sm" c="dimmed">Característica</Text>
+          <Text fz={26} fw={600} lh={1.25} mt={2}>{rotuloCampo(itens[0])}</Text>
+          <Text c="dimmed" mt={6}>Quanto cada valor aparece no top e no controle. Clique num valor para ver os Reels.</Text>
+        </div>
+        {acao?.(valor)}
+      </Group>
+
+      <Box mt={32} style={{ display: "flex", gap: 40, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <Box w={{ base: "100%", sm: 300 }} className="coluna-fixa">
+          <ListaValores achados={itens} rotulo={(a) => maiuscula(rotuloValor(a))} contagem={(a) => `${a.n_top} Reels no top`}
+            ativo={valor} onEscolher={setValor} />
+        </Box>
+
+        <Box style={{ flex: 1, minWidth: 280 }}>
+          {escolhido && (
+            <>
+              <Text fz={20} fw={600} lh={1.3}>{maiuscula(rotuloValor(escolhido))} no top</Text>
+              <Text size="sm" c="dimmed" mt={4} mb="md">
+                {escolhido.n_top ? "Reels do top com esse valor, do maior engajamento (no máximo 2 por perfil)." : "Nenhum Reel do top tem esse valor."}
+              </Text>
+            </>
+          )}
+          {!refs && <Loader size="sm" />}
+          {refs?.length === 0 && escolhido?.n_top !== 0 && <Text size="sm" c="dimmed">Nenhum Reel do top com esse valor.</Text>}
+          {refs && refs.length > 0 && (
+            <SimpleGrid cols={{ base: 2, sm: 3 }} spacing="md">{refs.map((r) => <CartaoReel key={r.shortCode} r={r} largura="100%" />)}</SimpleGrid>
+          )}
+        </Box>
+      </Box>
+    </>
   );
 }
 
@@ -164,8 +174,9 @@ export default function Panorama() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
   const [vista, setVista] = useState("cartoes");
-  const [aberto, setAberto] = useState<{ campo: string; valor: string | null } | null>(null);
+  const [aberto, setAberto] = useState<{ campo: string; valor: string | null; origem: DOMRect | null } | null>(null);
   useTitulo("Panorama");
+  const abrirGanchos = useAbrirGanchos();
 
   useEffect(() => {
     let ativo = true;
@@ -190,7 +201,8 @@ export default function Panorama() {
   const destaques = [...fortes.filter((a) => a.dif_pp > 0).slice(0, 3), ...fortes.filter((a) => a.dif_pp < 0).slice(0, 1)];
   const semEfeito = [...new Set(achados.filter((a) => a.robustez === "sem_diferenca" && a.valor === "True").map(nomeCampo))];
   const itensAbertos = aberto ? campos.find(([c]) => c === aberto.campo)?.[1] ?? [] : [];
-  const abrir = (a: Achado) => setAberto({ campo: a.campo, valor: a.valor });
+  const abrir = (a: Achado, el?: Element | null) =>
+    setAberto({ campo: a.campo, valor: a.valor, origem: el?.getBoundingClientRect() ?? null });
 
   return (
     <Tela>
@@ -225,7 +237,7 @@ export default function Panorama() {
             {destaques.length ? (
               <SimpleGrid cols={{ base: 1, sm: 2, lg: Math.min(destaques.length, 4) }} spacing="md">
                 {destaques.map((a) => (
-                  <Destaque key={a.campo + a.valor} a={a} evitar={a.dif_pp < 0} segmento={segmento} faixas={faixas} abrir={() => abrir(a)} />
+                  <Destaque key={a.campo + a.valor} a={a} evitar={a.dif_pp < 0} segmento={segmento} faixas={faixas} abrir={(el) => abrir(a, el)} />
                 ))}
               </SimpleGrid>
             ) : (
@@ -242,10 +254,10 @@ export default function Panorama() {
           >
             {vista === "cartoes" ? (
               <>
-                <Rotulo>Barra verde: quanto o valor aparece no top; cinza: no controle.</Rotulo>
+                <Box mb="md"><LegendaBarras verde /></Box>
                 <SimpleGrid cols={{ base: 2, sm: 3, lg: 4 }} spacing="sm">
                   {campos.map(([campo, itens]) => (
-                    <Peca key={campo} itens={itens} abrir={() => setAberto({ campo, valor: null })} />
+                    <Peca key={campo} itens={itens} abrir={(el) => setAberto({ campo, valor: null, origem: el.getBoundingClientRect() })} />
                   ))}
                 </SimpleGrid>
               </>
@@ -269,12 +281,19 @@ export default function Panorama() {
         </Stack>
       )}
 
-      <Drawer opened={!!aberto} onClose={() => setAberto(null)} position="right" size={560}
-        title={<Text fw={600} size="lg">{itensAbertos[0] ? rotuloCampo(itensAbertos[0]) : ""}</Text>}>
-        {aberto && (
-          <Detalhe itens={itensAbertos} inicial={aberto.valor} segmento={segmento} faixas={faixas} fechar={() => setAberto(null)} />
-        )}
-      </Drawer>
+      {aberto && itensAbertos.length > 0 && (
+        <Glance origem={aberto.origem} onFechar={() => setAberto(null)} rotulo={rotuloCampo(itensAbertos[0])} largura={1040}>
+          <Box px={{ base: "md", sm: 40 }} pt={{ base: 56, sm: 40 }} pb={48}>
+            <Detalhe itens={itensAbertos} inicial={aberto.valor} segmento={segmento} faixas={faixas}
+              acao={aberto.campo === "tipo_hook" ? (valor) => (
+                <Button leftSection={<IconQuote size={16} />} variant="default" style={{ flexShrink: 0 }}
+                  onClick={(e) => { abrirGanchos(valor ?? TODOS, e.currentTarget); setAberto(null); }}>
+                  Ver todos os ganchos
+                </Button>
+              ) : undefined} />
+          </Box>
+        </Glance>
+      )}
     </Tela>
   );
 }

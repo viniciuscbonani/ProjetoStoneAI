@@ -12,6 +12,9 @@
   --verde-texto: var(--mantine-color-stone-8);
   --verde-icone: var(--mantine-color-stone-7);
   --composer: var(--mantine-color-white);
+  /* Barras top x controle: top forte (verde quando se destaca), controle apagado, nos dois temas. */
+  --barra-top: var(--mantine-color-gray-7);
+  --barra-controle: var(--mantine-color-gray-4);
 }
 :root[data-mantine-color-scheme="dark"] {
   --fundo: var(--mantine-color-dark-8);
@@ -25,6 +28,8 @@
   --verde-texto: var(--mantine-color-stone-4);
   --verde-icone: var(--mantine-color-stone-6);
   --composer: var(--mantine-color-dark-6);
+  --barra-top: var(--mantine-color-dark-0);
+  --barra-controle: var(--mantine-color-dark-3);
 }
 
 body {
@@ -343,4 +348,112 @@ body {
 }
 .logo-recolhido:hover .logo-expandir {
   display: block;
+}
+
+/* Ganchos: uma frase por linha, separada por fio; o termo buscado aparece marcado. */
+.linha-gancho {
+  display: block;
+  width: 100%;
+  padding: 16px 8px;
+  border-bottom: 1px solid var(--linha);
+  border-radius: var(--mantine-radius-sm);
+}
+.linha-gancho:hover {
+  background: var(--nav-hover);
+}
+.marca {
+  background: var(--verde-suave);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Glance (componentes/Glance.tsx): janela por cima da tela, como no Zen Browser. A largura vem do componente. */
+.glance {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.glance-fundo {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 22, 19, 0.38);
+  backdrop-filter: blur(3px);
+}
+.glance-painel {
+  position: relative;
+  height: calc(100dvh - 56px);
+  background: var(--fundo);
+  border: 1px solid var(--linha);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  will-change: transform;
+}
+.glance-conteudo {
+  height: 100%;
+  overflow: auto;
+  border-radius: inherit;
+}
+.glance-botoes {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 48em) {
+  .glance-painel {
+    width: calc(100vw - 16px) !important;
+    height: calc(100dvh - 16px);
+  }
+  .glance-botoes {
+    left: auto;
+    right: 12px;
+    top: 12px;
+    flex-direction: row;
+    z-index: 1;
+  }
+}
+
+/* Coluna da esquerda de um glance (valores de uma característica, tipos de gancho): fixa ao rolar, com rolagem própria
+   se não couber. */
+.coluna-fixa {
+  position: sticky;
+  top: 24px;
+  flex-shrink: 0;
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+@media (max-width: 48em) {
+  .coluna-fixa {
+    position: static;
+    max-height: none;
+  }
+}
+.item-valor {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--mantine-radius-md);
+}
+.item-valor:hover {
+  background: var(--nav-hover);
+}
+.item-valor[data-ativo] {
+  background: var(--nav-ativo);
+}
+
+/* Amostra de cor da legenda das barras. */
+.amostra-barra {
+  display: inline-block;
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 5px;
 }

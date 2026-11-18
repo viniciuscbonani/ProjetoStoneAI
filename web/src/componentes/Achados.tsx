@@ -1,6 +1,7 @@
-import { Box, Button, Collapse, Group, Stack, Text, Tooltip } from "@mantine/core";
+import { Box, Button, Collapse, Group, Stack, Text, Tooltip, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown } from "@tabler/icons-react";
+import type { ReactNode } from "react";
 
 import { nomeAchado, num, pct, rotuloRecorte, vezes } from "../formato";
 import type { Achado } from "../tipos";
@@ -118,6 +119,84 @@ export function AchadosDaResposta({ achados }: { achados: Achado[] }) {
           </Collapse>
         </div>
       )}
+    </Stack>
+  );
+}
+
+// Cores das barras top x controle (variáveis em estilos.css, iguais nos dois temas): o top é forte, verde quando o
+// valor aparece mais no top com diferença clara ou indício; o controle é apagado.
+export const corTop = (a: Achado) =>
+  (a.robustez === "robusto" || a.robustez === "fragil") && a.dif_pp > 0 ? "var(--mantine-color-stone-6)" : "var(--barra-top)";
+
+// Com `verde`, explica também a cor do top quando o valor se destaca (nas listas agrupadas, o título do grupo já diz).
+export function LegendaBarras({ verde = false }: { verde?: boolean }) {
+  return (
+    <Text size="xs" c="dimmed">
+      <span className="amostra-barra" style={{ background: "var(--barra-top)" }} />top
+      {verde && <><span className="amostra-barra" style={{ background: "var(--mantine-color-stone-6)", marginLeft: 12 }} />top, quando se destaca</>}
+      <span className="amostra-barra" style={{ background: "var(--barra-controle)", marginLeft: 12 }} />controle
+    </Text>
+  );
+}
+
+// Um valor de característica como item de lista selecionável: nome, % no top × % no controle, uma barra para cada,
+// selo e contagem. Detalhe do Panorama e banco de ganchos.
+function ValorSelecionavel({ a, rotulo, contagem, ativo, onClick }: {
+  a: Achado; rotulo: string; contagem: string; ativo: boolean; onClick: () => void;
+}) {
+  return (
+    <UnstyledButton className="item-valor" data-ativo={ativo || undefined} onClick={onClick}>
+      <Group justify="space-between" wrap="nowrap" gap="xs">
+        <Text size="sm" fw={ativo ? 600 : 500} truncate>{rotulo}</Text>
+        <Text size="sm" style={{ fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+          <Text span inherit fw={600}>{pct(a.freq_top)}</Text>
+          <Text span inherit c="dimmed"> × {pct(a.freq_controle)}</Text>
+        </Text>
+      </Group>
+      <div className="peca-barra" style={{ marginTop: 6 }}>
+        <span style={{ width: x(a.freq_top), background: corTop(a) }} />
+      </div>
+      <div className="peca-barra"><span style={{ width: x(a.freq_controle), background: "var(--barra-controle)" }} /></div>
+      <Group justify="space-between" mt={4} gap="xs" wrap="nowrap">
+        <SeloRobustez robustez={a.robustez} />
+        <Text size="xs" c="dimmed">{contagem}</Text>
+      </Group>
+    </UnstyledButton>
+  );
+}
+
+// Os valores de uma característica em grupos: primeiro os que diferenciam o top (diferença clara ou indício), depois os
+// sem diferença e os com poucos dados; em cada grupo, do mais ao menos comum no top. `antes` entra acima dos grupos
+// (no banco de ganchos, "Todos os ganchos").
+const GRUPOS_VALOR: { titulo: string; robustez: Achado["robustez"][] }[] = [
+  { titulo: "Diferenciam o top", robustez: ["robusto", "fragil"] },
+  { titulo: "Sem diferença", robustez: ["sem_diferenca"] },
+  { titulo: "Poucos dados", robustez: ["insuficiente"] },
+];
+
+export function ListaValores({ achados, rotulo, contagem, ativo, onEscolher, antes }: {
+  achados: Achado[]; rotulo: (a: Achado) => string; contagem: (a: Achado) => string; ativo: string | null;
+  onEscolher: (valor: string) => void; antes?: ReactNode;
+}) {
+  return (
+    <Stack gap="md">
+      <Box px={12}><LegendaBarras /></Box>
+      {antes}
+      {GRUPOS_VALOR.map((g) => {
+        const itens = achados.filter((a) => g.robustez.includes(a.robustez)).sort((a, b) => b.freq_top - a.freq_top);
+        if (!itens.length) return null;
+        return (
+          <div key={g.titulo}>
+            <Text size="xs" fw={600} c="dimmed" px={12} mb={4}>{g.titulo}</Text>
+            <Stack gap={2}>
+              {itens.map((a) => (
+                <ValorSelecionavel key={a.valor} a={a} rotulo={rotulo(a)} contagem={contagem(a)} ativo={a.valor === ativo}
+                  onClick={() => onEscolher(a.valor)} />
+              ))}
+            </Stack>
+          </div>
+        );
+      })}
     </Stack>
   );
 }

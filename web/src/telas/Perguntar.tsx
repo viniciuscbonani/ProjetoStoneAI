@@ -1,9 +1,9 @@
 import { Anchor, Box, Group, Loader, Stack, Text, Title, UnstyledButton } from "@mantine/core";
 import {
-  IconArrowRight, IconBolt, IconBuildingStore, IconChartDots3, IconClock, IconSparkles, IconToolsKitchen2, IconUserCircle,
+  IconArrowRight, IconBolt, IconQuote, IconBuildingStore, IconChartDots3, IconClock, IconSparkles, IconToolsKitchen2, IconUserCircle,
   IconUsers, IconWand, type Icon,
 } from "@tabler/icons-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { api } from "../api";
@@ -11,9 +11,10 @@ import { AchadosDaResposta } from "../componentes/Achados";
 import { FaixaReels } from "../componentes/CartaoReel";
 import { numerarCitacoes, TextoComCitacoes } from "../componentes/Citacoes";
 import { Avisos, Compositor, Erro, Escolha, Inicio, MetaExecucao, Secao, Sugestoes, Tela, Trabalhando } from "../componentes/Comum";
-import { limparTarefa, rodar, useExecucao, useRecentes, useTarefa, useTitulo } from "../contexto";
+import { limparTarefa, rodar, useAbrirGanchos, useExecucao, useRecentes, useTarefa, useTitulo } from "../contexto";
 import { FAIXAS, SEGMENTOS } from "../formato";
-import type { Entrada, Execucao } from "../tipos";
+import type { Achado, Entrada, Execucao } from "../tipos";
+import { rotuloGancho } from "./Ganchos";
 
 type ModoPergunta = "analisar" | "recomendar";
 interface Rascunho { mode: ModoPergunta; query: string; segment: string; faixas: string[] }
@@ -60,7 +61,7 @@ function CaixaPergunta({ r, setR, enviar, ocupado, autoFocus }: {
 }
 
 // Próximo passo depois da resposta: uma linha de texto com seta, sem caixa.
-function Passo({ icone: Icone, children, onClick }: { icone: typeof IconSparkles; children: string; onClick: () => void }) {
+function Passo({ icone: Icone, children, onClick }: { icone: typeof IconSparkles; children: string; onClick: (e: MouseEvent<HTMLElement>) => void }) {
   return (
     <UnstyledButton onClick={onClick} className="pilula">
       <Group gap={8} wrap="nowrap">
@@ -72,11 +73,21 @@ function Passo({ icone: Icone, children, onClick }: { icone: typeof IconSparkles
   );
 }
 
+// Quando a resposta fala de tipo de gancho, o tipo para abrir na página Ganchos: o que mais aparece a mais no top
+// (com diferença clara ou indício) ou, sem isso, o mais comum no top.
+function ganchoDaResposta(achados: Achado[]) {
+  const ganchos = achados.filter((a) => a.campo === "tipo_hook" && a.valor !== "nenhum");
+  const fortes = ganchos.filter((a) => (a.robustez === "robusto" || a.robustez === "fragil") && a.dif_pp > 0);
+  return [...(fortes.length ? fortes : ganchos)].sort((a, b) => b.freq_top - a.freq_top)[0]?.valor ?? null;
+}
+
 function Resposta({ e, novaPergunta, caixa }: { e: Execucao; novaPergunta: (r: Rascunho) => void; caixa: ReactNode }) {
   const navigate = useNavigate();
   const s = e.saida!;
   const numeros = numerarCitacoes(s.reference_posts, s.explanation);
   const segment = e.entrada.segment ?? "";
+  const gancho = ganchoDaResposta(s.findings);
+  const abrirGanchos = useAbrirGanchos();
 
   return (
     <Tela largura={860}>
@@ -103,6 +114,11 @@ function Resposta({ e, novaPergunta, caixa }: { e: Execucao; novaPergunta: (r: R
               <Passo icone={IconWand}
                 onClick={() => novaPergunta({ mode: "recomendar", query: e.entrada.query, segment, faixas: e.entrada.filters?.faixa ?? [] })}>
                 Transformar em recomendações
+              </Passo>
+            )}
+            {gancho && (
+              <Passo icone={IconQuote} onClick={(ev) => abrirGanchos(gancho, ev.currentTarget)}>
+                {`Ver todos os ganchos de ${rotuloGancho(gancho)} do top`}
               </Passo>
             )}
             <Passo icone={IconChartDots3} onClick={() => navigate("/panorama")}>Ver todas as características</Passo>

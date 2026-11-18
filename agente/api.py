@@ -3,7 +3,8 @@
 Rotas:
 - POST /consultas: roda o agente (analisar | recomendar | gerar_criativo) e devolve a Saida
 - GET /panorama: achados do lift e perfis em destaque, sem LLM
-- GET /reels/{shortCode} e /reels/{shortCode}/quadros/{nome}: detalhe e quadros de um Reel da base
+- GET /reels/{shortCode} e /reels/{shortCode}/quadros/{nome}: detalhe (com a transcrição) e quadros de um Reel da base
+- GET /busca e /busca/opcoes: busca nos Reels por características e texto, sem LLM (página Ganchos)
 - GET /execucoes e /execucoes/{run_id}: histórico, lido do log do agente
 - POST /imagens e GET /imagens/{run_id}: imagens dos criativos (Cloudflare Workers AI), geradas sob demanda
 - POST /avaliacoes e GET /avaliacoes/{id}: modo avaliar (vídeo ou roteiro), em segundo plano, com progresso
@@ -27,7 +28,7 @@ from fastapi.responses import FileResponse, Response
 from langchain_google_genai.chat_models import GoogleRateLimitError
 from pydantic import BaseModel
 
-from . import IMPLEMENTADOS, dados, executar, imagens
+from . import IMPLEMENTADOS, busca, dados, executar, imagens
 from .avaliacao import salvar_upload
 from .contrato import Entrada, Saida
 from .ferramentas import buscar_referencias, consultar_caracteristicas, perfis_em_destaque
@@ -85,6 +86,23 @@ def _panorama(segmento: str | None, faixas: tuple[str, ...] | None) -> dict:
             "achados": achados, "perfis": perfis_em_destaque(20, segmento, list(faixas) if faixas else None)}
 
 
+@app.get("/busca")
+def buscar(q: str = "", f: Annotated[list[str] | None, Query()] = None,
+                      faixa: Annotated[list[str] | None, Query()] = None, grupo: str | None = None,
+                      ordem: str = "taxa", limite: int = 30, inicio: int = 0) -> dict:
+    """Reels com as características pedidas (f=campo:valor, repetível) e o texto q no gancho, legenda ou fala."""
+    filtros: dict[str, list[str]] = {}
+    for par in f or []:
+        campo, _, valor = par.partition(":")
+        filtros.setdefault(campo, []).append(valor)
+    return busca.buscar(q, filtros, faixa, grupo, ordem, max(1, min(limite, 100)), max(0, inicio))
+
+
+@app.get("/busca/opcoes")
+def opcoes_busca() -> list[dict]:
+    return busca.opcoes()
+
+
 def _validar(short_code: str) -> dict:
     r = dados.reel(short_code) if SHORTCODE.match(short_code) else None
     if r is None:
@@ -96,7 +114,8 @@ def _validar(short_code: str) -> dict:
 def reel(short_code: str) -> dict:
     r = _validar(short_code)
     pasta = dados.RAIZ / "data" / "midia" / short_code
-    return {**r, "quadros": [q for q in QUADROS if (pasta / f"q_{q}.jpg").exists()]}
+    return {**r, "quadros": [q for q in QUADROS if (pasta / f"q_{q}.jpg").exists()],
+            "transcricao": busca.transcricao(short_code)}
 
 
 @app.get("/reels/{short_code}/quadros/{nome}")

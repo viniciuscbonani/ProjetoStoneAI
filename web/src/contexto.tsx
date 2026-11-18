@@ -3,9 +3,15 @@ import { createContext, useContext, useEffect, useState, useSyncExternalStore } 
 import { api } from "./api";
 import type { Execucao, ExecucaoResumo } from "./tipos";
 
-// Qualquer componente abre a gaveta de um Reel com abrirReel(shortCode).
-export const ReelContexto = createContext<(shortCode: string) => void>(() => {});
+// Qualquer componente abre um Reel num glance com abrirReel(shortCode, elemento clicado); o glance cresce a partir
+// desse elemento.
+export const ReelContexto = createContext<(shortCode: string, origem?: Element | null) => void>(() => {});
 export const useAbrirReel = () => useContext(ReelContexto);
+
+// Qualquer componente abre o banco de ganchos num glance com abrirGanchos(tipo, elemento clicado); o glance cresce a
+// partir desse elemento.
+export const GanchosContexto = createContext<(tipo: string, origem?: Element | null) => void>(() => {});
+export const useAbrirGanchos = () => useContext(GanchosContexto);
 
 // Execuções recentes da barra lateral; as telas pedem para recarregar quando terminam uma execução.
 export const RecentesContexto = createContext<{ recentes: ExecucaoResumo[] | null; atualizar: () => void }>({
