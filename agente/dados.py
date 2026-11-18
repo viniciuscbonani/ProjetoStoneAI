@@ -37,8 +37,15 @@ CAMPOS = {
 BOOLEANOS = {"tem_rosto", "prova_social", "texto_na_tela", "usa_linguagem_regional", "tem_cta",
              "oferta_ou_beneficio_explicito", "convite_participacao", "fala_de_negocio", "tem_data_comemorativa",
              "oculta_parcial"}
+# Rótulos com acento dos valores da rubrica; os que faltam saem com "_" trocado por espaço.
 VALORES = {"ate_15s": "até 15 s", "15_30s": "15 a 30 s", "30_60s": "30 a 60 s", "60_90s": "60 a 90 s",
-           "mais_90s": "mais de 90 s"}
+           "mais_90s": "mais de 90 s", "link_na_bio": "link na bio", "dm": "mensagem direta (DM)",
+           "numero": "número", "polemica": "polêmica", "dor_real": "dor real",
+           "motivacional_generica": "motivacional genérica", "humoristico": "humorístico", "tecnico": "técnico",
+           "alimentacao": "alimentação", "servicos": "serviços", "ferramentas_maquininha": "ferramentas e maquininha",
+           "financas": "finanças", "gestao": "gestão", "historia_de_empreendedor": "história de empreendedor",
+           "gestao_e_vendas": "gestão e vendas", "educacao_financeira": "educação financeira",
+           "historias_reais": "histórias reais", "medio": "médio", "rapido": "rápido", "media": "média"}
 NUMERICOS = {"forca_hook_0a10", "clareza_mensagem_0a10", "duracao_s", "cortes_por_minuto", "taxa_engajamento",
              "curtidas", "comentarios", "visualizacoes", "seguidores", "coments_lidos", "coments_intencao"}
 
@@ -217,5 +224,14 @@ def perfis(faixas: list[str] | None = None) -> list[dict]:
     return [p for p in linhas if not faixas or p["faixa"] in faixas]
 
 
+@cache
+def reels_stone() -> tuple[dict, ...]:
+    """Os Reels da @impulsostone (tabela impulsostone, grupo = "impulsostone"), fora do top e do controle."""
+    if not _consultar("SELECT name FROM sqlite_master WHERE name = 'impulsostone'"):
+        return ()
+    return tuple(_reel(r) for r in _consultar("SELECT * FROM impulsostone"))
+
+
 def reel(short_code: str) -> dict | None:
-    return _por_shortcode().get(short_code)
+    """Um Reel da amostra ou, se não estiver lá, da @impulsostone."""
+    return _por_shortcode().get(short_code) or next((r for r in reels_stone() if r["shortCode"] == short_code), None)

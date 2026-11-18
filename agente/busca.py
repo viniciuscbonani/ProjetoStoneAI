@@ -20,12 +20,6 @@ FILTROS = ["tipo_hook", "tipo_cta", "duracao_faixa", "formato_video", "tema_prin
            "tem_rosto", "convite_participacao", "prova_social", "abordagem", "tem_data_comemorativa", "tom"]
 ORDENS = {"taxa": "taxa_engajamento", "visualizacoes": "visualizacoes", "recentes": "publicado_em"}
 SEGUNDOS_FINAIS = 8
-ROTULOS_VALORES = {**dados.VALORES, "link_na_bio": "link na bio", "dm": "mensagem direta (DM)", "nenhum": "nenhum",
-                   "numero": "número", "polemica": "polêmica", "dor_real": "dor real",
-                   "motivacional_generica": "motivacional genérica", "humoristico": "humorístico",
-                   "tecnico": "técnico", "alimentacao": "alimentação", "servicos": "serviços",
-                   "ferramentas_maquininha": "ferramentas e maquininha", "financas": "finanças",
-                   "gestao": "gestão", "historia_de_empreendedor": "história de empreendedor"}
 
 
 @cache
@@ -84,7 +78,7 @@ def opcoes() -> list[dict]:
         for v in dados.valores(campo):
             com = [r for r in reels if str(r[campo]) == v]
             rotulo = ("sim" if v == "True" else "não") if campo in dados.BOOLEANOS else \
-                ROTULOS_VALORES.get(v, v.replace("_", " "))
+                dados.VALORES.get(v, v.replace("_", " "))
             valores.append({"valor": v, "rotulo": rotulo, "n": len(com), "n_top": sum(r["grupo"] == "top" for r in com)})
         saida.append({"campo": campo, "rotulo": dados.CAMPOS[campo], "valores": sorted(valores, key=lambda x: -x["n"])})
     return saida

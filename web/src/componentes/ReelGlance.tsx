@@ -70,7 +70,7 @@ export default function ReelGlance({ shortCode, fechar }: { shortCode: string; f
 
         <div>
           <Text size="sm" c="dimmed" mb={4}>
-            {reel.grupo === "top" ? "Top 10% de engajamento" : "Amostra comum"} · {Math.round(reel.duracao_s)} s · gancho
+            {reel.grupo === "top" ? "Top 10% de engajamento" : reel.grupo === "impulsostone" ? "Reel da @impulsostone" : "Amostra comum"} · {Math.round(reel.duracao_s)} s · gancho
           </Text>
           <Text fz={22} fw={500} lh={1.35}>“{reel.hook_texto}”</Text>
           {reel.tipo_hook !== "nenhum" && (

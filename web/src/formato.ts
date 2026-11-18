@@ -42,8 +42,19 @@ export const FAIXAS = [
   { value: "grande", label: "Grande (100 mil+)" },
 ];
 
+// Rótulos com acento dos valores da rubrica (os mesmos de dados.VALORES na API).
+const VALORES: Record<string, string> = {
+  ate_15s: "até 15 s", "15_30s": "15 a 30 s", "30_60s": "30 a 60 s", "60_90s": "60 a 90 s", mais_90s: "mais de 90 s",
+  link_na_bio: "link na bio", dm: "mensagem direta (DM)", numero: "número", polemica: "polêmica", dor_real: "dor real",
+  motivacional_generica: "motivacional genérica", humoristico: "humorístico", tecnico: "técnico",
+  alimentacao: "alimentação", servicos: "serviços", ferramentas_maquininha: "ferramentas e maquininha",
+  financas: "finanças", gestao: "gestão", historia_de_empreendedor: "história de empreendedor",
+  gestao_e_vendas: "gestão e vendas", educacao_financeira: "educação financeira", historias_reais: "histórias reais",
+  medio: "médio", rapido: "rápido", media: "média",
+};
+
 export const rotuloValor = (v: unknown) =>
-  v === true ? "sim" : v === false ? "não" : String(v).replaceAll("_", " ");
+  v === true ? "sim" : v === false ? "não" : VALORES[String(v)] ?? String(v).replaceAll("_", " ");
 
 export const rotuloSegmento = (s: string | null | undefined) => SEGMENTOS.find((x) => x.value === (s ?? ""))?.label ?? s ?? "";
 
