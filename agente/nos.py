@@ -366,7 +366,9 @@ INSTRUCOES_CRIATIVO = """Escreva 3 criativos de Reels para a @impulsostone atend
   nada de frase motivacional genérica.
 - roteiro: 4 a 7 cenas com tempo ("0–3 s", "3–20 s"...), o que se fala e o que aparece; texto_na_tela quando
   houver. A última cena é o convite claro para se inscrever ou participar do Impulso Stone.
-- legenda: até uns 600 caracteres, no tom da persona, terminando com o mesmo convite; poucas hashtags.
+- legenda: até uns 600 caracteres, no tom da persona, terminando com o mesmo convite; poucas hashtags, sem gênero
+  (nada de #EmpreendedorismoFeminino ou #Empreendedora: o programa fala com empreendedores e empreendedoras).
+- formato: o mesmo do roteiro; se usar um achado de formato (ex.: explicativo), o formato do criativo é esse.
 - cta: o convite, em uma frase.
 - Imagens (em inglês; o estilo visual é aplicado depois, por código): personagem = quem aparece em todas
   as imagens do criativo, sempre a mesma pessoa; capa = o que a capa mostra; visual de cada cena = o que a

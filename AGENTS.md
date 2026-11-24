@@ -16,7 +16,7 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 - Planejar e propor antes de implementar; o Vinícius aprova a abordagem.
 - Commits agrupados por assunto, em português, **sem linha de coautoria**. Trabalhar numa branch e só
   juntar na `main` quando pedido.
-- Não criar arquivos `.md` avulsos; contexto para agentes vai neste arquivo.
+- Não criar arquivos `.md` avulsos; contexto para agentes vai neste arquivo. Exceção: o playbook (`docs/playbook.md`).
 - Segredos só no `.env` (`GEMINI_API_KEY`, `APIFY_TOKEN`); nunca no código, no chat ou no Git.
 - Dados brutos, mídia e comentários de terceiros ficam fora do Git (ver `.gitignore`).
 
@@ -46,7 +46,7 @@ execução do esdrasdw só com o perfil), quadros em `data/midia/`, transcriçã
 ## Dados
 | Arquivo | Conteúdo |
 |---|---|
-| `data/processed/base.csv` | 7.561 Reels; `no_ranking=True` em 4.719. Colunas: shortCode, url, perfil, publicado_em, curtidas, comentarios, visualizacoes, duracao_s, seguidores, faixa (micro/medio/grande), tipo, nicho, taxa_engajamento, taxa_visualizacoes, taxa_comentarios, motivo_fora, legenda |
+| `data/processed/base.csv` | 7.554 Reels (7.561 coletados, menos 7 repetidos); `no_ranking=True` em 4.719. Colunas: shortCode, url, perfil, publicado_em, curtidas, comentarios, visualizacoes, duracao_s, seguidores, faixa (micro/medio/grande), tipo, nicho, taxa_engajamento, taxa_visualizacoes, taxa_comentarios, motivo_fora, legenda |
 | `data/processed/amostra.csv` | 944 Reels: `grupo` = top (472, 10% de maior taxa) ou controle (472, sorteado e estratificado por faixa) |
 | `data/processed/anotacoes.jsonl` | Anotação do Gemini por Reel da amostra; usar só `versao_rubrica == "v2"`. Campos na classe `Anotacao` de `agente/rubrica.py` |
 | `data/processed/lift.csv` | Top × controle por campo/valor: freq_top, freq_controle, dif_pp, lift, ic95_min/max, confidence_flag, robusto_sensibilidade |
@@ -74,6 +74,23 @@ recalculado sem eles (coluna `mantem_sem_6_maiores`).
   (@fabio.morassi, @larice_, @caitomaiaoficial, @karolinebragaf), cuja taxa pode estar distorcida.
 - Confiabilidade dos campos: bons — tem_rosto, tem_cta, tipo_cta, tema_principal, fala_de_negocio,
   formato_video; moderados — abordagem, tipo_hook; **fraco — criador_e_empreendedor_real (não usar)**.
+
+## Playbook (#19 e #20)
+`docs/playbook.md`, o manual de conteúdo para a equipe da @impulsostone, é **gerado** por `scripts/gerar_playbook.py`
+(não editar à mão; o texto fixo, como o "Como aplicar" de cada achado, fica no script). Números, Reels de exemplo
+(um por criador, sem repetir Reel nem gancho), ganchos, diagnóstico e perfis vêm da base; rodar de novo se o lift, os
+achados finais ou o diagnóstico mudarem. Os criativos vêm de `scripts/criativos_playbook.py`: 3 briefings no modo
+gerar_criativo (educação financeira geral, beleza e alimentação; ~1 min e ~5 chamadas cada), salvos em
+`data/processed/playbook_criativos.json`; o playbook usa os 2 primeiros de cada (6). O script pula briefings já feitos:
+para refazer, apagar o JSON. Seções: resumo, método, o que fazer, o que evitar, o que não faz diferença, diagnóstico da
+@impulsostone, perfis, banco de ganchos, criativos e limites. Sem vídeos (edição está fora do escopo, seção 4.3 do
+documento): só links para os Reels. Filtros do script (23/11): exemplos e ganchos sem os perfis com ocultação parcial
+de curtidas, exemplos de explicativo com 45 s ou mais, `GANCHOS_FORA` (ganchos fora do tema, revisão manual),
+hashtags com gênero trocadas por neutras e, nos criativos, só os achados que o roteiro cumpre (formato e duração),
+com o aviso de "depende de poucos criadores". Capas dos 6 criativos: geradas à parte com `agente.imagens` em
+`data/imagens/{run_id}/` (conferidas a olho; as duas de alimentação foram refeitas sem "bold text on screen" e sem
+"empty space in the top third", que viravam texto embaralhado e faixa chapada) e copiadas reduzidas pelo script
+para `docs/imagens/` (essas vão para o Git).
 
 ## Persona da @impulsostone (criativos)
 Texto completo em `agente/persona.py` (fontes: relatório de Instagram e histórico de campanhas do Meta Ads).

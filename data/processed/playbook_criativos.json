@@ -1,0 +1,1155 @@
+[
+ {
+  "entrada": {
+   "mode": "gerar_criativo",
+   "query": "Reels de educação financeira para empreendedores de pequenos negócios: separar o dinheiro da empresa do dinheiro pessoal. Quero que ele convide a pessoa a se inscrever no Impulso Stone."
+  },
+  "saida": {
+   "run_id": "20261118-153756-e7424b",
+   "mode": "gerar_criativo",
+   "findings": [
+    {
+     "campo": "duracao_faixa",
+     "valor": "mais_90s",
+     "descricao": "duração: mais de 90 s — 32% no top × 16% no controle",
+     "freq_top": 0.316,
+     "freq_controle": 0.161,
+     "dif_pp": 15.5,
+     "lift": 1.96,
+     "ic95_min": 1.15,
+     "ic95_max": 3.14,
+     "n_top": 149,
+     "n_controle": 76,
+     "robustez": "robusto",
+     "recorte": null
+    },
+    {
+     "campo": "formato_video",
+     "valor": "explicativo",
+     "descricao": "formato do vídeo: explicativo — 20% no top × 9% no controle",
+     "freq_top": 0.195,
+     "freq_controle": 0.087,
+     "dif_pp": 10.8,
+     "lift": 2.24,
+     "ic95_min": 1.04,
+     "ic95_max": 4.09,
+     "n_top": 92,
+     "n_controle": 41,
+     "robustez": "fragil",
+     "recorte": null
+    },
+    {
+     "campo": "tipo_hook",
+     "valor": "curiosidade",
+     "descricao": "tipo de gancho: curiosidade — 36% no top × 28% no controle",
+     "freq_top": 0.364,
+     "freq_controle": 0.278,
+     "dif_pp": 8.7,
+     "lift": 1.31,
+     "ic95_min": 1.01,
+     "ic95_max": 1.7,
+     "n_top": 172,
+     "n_controle": 131,
+     "robustez": "fragil",
+     "recorte": null
+    },
+    {
+     "campo": "tipo_hook",
+     "valor": "polemica",
+     "descricao": "tipo de gancho: polêmica — 5% no top × 2% no controle",
+     "freq_top": 0.049,
+     "freq_controle": 0.019,
+     "dif_pp": 3.0,
+     "lift": 2.56,
+     "ic95_min": 1.19,
+     "ic95_max": 6.73,
+     "n_top": 23,
+     "n_controle": 9,
+     "robustez": "fragil",
+     "recorte": null
+    }
+   ],
+   "reference_posts": [
+    {
+     "shortCode": "Dc05Vy3RYWH",
+     "url": "https://www.instagram.com/reel/Dc05Vy3RYWH/",
+     "perfil": "facoascontas",
+     "faixa": "medio",
+     "seguidores": 55681,
+     "curtidas": 8837,
+     "comentarios": 98,
+     "visualizacoes": 201174,
+     "taxa_engajamento": 0.1605,
+     "duracao_s": 86.9,
+     "publicado_em": "2026-09-03",
+     "hook_texto": "Essa mulher vende sanduíche por 4 reais e diz que é super lucrativo",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "60_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "produto_resultado",
+      "tema_principal": "financas",
+      "pilar_impulso": "educacao_financeira",
+      "segmento_publico": "geral",
+      "tem_rosto": true,
+      "tem_cta": false,
+      "tipo_cta": "nenhum",
+      "abordagem": "nenhum",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com tema: finanças; formato do vídeo: explicativo"
+    },
+    {
+     "shortCode": "DettqnjB8Kq",
+     "url": "https://www.instagram.com/reel/DettqnjB8Kq/",
+     "perfil": "penteadokaique",
+     "faixa": "micro",
+     "seguidores": 2282,
+     "curtidas": 9908,
+     "comentarios": 49,
+     "visualizacoes": 98333,
+     "taxa_engajamento": 4.3633,
+     "duracao_s": 111.6,
+     "publicado_em": "2026-10-20",
+     "hook_texto": "Você abre o cardápio e vê um vinho de 900 reais",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "produto_resultado",
+      "tema_principal": "vendas",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "geral",
+      "tem_rosto": false,
+      "tem_cta": true,
+      "tipo_cta": "seguir",
+      "abordagem": "nenhum",
+      "tom": "tecnico"
+     },
+     "motivo": "top com duração: mais de 90 s"
+    },
+    {
+     "shortCode": "DXaTt7Pj5DY",
+     "url": "https://www.instagram.com/reel/DXaTt7Pj5DY/",
+     "perfil": "gislainebarbosaoficial",
+     "faixa": "medio",
+     "seguidores": 24973,
+     "curtidas": 8828,
+     "comentarios": 205,
+     "visualizacoes": 389850,
+     "taxa_engajamento": 0.3617,
+     "duracao_s": 7.1,
+     "publicado_em": "2026-04-21",
+     "hook_texto": "Ter vício não é bom, mas já experimentou PARAR de Receber Pix no CPF?",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "ate_15s",
+      "tipo_hook": "dor",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "financas",
+      "pilar_impulso": "educacao_financeira",
+      "segmento_publico": "geral",
+      "tem_rosto": false,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "dor_real",
+      "tom": "informal"
+     },
+     "motivo": "top com tema: finanças; formato do vídeo: explicativo"
+    },
+    {
+     "shortCode": "De7J01Yx_lG",
+     "url": "https://www.instagram.com/reel/De7J01Yx_lG/",
+     "perfil": "contaazul",
+     "faixa": "grande",
+     "seguidores": 321011,
+     "curtidas": 20648,
+     "comentarios": 487,
+     "visualizacoes": 198211,
+     "taxa_engajamento": 0.0658,
+     "duracao_s": 105.3,
+     "publicado_em": "2026-10-25",
+     "hook_texto": "Empresário é tudo malvadão?",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "polemica",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "financas",
+      "pilar_impulso": "educacao_financeira",
+      "segmento_publico": "geral",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "compartilhar",
+      "abordagem": "dor_real",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com tipo de gancho: polêmica"
+    },
+    {
+     "shortCode": "DcOdTduJOKC",
+     "url": "https://www.instagram.com/reel/DcOdTduJOKC/",
+     "perfil": "_kalps23",
+     "faixa": "micro",
+     "seguidores": 972,
+     "curtidas": 94,
+     "comentarios": 6,
+     "visualizacoes": 3031,
+     "taxa_engajamento": 0.1029,
+     "duracao_s": 67.5,
+     "publicado_em": "2026-08-19",
+     "hook_texto": "A gente pagou R$ 60,00",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "60_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "rosto",
+      "tema_principal": "financas",
+      "pilar_impulso": "educacao_financeira",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "link_na_bio",
+      "abordagem": "dor_real",
+      "tom": "informal"
+     },
+     "motivo": "top com tema: finanças; formato do vídeo: explicativo"
+    },
+    {
+     "shortCode": "DZqVCbmgu2X",
+     "url": "https://www.instagram.com/reel/DZqVCbmgu2X/",
+     "perfil": "conicesar",
+     "faixa": "micro",
+     "seguidores": 5096,
+     "curtidas": 4164,
+     "comentarios": 255,
+     "visualizacoes": 66805,
+     "taxa_engajamento": 0.8672,
+     "duracao_s": 154.5,
+     "publicado_em": "2026-06-16",
+     "hook_texto": "Eu trabalhei em comércio, eu saí tem 2 meses",
+     "categorias": {
+      "formato_video": "talking_head",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "dor",
+      "hook_visual": "rosto",
+      "tema_principal": "historia_de_empreendedor",
+      "pilar_impulso": "historias_reais",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "dor_real",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com duração: mais de 90 s"
+    }
+   ],
+   "creatives": [
+    {
+     "titulo": "O mistério do dinheiro que sumiu",
+     "formato": "explicativo",
+     "duracao_alvo": "90 a 105 s",
+     "gancho": "Você sabe por que tem tanto empreendedor(a) que vende bem todo dia, mas chega no fim do mês sem dinheiro na conta pessoal?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "A apresentadora olha para a câmera com tom curioso e faz a pergunta inicial sobre a falta de saldo pessoal apesar de boas vendas.",
+       "texto_na_tela": "Vende muito e não vê a cor do dinheiro?",
+       "visual": "A friendly 38-year-old Latina woman wearing a green apron standing inside her small bakery, looking curiously at the camera.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nNew photo: A friendly 38-year-old Latina woman wearing a green apron standing inside her small bakery, looking curiously at the camera."
+      },
+      {
+       "tempo": "3–25 s",
+       "descricao": "Ela explica que pagar compras da casa direto com a conta da empresa cria uma ilusão financeira, impedindo de enxergar o lucro real.",
+       "texto_na_tela": "Misturar contas esconde o lucro real",
+       "visual": "The woman organizing freshly baked breads on wooden shelves in her cozy bakery kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nNew photo: The woman organizing freshly baked breads on wooden shelves in her cozy bakery kitchen."
+      },
+      {
+       "tempo": "25–55 s",
+       "descricao": "Ela demonstra a importância de definir um valor fixo mensal de retirada, o famoso pró-labore, para organizar as despesas da família.",
+       "texto_na_tela": "Defina seu pró-labore mensal",
+       "visual": "The woman sitting at a clean wooden counter in her bakery, thoughtfully organizing cake packaging materials.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nNew photo: The woman sitting at a clean wooden counter in her bakery, thoughtfully organizing cake packaging materials."
+      },
+      {
+       "tempo": "55–85 s",
+       "descricao": "Ela orienta os passos básicos para ter uma conta exclusiva para o negócio e manter os comprovantes separados.",
+       "texto_na_tela": "Separar a conta é ter clareza",
+       "visual": "The woman smiling warmly while serving a customer behind the glass display of her bakery.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nNew photo: The woman smiling warmly while serving a customer behind the glass display of her bakery."
+      },
+      {
+       "tempo": "85–105 s",
+       "descricao": "Ela faz o convite caloroso para o empreendedor se inscrever no programa Impulso Stone e aprender mais na prática.",
+       "texto_na_tela": "Inscreva-se no Impulso Stone!",
+       "visual": "The woman holding a green notepad and giving an encouraging thumbs-up to the camera in her bright bakery.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nNew photo: The woman holding a green notepad and giving an encouraging thumbs-up to the camera in her bright bakery."
+      }
+     ],
+     "legenda": "Vender bem é ótimo, mas ver o dinheiro sumir no fim do mês dá uma dor de cabeça, né? Quando a gente paga as contas da casa direto do caixa da loja, fica impossível saber se o negócio está dando lucro de verdade. Definir um pró-labore e separar as contas é o primeiro passo para ter tranquilidade financeira. Quer aprender a organizar suas finanças na prática com mentoria gratuita? Inscreva-se no Impulso Stone! O link está no nosso perfil. #ImpulsoStone #Empreendedorismo #EducaçãoFinanceira #Gestão",
+     "cta": "Inscreva-se no Impulso Stone para aprender a organizar as finanças do seu negócio na prática!",
+     "personagem": "A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\nThis image (Reel cover): A small business owner standing in her bakery looking at the camera with an intrigued expression.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A friendly 38-year-old Latina woman with curly dark hair wearing a stylish green apron in a bright small bakery.\n\n1. Cover: A small business owner standing in her bakery looking at the camera with an intrigued expression.\n2. Scene 0–3 s: A friendly 38-year-old Latina woman wearing a green apron standing inside her small bakery, looking curiously at the camera.\n3. Scene 3–25 s: The woman organizing freshly baked breads on wooden shelves in her cozy bakery kitchen.\n4. Scene 25–55 s: The woman sitting at a clean wooden counter in her bakery, thoughtfully organizing cake packaging materials.\n5. Scene 55–85 s: The woman smiling warmly while serving a customer behind the glass display of her bakery.\n6. Scene 85–105 s: The woman holding a green notepad and giving an encouraging thumbs-up to the camera in her bright bakery.",
+     "inspirado_em": [
+      "Dc05Vy3RYWH",
+      "DettqnjB8Kq"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "formato do vídeo: explicativo (2,2× mais comum no top)",
+      "tipo de gancho: curiosidade (1,3× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "O perigo do Pix no CPF",
+     "formato": "explicativo",
+     "duracao_alvo": "95 a 110 s",
+     "gancho": "Misturar o Pix da sua vida pessoal com as vendas do seu negócio pode estar matando o seu lucro sem você perceber.",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "O apresentador faz um alerta direto sobre o hábito de receber pagamentos do negócio na chave Pix pessoal.",
+       "texto_na_tela": "Pix no CPF para receber do negócio?",
+       "visual": "A focused 45-year-old Black man wearing a polo shirt with a subtle green collar inside his neighborhood hardware store, talking directly to camera.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nNew photo: A focused 45-year-old Black man wearing a polo shirt with a subtle green collar inside his neighborhood hardware store, talking directly to camera."
+      },
+      {
+       "tempo": "3–30 s",
+       "descricao": "Ele explica como essa prática confunde o fluxo de caixa e impede o controle exato dos custos da loja.",
+       "texto_na_tela": "Fluxo de caixa bagunçado prejudica o negócio",
+       "visual": "The man arranging paint cans neatly on metal shelves in his brightly lit store.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nNew photo: The man arranging paint cans neatly on metal shelves in his brightly lit store."
+      },
+      {
+       "tempo": "30–60 s",
+       "descricao": "Ele compartilha a regra das duas contas: uma para a empresa receber e pagar fornecedores, outra para o dinheiro pessoal.",
+       "texto_na_tela": "2 contas simples: PJ para loja, PF para você",
+       "visual": "The man handing a bag of supplies to a happy customer across the store counter.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nNew photo: The man handing a bag of supplies to a happy customer across the store counter."
+      },
+      {
+       "tempo": "60–90 s",
+       "descricao": "Ele reforça como a clareza nos números traz segurança para fazer o negócio crescer sem sobressaltos.",
+       "texto_na_tela": "Clareza nos números traz crescimento",
+       "visual": "The man inspecting tools and hardware stock in the organized store aisle.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nNew photo: The man inspecting tools and hardware stock in the organized store aisle."
+      },
+      {
+       "tempo": "90–110 s",
+       "descricao": "Ele convida o público a participar das turmas gratuitas do Impulso Stone para estruturar a gestão da loja.",
+       "texto_na_tela": "Vem pro Impulso Stone!",
+       "visual": "The man looking confidently into the camera, waving warmly inside his hardware store.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nNew photo: The man looking confidently into the camera, waving warmly inside his hardware store."
+      }
+     ],
+     "legenda": "Receber as vendas do negócio na conta pessoal parece prático, mas bagunça todo o seu caixa! Sem separar o dinheiro da empresa do seu dinheiro pessoal, você corre o risco de pagar contas sem saber de onde veio a verba. Bora profissionalizar a gestão do seu negócio? O Impulso Stone oferece oficinas e mentorias gratuitas para microempreendedores. Participe do Impulso Stone e garanta sua vaga! Clique no link da bio. #ImpulsoStone #PequenosNegocios #Finanças #GestaoDeCaixa",
+     "cta": "Garanta sua vaga no Impulso Stone e receba mentoria gratuita para organizar suas contas!",
+     "personagem": "A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\nThis image (Reel cover): A hardware store owner standing confidently in his shop looking serious yet welcoming.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A focused 45-year-old Black man with short black hair wearing a polo shirt with a green collar inside a small hardware store.\n\n1. Cover: A hardware store owner standing confidently in his shop looking serious yet welcoming.\n2. Scene 0–3 s: A focused 45-year-old Black man wearing a polo shirt with a subtle green collar inside his neighborhood hardware store, talking directly to camera.\n3. Scene 3–30 s: The man arranging paint cans neatly on metal shelves in his brightly lit store.\n4. Scene 30–60 s: The man handing a bag of supplies to a happy customer across the store counter.\n5. Scene 60–90 s: The man inspecting tools and hardware stock in the organized store aisle.\n6. Scene 90–110 s: The man looking confidently into the camera, waving warmly inside his hardware store.",
+     "inspirado_em": [
+      "DXaTt7Pj5DY",
+      "De7J01Yx_lG"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "formato do vídeo: explicativo (2,2× mais comum no top)",
+      "tipo de gancho: polêmica (2,6× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "A conta de luz que engana seu lucro",
+     "formato": "explicativo",
+     "duracao_alvo": "90 a 110 s",
+     "gancho": "Você sabia que pagar uma conta da sua casa usando o caixa do seu salão de beleza faz sua empresa parecer falida?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "A apresentadora traz um exemplo prático do dia a dia sobre misturar pagamentos domésticos com a receita do serviço.",
+       "texto_na_tela": "Pagar conta de casa com caixa do salão?",
+       "visual": "A smiling 50-year-old Latina woman wearing a green scarf in her cozy beauty salon, looking directly at the camera.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nNew photo: A smiling 50-year-old Latina woman wearing a green scarf in her cozy beauty salon, looking directly at the camera."
+      },
+      {
+       "tempo": "3–25 s",
+       "descricao": "Ela mostra que a falta de registro das retiradas faz parecer que a empresa não dá dinheiro, quando na verdade o caixa só está desorganizado.",
+       "texto_na_tela": "Falta de registro parece falta de lucro",
+       "visual": "The woman blow-drying a client's hair skillfully in front of a salon mirror.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nNew photo: The woman blow-drying a client's hair skillfully in front of a salon mirror."
+      },
+      {
+       "tempo": "25–55 s",
+       "descricao": "Ela ensina como anotar cada entrada do salão e separar o valor estipulado para a sua renda pessoal mensal.",
+       "texto_na_tela": "Anote entradas e separe sua renda",
+       "visual": "The woman neatly arranging hair care products on a salon display shelf.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nNew photo: The woman neatly arranging hair care products on a salon display shelf."
+      },
+      {
+       "tempo": "55–85 s",
+       "descricao": "Ela fala sobre a sensação de alívio e autonomia quando a empreendedora consegue enxergar a sobra real do mês.",
+       "texto_na_tela": "Saber a sobra real traz autonomia",
+       "visual": "The woman greeting a client warmly at the salon entrance.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nNew photo: The woman greeting a client warmly at the salon entrance."
+      },
+      {
+       "tempo": "85–110 s",
+       "descricao": "Ela finaliza convidando as empreendedoras para se inscreverem no Impulso Stone e receberem apoio prático.",
+       "texto_na_tela": "Inscreva-se no Impulso Stone",
+       "visual": "The woman smiling brightly and invitingly toward the camera in her vibrant salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nNew photo: The woman smiling brightly and invitingly toward the camera in her vibrant salon."
+      }
+     ],
+     "legenda": "Quando a gente tira dinheiro do caixa do salão para pagar o boleto de casa sem registrar, parece que o negócio nunca dá lucro. Mas a verdade é que as contas estão misturadas! Ajustar a gestão financeira traz clareza e paz para o seu dia a dia. Quer aprender a fazer isso com ajuda de especialistas e sem complicação? Vem pro Impulso Stone! Inscreva-se gratuitamente no link do nosso perfil. #ImpulsoStone #Beleza #Empreendedora #EducaçãoFinanceira",
+     "cta": "Inscreva-se gratuitamente no Impulso Stone e aprenda a separar suas contas com ajuda de especialistas!",
+     "personagem": "A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\nThis image (Reel cover): A salon owner smiling brightly at the camera in a modern salon setting.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A smiling 50-year-old Latina woman with warm brown hair wearing a green scarf inside her cozy beauty salon.\n\n1. Cover: A salon owner smiling brightly at the camera in a modern salon setting.\n2. Scene 0–3 s: A smiling 50-year-old Latina woman wearing a green scarf in her cozy beauty salon, looking directly at the camera.\n3. Scene 3–25 s: The woman blow-drying a client's hair skillfully in front of a salon mirror.\n4. Scene 25–55 s: The woman neatly arranging hair care products on a salon display shelf.\n5. Scene 55–85 s: The woman greeting a client warmly at the salon entrance.\n6. Scene 85–110 s: The woman smiling brightly and invitingly toward the camera in her vibrant salon.",
+     "inspirado_em": [
+      "DcOdTduJOKC",
+      "DZqVCbmgu2X"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "tipo de gancho: curiosidade (1,3× mais comum no top)"
+     ]
+    }
+   ],
+   "avaliacao": null,
+   "profiles": [],
+   "confidence_flag": "fragil",
+   "explanation": "Estes criativos foram estruturados com duração superior a 90 segundos, padrão que se mostrou 2,0 vezes mais comum nos Reels de alto engajamento (32% no top versus 16% no controle, com sinal robusto). Utilizou-se o formato explicativo, presente em 20% do top contra 9% do controle (2,2 vezes mais comum, sendo uma hipótese a testar por depender de poucos criadores), aliado a ganchos de curiosidade (36% no top contra 28% no controle) e polêmica (5% no top contra 2% no controle). O foco é orientar a separação das finanças pessoais e da empresa, convidando o(a) empreendedor(a) a participar do Impulso Stone.",
+   "warnings": []
+  }
+ },
+ {
+  "entrada": {
+   "mode": "gerar_criativo",
+   "segment": "beleza",
+   "query": "Reels para donas e donos de salão de beleza sobre como cobrar o preço certo pelo serviço, terminando com o convite para participar do Impulso Stone."
+  },
+  "saida": {
+   "run_id": "20261118-153914-8bbe2d",
+   "mode": "gerar_criativo",
+   "findings": [
+    {
+     "campo": "duracao_faixa",
+     "valor": "mais_90s",
+     "descricao": "duração: mais de 90 s — 32% no top × 16% no controle",
+     "freq_top": 0.316,
+     "freq_controle": 0.161,
+     "dif_pp": 15.5,
+     "lift": 1.96,
+     "ic95_min": 1.15,
+     "ic95_max": 3.14,
+     "n_top": 149,
+     "n_controle": 76,
+     "robustez": "robusto",
+     "recorte": null
+    },
+    {
+     "campo": "formato_video",
+     "valor": "explicativo",
+     "descricao": "formato do vídeo: explicativo — 20% no top × 9% no controle",
+     "freq_top": 0.195,
+     "freq_controle": 0.087,
+     "dif_pp": 10.8,
+     "lift": 2.24,
+     "ic95_min": 1.04,
+     "ic95_max": 4.09,
+     "n_top": 92,
+     "n_controle": 41,
+     "robustez": "fragil",
+     "recorte": null
+    },
+    {
+     "campo": "tipo_hook",
+     "valor": "curiosidade",
+     "descricao": "tipo de gancho: curiosidade — 36% no top × 28% no controle",
+     "freq_top": 0.364,
+     "freq_controle": 0.278,
+     "dif_pp": 8.7,
+     "lift": 1.31,
+     "ic95_min": 1.01,
+     "ic95_max": 1.7,
+     "n_top": 172,
+     "n_controle": 131,
+     "robustez": "fragil",
+     "recorte": null
+    },
+    {
+     "campo": "tipo_hook",
+     "valor": "polemica",
+     "descricao": "tipo de gancho: polêmica — 5% no top × 2% no controle",
+     "freq_top": 0.049,
+     "freq_controle": 0.019,
+     "dif_pp": 3.0,
+     "lift": 2.56,
+     "ic95_min": 1.19,
+     "ic95_max": 6.73,
+     "n_top": 23,
+     "n_controle": 9,
+     "robustez": "fragil",
+     "recorte": null
+    }
+   ],
+   "reference_posts": [
+    {
+     "shortCode": "DettqnjB8Kq",
+     "url": "https://www.instagram.com/reel/DettqnjB8Kq/",
+     "perfil": "penteadokaique",
+     "faixa": "micro",
+     "seguidores": 2282,
+     "curtidas": 9908,
+     "comentarios": 49,
+     "visualizacoes": 98333,
+     "taxa_engajamento": 4.3633,
+     "duracao_s": 111.6,
+     "publicado_em": "2026-10-20",
+     "hook_texto": "Você abre o cardápio e vê um vinho de 900 reais",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "produto_resultado",
+      "tema_principal": "vendas",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "geral",
+      "tem_rosto": false,
+      "tem_cta": true,
+      "tipo_cta": "seguir",
+      "abordagem": "nenhum",
+      "tom": "tecnico"
+     },
+     "motivo": "top com formato do vídeo: explicativo (público geral; poucos Reels do segmento beleza)"
+    },
+    {
+     "shortCode": "DdpPf7LxX93",
+     "url": "https://www.instagram.com/reel/DdpPf7LxX93/",
+     "perfil": "zicaassis",
+     "faixa": "medio",
+     "seguidores": 98290,
+     "curtidas": 2684,
+     "comentarios": 301,
+     "visualizacoes": 47886,
+     "taxa_engajamento": 0.0304,
+     "duracao_s": 755.6,
+     "publicado_em": "2026-09-23",
+     "hook_texto": "Gente, quero falar uma coisa pra vocês.",
+     "categorias": {
+      "formato_video": "bastidores",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "rosto",
+      "tema_principal": "gestao",
+      "pilar_impulso": "historias_reais",
+      "segmento_publico": "beleza",
+      "tem_rosto": true,
+      "tem_cta": false,
+      "tipo_cta": "nenhum",
+      "abordagem": "nenhum",
+      "tom": "informal"
+     },
+     "motivo": "top com duração: mais de 90 s (segmento beleza)"
+    },
+    {
+     "shortCode": "De7J01Yx_lG",
+     "url": "https://www.instagram.com/reel/De7J01Yx_lG/",
+     "perfil": "contaazul",
+     "faixa": "grande",
+     "seguidores": 321011,
+     "curtidas": 20648,
+     "comentarios": 487,
+     "visualizacoes": 198211,
+     "taxa_engajamento": 0.0658,
+     "duracao_s": 105.3,
+     "publicado_em": "2026-10-25",
+     "hook_texto": "Empresário é tudo malvadão?",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "polemica",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "financas",
+      "pilar_impulso": "educacao_financeira",
+      "segmento_publico": "geral",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "compartilhar",
+      "abordagem": "dor_real",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com tipo de gancho: polêmica (público geral; poucos Reels do segmento beleza)"
+    },
+    {
+     "shortCode": "DWpd-C0gOAN",
+     "url": "https://www.instagram.com/reel/DWpd-C0gOAN/",
+     "perfil": "conicesar",
+     "faixa": "micro",
+     "seguidores": 5096,
+     "curtidas": 108,
+     "comentarios": 34,
+     "visualizacoes": 2732,
+     "taxa_engajamento": 0.0279,
+     "duracao_s": 279.1,
+     "publicado_em": "2026-04-02",
+     "hook_texto": "Eu sou a Ana, eu tenho 30 anos",
+     "categorias": {
+      "formato_video": "talking_head",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "nenhum",
+      "hook_visual": "rosto",
+      "tema_principal": "historia_de_empreendedor",
+      "pilar_impulso": "historias_reais",
+      "segmento_publico": "beleza",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "motivacional_generica",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com formato do vídeo: talking head; chamada para ação (CTA): sim (segmento beleza)"
+    },
+    {
+     "shortCode": "DeDBfLQyvu3",
+     "url": "https://www.instagram.com/reel/DeDBfLQyvu3/",
+     "perfil": "penteadokaique",
+     "faixa": "micro",
+     "seguidores": 2282,
+     "curtidas": 18692,
+     "comentarios": 1403,
+     "visualizacoes": 392761,
+     "taxa_engajamento": 8.8059,
+     "duracao_s": 64.4,
+     "publicado_em": "2026-10-03",
+     "hook_texto": "Você nunca compra o copo grande de refrigerante",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "60_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "vendas",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "geral",
+      "tem_rosto": false,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "dor_real",
+      "tom": "tecnico"
+     },
+     "motivo": "top com formato do vídeo: explicativo (público geral; poucos Reels do segmento beleza)"
+    }
+   ],
+   "creatives": [
+    {
+     "titulo": "O Cálculo da Escova Perfeita",
+     "formato": "explicativo",
+     "duracao_alvo": "95 a 110 s",
+     "gancho": "Você calcula o preço da escova pelo tempo de cadeira ou pelo produto que gasta no lavatório?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "A empreendedora olha para a câmera no salão enquanto segura um secador de cabelo e faz a pergunta direta sobre precificação.",
+       "texto_na_tela": "Cobrando certo na beleza?",
+       "visual": "A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, holding a hairdryer in a bright hair salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nNew photo: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, holding a hairdryer in a bright hair salon."
+      },
+      {
+       "tempo": "3–25 s",
+       "descricao": "Ela explica que somar apenas o custo do shampoo e condicionador é um erro comum que faz o salão perder dinheiro todos os meses.",
+       "texto_na_tela": "O erro no custo direto",
+       "visual": "The hairdresser placing a bottle of shampoo on a clean wooden salon counter, pointing to the product while speaking warmly to the camera.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nNew photo: The hairdresser placing a bottle of shampoo on a clean wooden salon counter, pointing to the product while speaking warmly to the camera."
+      },
+      {
+       "tempo": "25–55 s",
+       "descricao": "Demonstra como embutir os custos invisíveis no serviço: água, energia, aluguel, depreciação do secador e as horas trabalhadas.",
+       "texto_na_tela": "Custos invisíveis da cadeira",
+       "visual": "The hairdresser adjusting a salon chair height, then pointing to the salon lighting overhead, showing the environment in action.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nNew photo: The hairdresser adjusting a salon chair height, then pointing to the salon lighting overhead, showing the environment in action."
+      },
+      {
+       "tempo": "55–80 s",
+       "descricao": "Mostra a diferença entre cobrar por impulso e calcular a margem de lucro real para cada tipo de cabelo ou procedimento.",
+       "texto_na_tela": "Margem de lucro real",
+       "visual": "The hairdresser carefully combing a client's hair in front of a large illuminated mirror in the modern salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nNew photo: The hairdresser carefully combing a client's hair in front of a large illuminated mirror in the modern salon."
+      },
+      {
+       "tempo": "80–95 s",
+       "descricao": "Convida os donos de salão a aprenderem a estruturar suas contas e precificar com autonomia no programa gratuito Impulso Stone.",
+       "texto_na_tela": "Participe do Impulso Stone!",
+       "visual": "The hairdresser smiling encouragingly at the camera, gesturing warmly with her hands in the center of her salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nNew photo: The hairdresser smiling encouragingly at the camera, gesturing warmly with her hands in the center of her salon."
+      }
+     ],
+     "legenda": "Cobrar o valor justo pelo seu trabalho no salão não é questão de sorte, é gestão! Quando você entende onde cada centavo da sua água, luz e produto se encaixa, a sua margem de lucro aparece. Quer aprender a precificar seus serviços de beleza sem medo de perder cliente? Inscreva-se no programa gratuito Impulso Stone e fortaleça seu negócio! #ImpulsoStone #EmpreendedorismoFeminino #SalaoDeBeleza #Precificacao",
+     "cta": "Inscreva-se no programa gratuito Impulso Stone e aprenda a precificar com segurança no seu salão!",
+     "personagem": "A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\nThis image (Reel cover): A female salon owner smiling confidentially while holding professional styling tools in a well-lit beauty salon.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, set inside a bright hair salon.\n\n1. Cover: A female salon owner smiling confidentially while holding professional styling tools in a well-lit beauty salon.\n2. Scene 0–3 s: A 40-year-old Brazilian female hairdresser with dark wavy hair, wearing a dark apron with a subtle green pin, holding a hairdryer in a bright hair salon.\n3. Scene 3–25 s: The hairdresser placing a bottle of shampoo on a clean wooden salon counter, pointing to the product while speaking warmly to the camera.\n4. Scene 25–55 s: The hairdresser adjusting a salon chair height, then pointing to the salon lighting overhead, showing the environment in action.\n5. Scene 55–80 s: The hairdresser carefully combing a client's hair in front of a large illuminated mirror in the modern salon.\n6. Scene 80–95 s: The hairdresser smiling encouragingly at the camera, gesturing warmly with her hands in the center of her salon.",
+     "inspirado_em": [
+      "DettqnjB8Kq",
+      "DdpPf7LxX93"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "formato do vídeo: explicativo (2,2× mais comum no top)",
+      "tipo de gancho: curiosidade (1,3× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "Preço Baixo Não Salva Salão",
+     "formato": "talking head",
+     "duracao_alvo": "95 a 105 s",
+     "gancho": "Cobrar barato no salão de beleza não atrai mais clientes fiéis, só destrói o seu caixa.",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "O especialista fala de forma direta e provocativa olhando para a câmera no ambiente do salão de beleza.",
+       "texto_na_tela": "Baixar preço destrói seu caixa!",
+       "visual": "A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, standing in a chic salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nNew photo: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, standing in a chic salon."
+      },
+      {
+       "tempo": "3–30 s",
+       "descricao": "Explica por que dar desconto sem cálculo prévio cria a ilusão de salão cheio, mas deixa a conta bancária no vermelho ao final do mês.",
+       "texto_na_tela": "Salão cheio vs. conta no vermelho",
+       "visual": "The salon consultant walking slowly down the salon aisle, gesturing with his hands while explaining financial concepts.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nNew photo: The salon consultant walking slowly down the salon aisle, gesturing with his hands while explaining financial concepts."
+      },
+      {
+       "tempo": "30–65 s",
+       "descricao": "Apresenta o conceito de valor percebido no atendimento de beleza: limpeza, pontualidade, café acolhedor e biossegurança valorizam o preço.",
+       "texto_na_tela": "Agregue valor ao seu atendimento",
+       "visual": "The consultant pointing towards a neat reception counter where a welcoming coffee tray is set up for salon clients.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nNew photo: The consultant pointing towards a neat reception counter where a welcoming coffee tray is set up for salon clients."
+      },
+      {
+       "tempo": "65–85 s",
+       "descricao": "Dá o exemplo prático da diferença de faturamento entre quem vende dez cortes baratinhos e quem vende quatro combos completos precificados corretamente.",
+       "texto_na_tela": "Combo precificado vs. preço baixo",
+       "visual": "The consultant standing near a styling station, demonstrating with hand gestures the comparison of business figures.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nNew photo: The consultant standing near a styling station, demonstrating with hand gestures the comparison of business figures."
+      },
+      {
+       "tempo": "85–100 s",
+       "descricao": "Faz o convite direto para que empreendedoras e empreendedores da beleza se inscrevam no Impulso Stone para transformar a gestão financeira.",
+       "texto_na_tela": "Inscreva-se no Impulso Stone",
+       "visual": "The consultant smiling into the camera with an open, welcoming gesture in the brightly lit salon.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nNew photo: The consultant smiling into the camera with an open, welcoming gesture in the brightly lit salon."
+      }
+     ],
+     "legenda": "Você atende o dia todo, fica exausto(a) e na hora de pagar as contas do salão o dinheiro não sobra? O problema pode estar no preço cobrado por impulso. No Impulso Stone, ajudamos você a calcular seus custos reais e valorizar seu trabalho. Garanta sua vaga gratuita no programa Impulso Stone e transforme a gestão do seu negócio! #ImpulsoStone #GestaoDeSalao #BelezaEAutonomia #VendasQualificadas",
+     "cta": "Garanta sua vaga gratuita no programa Impulso Stone e receba mentoria prática para o seu salão!",
+     "personagem": "A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\nThis image (Reel cover): A male salon consultant looking directly at the camera with a confident and serious expression inside a professional salon.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, in a chic salon environment.\n\n1. Cover: A male salon consultant looking directly at the camera with a confident and serious expression inside a professional salon.\n2. Scene 0–3 s: A 45-year-old Brazilian male barber and salon consultant, wearing a charcoal shirt with a small green detail on the collar, standing in a chic salon.\n3. Scene 3–30 s: The salon consultant walking slowly down the salon aisle, gesturing with his hands while explaining financial concepts.\n4. Scene 30–65 s: The consultant pointing towards a neat reception counter where a welcoming coffee tray is set up for salon clients.\n5. Scene 65–85 s: The consultant standing near a styling station, demonstrating with hand gestures the comparison of business figures.\n6. Scene 85–100 s: The consultant smiling into the camera with an open, welcoming gesture in the brightly lit salon.",
+     "inspirado_em": [
+      "De7J01Yx_lG",
+      "DWpd-C0gOAN"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "formato do vídeo: explicativo (2,2× mais comum no top)",
+      "tipo de gancho: polêmica (2,6× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "Bastidores do Preço Justo",
+     "formato": "bastidores",
+     "duracao_alvo": "95 a 110 s",
+     "gancho": "Sabe por que no final do mês seu salão está cheio, mas não sobra nada para você reinvestir?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "A dona do salão aparece organizando o estoque de tinturas e descolorantes no final do expediente e faz a pergunta reflexiva.",
+       "texto_na_tela": "Salão cheio e caixa vazio?",
+       "visual": "A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, reorganizing hair color boxes.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nNew photo: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, reorganizing hair color boxes."
+      },
+      {
+       "tempo": "3–25 s",
+       "descricao": "Ela mostra a rotina real abrindo os armários de insumos e conferindo quanto material é gasto em cada química capilar.",
+       "texto_na_tela": "Bastidores dos insumos",
+       "visual": "The salon owner counting tube boxes of hair dye on a shelf in a neat storage area behind the styling station.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nNew photo: The salon owner counting tube boxes of hair dye on a shelf in a neat storage area behind the styling station."
+      },
+      {
+       "tempo": "25–60 s",
+       "descricao": "Explica como aprendeu a somar a comissão da equipe, os impostos e a sobra necessária para comprar equipamentos novos.",
+       "texto_na_tela": "Comissão + Custos + Lucro",
+       "visual": "The salon owner checking a professional hair steamer unit and wiping down a styling workstation carefully.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nNew photo: The salon owner checking a professional hair steamer unit and wiping down a styling workstation carefully."
+      },
+      {
+       "tempo": "60–85 s",
+       "descricao": "Demonstra a mudança na tabela de preços do salão depois de separar o dinheiro pessoal da conta bancária da empresa.",
+       "texto_na_tela": "Separe a conta física da jurídica",
+       "visual": "The salon owner organizing professional brushes and styling shears neatly on a clean tray in front of a mirror.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nNew photo: The salon owner organizing professional brushes and styling shears neatly on a clean tray in front of a mirror."
+      },
+      {
+       "tempo": "85–100 s",
+       "descricao": "Convida os colegas do setor de beleza a participarem do programa Impulso Stone para levarem essa organização para a prática.",
+       "texto_na_tela": "Vem pro Impulso Stone!",
+       "visual": "The salon owner walking to the front entrance of her warm, brightly lit salon and smiling warmly at the camera.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nNew photo: The salon owner walking to the front entrance of her warm, brightly lit salon and smiling warmly at the camera."
+      }
+     ],
+     "legenda": "Trabalhar muito e ver o lucro sumir nos insumos do salão é uma dor comum na área da beleza. Mas quando você aprende a separar as contas da empresa e precificar com clareza, seu negócio ganha força! Quer organizar suas finanças com quem entende a sua rotina? Vem pro Impulso Stone! Inscreva-se gratuitamente no programa. #ImpulsoStone #DonaDeSalao #EducacaoFinanceira #NegociosDeBeleza",
+     "cta": "Inscreva-se gratuitamente no programa Impulso Stone e receba ferramentas práticas de gestão!",
+     "personagem": "A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\nThis image (Reel cover): A salon owner standing proudly in her neatly organized salon, looking warmly at the camera.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, in her cozy beauty salon.\n\n1. Cover: A salon owner standing proudly in her neatly organized salon, looking warmly at the camera.\n2. Scene 0–3 s: A 52-year-old Brazilian female salon owner with shoulder-length hair, wearing a stylish olive blouse with a green button detail, reorganizing hair color boxes.\n3. Scene 3–25 s: The salon owner counting tube boxes of hair dye on a shelf in a neat storage area behind the styling station.\n4. Scene 25–60 s: The salon owner checking a professional hair steamer unit and wiping down a styling workstation carefully.\n5. Scene 60–85 s: The salon owner organizing professional brushes and styling shears neatly on a clean tray in front of a mirror.\n6. Scene 85–100 s: The salon owner walking to the front entrance of her warm, brightly lit salon and smiling warmly at the camera.",
+     "inspirado_em": [
+      "DdpPf7LxX93",
+      "DeDBfLQyvu3"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)",
+      "formato do vídeo: explicativo (2,2× mais comum no top)",
+      "tipo de gancho: curiosidade (1,3× mais comum no top)"
+     ]
+    }
+   ],
+   "avaliacao": null,
+   "profiles": [],
+   "confidence_flag": "fragil",
+   "explanation": "Estes criativos foram desenvolvidos com base nos padrões observados na amostra inteira de Reels de alto desempenho. Destaca-se a duração superior a 90 segundos, presente em 32% dos vídeos de topo contra 16% no grupo de controle (2,0 vezes mais comum), além do formato explicativo que aparece em 20% do topo contra 9% no controle. Para captar a atenção nos primeiros segundos, utilizamos ganchos de curiosidade (36% no topo contra 28% no controle) e polêmica (5% no topo contra 2% no controle), conectando os custos reais do salão de beleza à oferta do Impulso Stone.",
+   "warnings": [
+    "parte dos achados vem da amostra inteira, não do recorte pedido (segmento beleza)"
+   ]
+  }
+ },
+ {
+  "entrada": {
+   "mode": "gerar_criativo",
+   "segment": "alimentacao",
+   "query": "Reels para quem vende comida feita em casa sobre como vender mais pelo Instagram e pelo WhatsApp, terminando com o convite para participar do Impulso Stone."
+  },
+  "saida": {
+   "run_id": "20261118-154014-e11fce",
+   "mode": "gerar_criativo",
+   "findings": [
+    {
+     "campo": "duracao_faixa",
+     "valor": "mais_90s",
+     "descricao": "duração: mais de 90 s — 32% no top × 16% no controle",
+     "freq_top": 0.316,
+     "freq_controle": 0.161,
+     "dif_pp": 15.5,
+     "lift": 1.96,
+     "ic95_min": 1.15,
+     "ic95_max": 3.14,
+     "n_top": 149,
+     "n_controle": 76,
+     "robustez": "robusto",
+     "recorte": null
+    },
+    {
+     "campo": "formato_video",
+     "valor": "explicativo",
+     "descricao": "formato do vídeo: explicativo — 20% no top × 9% no controle",
+     "freq_top": 0.195,
+     "freq_controle": 0.087,
+     "dif_pp": 10.8,
+     "lift": 2.24,
+     "ic95_min": 1.04,
+     "ic95_max": 4.09,
+     "n_top": 92,
+     "n_controle": 41,
+     "robustez": "fragil",
+     "recorte": null
+    }
+   ],
+   "reference_posts": [
+    {
+     "shortCode": "DZqVCbmgu2X",
+     "url": "https://www.instagram.com/reel/DZqVCbmgu2X/",
+     "perfil": "conicesar",
+     "faixa": "micro",
+     "seguidores": 5096,
+     "curtidas": 4164,
+     "comentarios": 255,
+     "visualizacoes": 66805,
+     "taxa_engajamento": 0.8672,
+     "duracao_s": 154.5,
+     "publicado_em": "2026-06-16",
+     "hook_texto": "Eu trabalhei em comércio, eu saí tem 2 meses",
+     "categorias": {
+      "formato_video": "talking_head",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "dor",
+      "hook_visual": "rosto",
+      "tema_principal": "historia_de_empreendedor",
+      "pilar_impulso": "historias_reais",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "dor_real",
+      "tom": "inspiracional"
+     },
+     "motivo": "top com duração: mais de 90 s (segmento alimentacao)"
+    },
+    {
+     "shortCode": "DbsI9LLPQC4",
+     "url": "https://www.instagram.com/reel/DbsI9LLPQC4/",
+     "perfil": "clarianalima",
+     "faixa": "micro",
+     "seguidores": 9105,
+     "curtidas": 1366,
+     "comentarios": 32,
+     "visualizacoes": 28459,
+     "taxa_engajamento": 0.1535,
+     "duracao_s": 133.8,
+     "publicado_em": "2026-08-06",
+     "hook_texto": "Essa é a Engenharia do evento e a aula de hoje é sobre curadoria!",
+     "categorias": {
+      "formato_video": "tutorial",
+      "duracao_faixa": "mais_90s",
+      "tipo_hook": "promessa",
+      "hook_visual": "rosto",
+      "tema_principal": "gestao",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "nenhum",
+      "tom": "tecnico"
+     },
+     "motivo": "top com duração: mais de 90 s (segmento alimentacao)"
+    },
+    {
+     "shortCode": "DeuZrmYyq2o",
+     "url": "https://www.instagram.com/reel/DeuZrmYyq2o/",
+     "perfil": "willianmuller_",
+     "faixa": "medio",
+     "seguidores": 22284,
+     "curtidas": 6708,
+     "comentarios": 18,
+     "visualizacoes": 112156,
+     "taxa_engajamento": 0.3018,
+     "duracao_s": 70.2,
+     "publicado_em": "2026-10-20",
+     "hook_texto": "Se você abrir uma portinha e vender só o lanche",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "60_90s",
+      "tipo_hook": "curiosidade",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "vendas",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": false,
+      "tem_cta": false,
+      "tipo_cta": "nenhum",
+      "abordagem": "nenhum",
+      "tom": "informal"
+     },
+     "motivo": "top com tipo de gancho: curiosidade (segmento alimentacao)"
+    },
+    {
+     "shortCode": "DbnuKRmRJ_H",
+     "url": "https://www.instagram.com/reel/DbnuKRmRJ_H/",
+     "perfil": "_kalps23",
+     "faixa": "micro",
+     "seguidores": 972,
+     "curtidas": 17649,
+     "comentarios": 980,
+     "visualizacoes": 530959,
+     "taxa_engajamento": 19.1656,
+     "duracao_s": 62.4,
+     "publicado_em": "2026-08-04",
+     "hook_texto": "E o caso polêmico dessa doceira?",
+     "categorias": {
+      "formato_video": "explicativo",
+      "duracao_faixa": "60_90s",
+      "tipo_hook": "polemica",
+      "hook_visual": "texto_na_tela",
+      "tema_principal": "atendimento",
+      "pilar_impulso": "gestao_e_vendas",
+      "segmento_publico": "alimentacao",
+      "tem_rosto": true,
+      "tem_cta": true,
+      "tipo_cta": "comentar",
+      "abordagem": "dor_real",
+      "tom": "informal"
+     },
+     "motivo": "top com formato do vídeo: explicativo (segmento alimentacao)"
+    }
+   ],
+   "creatives": [
+    {
+     "titulo": "Como calcular o preço e vender pelo WhatsApp",
+     "formato": "explicativo",
+     "duracao_alvo": "95 a 120 s",
+     "gancho": "Você sabe quanto realmente sobra no final do mês com as suas marmitas entregues pelo WhatsApp?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "Você sabe quanto realmente sobra no final do mês com as suas marmitas entregues pelo WhatsApp?",
+       "texto_na_tela": "Quanto sobra na marmita?",
+       "visual": "A woman in her 40s wearing a home apron with a subtle green detail, smiling warmly while looking directly at the camera inside a cozy residential kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nNew photo: A woman in her 40s wearing a home apron with a subtle green detail, smiling warmly while looking directly at the camera inside a cozy residential kitchen."
+      },
+      {
+       "tempo": "3–30 s",
+       "descricao": "Muitos empreendedores vendem bem no delivery de comida caseira, mas esquecem de colocar todos os custos na ponta do lápis, como a embalagem e o gás.",
+       "texto_na_tela": "Custo real da marmita",
+       "visual": "Medium shot of a woman organizing takeout containers on a clean kitchen counter, holding a notepad and pen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nNew photo: Medium shot of a woman organizing takeout containers on a clean kitchen counter, holding a notepad and pen."
+      },
+      {
+       "tempo": "30–60 s",
+       "descricao": "Quando você ajusta o valor do seu prato e cria combos inteligentes para o WhatsApp, o cliente pede mais vezes e o seu lucro finalmente aparece.",
+       "texto_na_tela": "Combos que dão lucro",
+       "visual": "Close-up shot of a woman carefully packing homemade food into a branded box inside a brightly lit home kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nNew photo: Close-up shot of a woman carefully packing homemade food into a branded box inside a brightly lit home kitchen."
+      },
+      {
+       "tempo": "60–90 s",
+       "descricao": "Eu passei por essa mesma dúvida no meu negócio de comida, aprendendo que gestão organizada muda tudo na rotina de quem vende em casa.",
+       "texto_na_tela": "Sua rotina organizada",
+       "visual": "A woman smiling while using her smartphone at the kitchen table, surrounded by ingredients and recipe notes.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nNew photo: A woman smiling while using her smartphone at the kitchen table, surrounded by ingredients and recipe notes."
+      },
+      {
+       "tempo": "90–110 s",
+       "descricao": "Empreendedor(a), queremos ajudar o seu negócio de alimentação a crescer de verdade. Participe do Impulso Stone e venha transformar a gestão da sua cozinha.",
+       "texto_na_tela": "Participe do Impulso Stone",
+       "visual": "Medium shot of a woman gesturing invitingly to the camera with a warm smile in her home kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nNew photo: Medium shot of a woman gesturing invitingly to the camera with a warm smile in her home kitchen."
+      }
+     ],
+     "legenda": "Vender comida caseira exige carinho na receita e muita organização nos números. Se você quer aprender a precificar certo e lotar o seu WhatsApp de encomendas sem complicação, nós podemos te ajudar. Empreendedor(a), queremos ajudar o seu negócio de alimentação a crescer de verdade. Participe do Impulso Stone e venha transformar a gestão da sua cozinha.",
+     "cta": "Participe do Impulso Stone e venha transformar a gestão da sua cozinha.",
+     "personagem": "A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\nThis image (Reel cover): Vertical cover showing a woman smiling in a home kitchen next to homemade food boxes with bold text on screen.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.\n\n1. Cover: Vertical cover showing a woman smiling in a home kitchen next to homemade food boxes with bold text on screen.\n2. Scene 0–3 s: A woman in her 40s wearing a home apron with a subtle green detail, smiling warmly while looking directly at the camera inside a cozy residential kitchen.\n3. Scene 3–30 s: Medium shot of a woman organizing takeout containers on a clean kitchen counter, holding a notepad and pen.\n4. Scene 30–60 s: Close-up shot of a woman carefully packing homemade food into a branded box inside a brightly lit home kitchen.\n5. Scene 60–90 s: A woman smiling while using her smartphone at the kitchen table, surrounded by ingredients and recipe notes.\n6. Scene 90–110 s: Medium shot of a woman gesturing invitingly to the camera with a warm smile in her home kitchen.",
+     "inspirado_em": [
+      "DZqVCbmgu2X",
+      "DbsI9LLPQC4"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "O segredo para lotar o WhatsApp com comida caseira",
+     "formato": "explicativo",
+     "duracao_alvo": "70 a 90 s",
+     "gancho": "E se o segredo para vender mais comida caseira estivesse em uma simples mensagem no WhatsApp?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "E se o segredo para vender mais comida caseira estivesse em uma simples mensagem no WhatsApp?",
+       "texto_na_tela": "Segredo no WhatsApp",
+       "visual": "A woman in her 40s wearing a casual shirt with a discreet green stripe, looking curiously at her phone in a cozy home kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\nNew photo: A woman in her 40s wearing a casual shirt with a discreet green stripe, looking curiously at her phone in a cozy home kitchen."
+      },
+      {
+       "tempo": "3–25 s",
+       "descricao": "Muitas pessoas que fazem marmitas ou bolos em casa acham que basta postar foto. Mas o pós-venda e o atendimento rápido é que fazem o cliente voltar toda semana.",
+       "texto_na_tela": "Atendimento que fideliza",
+       "visual": "Medium shot of a woman typing happily on a smartphone while fresh ingredients rest on the kitchen counter behind her.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\nNew photo: Medium shot of a woman typing happily on a smartphone while fresh ingredients rest on the kitchen counter behind her."
+      },
+      {
+       "tempo": "25–50 s",
+       "descricao": "Com um método prático de atendimento, você transforma quem comprou uma vez em cliente fixo do seu cardápio de delivery.",
+       "texto_na_tela": "Cliente fixo toda semana",
+       "visual": "Close-up shot of a woman garnishing a delicious homemade dish in a warm, sunlit domestic kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\nNew photo: Close-up shot of a woman garnishing a delicious homemade dish in a warm, sunlit domestic kitchen."
+      },
+      {
+       "tempo": "50–80 s",
+       "descricao": "Empreendedor(a), queremos ver o seu negócio de alimentação alcançar novos clientes todos os dias. Venha fazer parte do Impulso Stone e conquiste sua autonomia.",
+       "texto_na_tela": "Venha para o Impulso Stone",
+       "visual": "A woman smiling confidently at the camera in her organized kitchen, holding a recipe book.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\nNew photo: A woman smiling confidently at the camera in her organized kitchen, holding a recipe book."
+      }
+     ],
+     "legenda": "Atender bem pelo WhatsApp é o que diferencia quem vende de quem fideliza no setor de alimentação. Quer aprender estratégias práticas para o seu negócio? Empreendedor(a), queremos ver o seu negócio de alimentação alcançar novos clientes todos os dias. Venha fazer parte do Impulso Stone e conquiste sua autonomia.",
+     "cta": "Venha fazer parte do Impulso Stone e conquiste sua autonomia.",
+     "personagem": "A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\nThis image (Reel cover): Vertical cover showing a woman looking at her phone with delicious food in the background.",
+     "prompt_copiar": "Create 5 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A welcoming woman in her 40s, wearing a casual top with a small green detail, cooking and managing orders in a home kitchen.\n\n1. Cover: Vertical cover showing a woman looking at her phone with delicious food in the background.\n2. Scene 0–3 s: A woman in her 40s wearing a casual shirt with a discreet green stripe, looking curiously at her phone in a cozy home kitchen.\n3. Scene 3–25 s: Medium shot of a woman typing happily on a smartphone while fresh ingredients rest on the kitchen counter behind her.\n4. Scene 25–50 s: Close-up shot of a woman garnishing a delicious homemade dish in a warm, sunlit domestic kitchen.\n5. Scene 50–80 s: A woman smiling confidently at the camera in her organized kitchen, holding a recipe book.",
+     "inspirado_em": [
+      "DeuZrmYyq2o",
+      "DbnuKRmRJ_H"
+     ],
+     "achados_usados": [
+      "formato do vídeo: explicativo (2,2× mais comum no top)"
+     ]
+    },
+    {
+     "titulo": "História real: da cozinha de casa para os pedidos diarios",
+     "formato": "explicativo",
+     "duracao_alvo": "100 a 130 s",
+     "gancho": "Você já parou para pensar por que algumas cozinhas caseiras não param de receber pedidos enquanto outras ficam paradas?",
+     "roteiro": [
+      {
+       "tempo": "0–3 s",
+       "descricao": "Você já parou para pensar por que algumas cozinhas caseiras não param de receber pedidos enquanto outras ficam paradas?",
+       "texto_na_tela": "Por que alguns vendem mais?",
+       "visual": "A woman in her 45s wearing an apron with a neat green trim, looking thoughtfully toward the camera in a domestic kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nNew photo: A woman in her 45s wearing an apron with a neat green trim, looking thoughtfully toward the camera in a domestic kitchen."
+      },
+      {
+       "tempo": "3–35 s",
+       "descricao": "Eu comecei fazendo doces na minha própria cozinha, sem saber como divulgar no Instagram ou como organizar as entregas no WhatsApp.",
+       "texto_na_tela": "Começando do zero em casa",
+       "visual": "Medium shot of a woman mixing batter in a large bowl on a clean wooden kitchen table.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nNew photo: Medium shot of a woman mixing batter in a large bowl on a clean wooden kitchen table."
+      },
+      {
+       "tempo": "35–70 s",
+       "descricao": "Quando entendi a importância de mostrar os bastidores da produção e organizar o caixa, tudo mudou no ritmo das minhas vendas.",
+       "texto_na_tela": "Organizando os bastidores",
+       "visual": "Close-up shot of a woman neatly arranging homemade sweets on a tray inside a cozy kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nNew photo: Close-up shot of a woman neatly arranging homemade sweets on a tray inside a cozy kitchen."
+      },
+      {
+       "tempo": "70–100 s",
+       "descricao": "A troca de experiências com outros empreendedores faz toda a diferença para quem trabalha sozinho em casa.",
+       "texto_na_tela": "Comunidade e apoio",
+       "visual": "A woman smiling while talking animatedly and holding a notebook in her bright kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nNew photo: A woman smiling while talking animatedly and holding a notebook in her bright kitchen."
+      },
+      {
+       "tempo": "100–120 s",
+       "descricao": "Empreendedor(a), queremos caminhar ao seu lado nessa jornada de crescimento. Inscreva-se no Impulso Stone e leve educação prática para o seu negócio de comida.",
+       "texto_na_tela": "Inscreva-se no Impulso Stone",
+       "visual": "Medium shot of a woman smiling warmly at the camera with her hands gently folded in front of her in the kitchen.",
+       "prompt_imagem": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nThe reference image is a close-up of the main character: keep the same person (face, hair, clothes). Create a new photo with its own pose, framing and setting.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nNew photo: Medium shot of a woman smiling warmly at the camera with her hands gently folded in front of her in the kitchen."
+      }
+     ],
+     "legenda": "Trabalhar com comida em casa é gratificante, mas exige gestão, vendas e muita dedicação diária. Você não precisa fazer tudo sozinha. Empreendedor(a), queremos caminhar ao seu lado nessa jornada de crescimento. Inscreva-se no Impulso Stone e leve educação prática para o seu negócio de comida.",
+     "cta": "Inscreva-se no Impulso Stone e leve educação prática para o seu negócio de comida.",
+     "personagem": "A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.",
+     "prompt_capa": "Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\nThis image (Reel cover): Vertical cover featuring a woman smiling in her kitchen with homemade food and text overlay.",
+     "prompt_copiar": "Create 6 vertical 9:16 images for an Instagram Reel storyboard, one image at a time, in this order. Keep the SAME person, clothes and place in every image.\n\nImpulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.\n\nMain character: A relatable woman in her late 40s, wearing an apron with a visible green detail, operating a home-based food business.\n\n1. Cover: Vertical cover featuring a woman smiling in her kitchen with homemade food and text overlay.\n2. Scene 0–3 s: A woman in her 45s wearing an apron with a neat green trim, looking thoughtfully toward the camera in a domestic kitchen.\n3. Scene 3–35 s: Medium shot of a woman mixing batter in a large bowl on a clean wooden kitchen table.\n4. Scene 35–70 s: Close-up shot of a woman neatly arranging homemade sweets on a tray inside a cozy kitchen.\n5. Scene 70–100 s: A woman smiling while talking animatedly and holding a notebook in her bright kitchen.\n6. Scene 100–120 s: Medium shot of a woman smiling warmly at the camera with her hands gently folded in front of her in the kitchen.",
+     "inspirado_em": [
+      "DZqVCbmgu2X",
+      "DbsI9LLPQC4"
+     ],
+     "achados_usados": [
+      "duração: mais de 90 s (2,0× mais comum no top)"
+     ]
+    }
+   ],
+   "avaliacao": null,
+   "profiles": [],
+   "confidence_flag": "fragil",
+   "explanation": "Estes três criativos foram desenhados para empreendedores de alimentação que vendem comida feita em casa, utilizando dados sólidos e referências do próprio setor. O primeiro e o terceiro criativos adotam a duração acima de 90 segundos, que aparece 2,0 vezes mais no top com selo robusto (“duração: mais de 90 s”, com base na amostra inteira). O segundo aposta no formato explicativo, que é 2,2 vezes mais comum no top segundo a amostra inteira, embora com a ressalta de que esse sinal depende de poucos criadores e some sem os 6 maiores.",
+   "warnings": [
+    "parte dos achados vem da amostra inteira, não do recorte pedido (segmento alimentacao)"
+   ]
+  }
+ }
+]
