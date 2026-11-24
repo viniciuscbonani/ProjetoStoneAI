@@ -2,7 +2,7 @@
 
 O que os Reels de maior engajamento entre micro e pequenos empreendedores têm em comum, e como levar isso para a @impulsostone.
 
-TAPI Stone × Inteli Academy · gerado em 23/11/2026 por `scripts/gerar_playbook.py` a partir da base do projeto (7.554 Reels coletados; 4.719 de 83 perfis no ranking).
+TAPI Stone × Inteli Academy · gerado em 24/11/2026 por `scripts/gerar_playbook.py` a partir da base do projeto (7.554 Reels coletados; 4.719 de 83 perfis no ranking).
 
 Este documento é para a equipe que planeja e grava os Reels da @impulsostone. Cada recomendação vem com o número que a sustenta, o grau de confiança e Reels reais para assistir. Os criativos do fim são roteiros prontos para gravar.
 
@@ -24,6 +24,61 @@ Este documento é para a equipe que planeja e grava os Reels da @impulsostone. C
 - **Leitura dos vídeos:** o Gemini assistiu a cada Reel da amostra (8 quadros, transcrição do áudio e legenda) e preencheu uma ficha fixa: formato, gancho, tema, duração, CTA, rosto em cena e outros. Uma parte foi conferida à mão e por outro modelo.
 - **Concentração:** os 6 criadores com mais Reels no top somam 37% dele. Cada achado foi refeito sem eles; os que somem sem esses 6 aparecem aqui como *depende de poucos criadores*.
 - **Taxas acima de 100%:** acontecem quando um Reel viraliza e recebe mais curtidas do que o perfil tem de seguidores (o alcance vem de quem não segue). São os casos mais fortes do top; o padrão vale para os 472.
+
+## Como é o Reel do top
+
+O retrato dos 472 Reels de maior engajamento: o valor mais comum de cada característica da ficha de leitura. Ao lado, a frequência nos Reels comuns, porque o mais comum no top pode ser só o jeito de todo mundo fazer; a última coluna diz se a característica separa o top dos comuns (detalhes nas seções seguintes).
+
+| Característica | Mais comum no top | No top | Nos comuns | Separa o top? |
+|---|---|---|---|---|
+| Formato do vídeo | talking head | 34% | 47% | Sem diferença |
+| Tema | vendas | 21% | 22% | Sem diferença |
+| Tipo de gancho | curiosidade | 36% | 28% | Indício (mais no top) |
+| Duração | mais de 90 s | 32% | 16% | Diferença clara (mais no top) |
+| Rosto em cena | sim | 81% | 89% | Sem diferença |
+| Texto na tela | sim | 93% | 91% | Sem diferença |
+| Chamada para ação (CTA) | sim | 67% | 62% | Sem diferença |
+| Tipo de CTA | comentar | 38% | 29% | Sem diferença |
+| Tom | informal | 41% | 47% | Sem diferença |
+| Ritmo de cortes | lento | 42% | 44% | Sem diferença |
+| Tamanho da legenda | longa | 45% | 47% | Sem diferença |
+
+### Recorte por tema
+
+Quantos Reels do top tratam de cada tema e, dentro de cada tema, o formato, o gancho e a duração mais comuns, com um Reel real para assistir (o de maior engajamento do tema).
+
+| Tema | Reels no top | Nos comuns | Formato mais comum | Gancho mais comum | Duração mais comum | Exemplo | Separa o top? |
+|---|---|---|---|---|---|---|---|
+| Vendas | 99 (21%) | 22% | talking head | promessa | 60 a 90 s | [DeDBfLQyvu3](https://www.instagram.com/reel/DeDBfLQyvu3/) @penteadokaique | Sem diferença |
+| Gestão | 97 (21%) | 23% | talking head | curiosidade | mais de 90 s | [DeuE5VWotiU](https://www.instagram.com/reel/DeuE5VWotiU/) @agafestlocacoes | Sem diferença |
+| Outro | 91 (19%) | 17% | talking head | curiosidade | mais de 90 s | [DXmVljvjWHR](https://www.instagram.com/reel/DXmVljvjWHR/) @soucarolssoares | Sem diferença |
+| Marketing | 71 (15%) | 11% | explicativo | promessa | 30 a 60 s | [DZYbcAfCwQc](https://www.instagram.com/reel/DZYbcAfCwQc/) @rayssamedrado | Sem diferença |
+| Finanças | 51 (11%) | 18% | talking head | dor | 60 a 90 s | [DSAMnSmDTiZ](https://www.instagram.com/reel/DSAMnSmDTiZ/) @contadora.naiale | Sem diferença |
+| História de empreendedor | 36 (8%) | 3% | depoimento | curiosidade | mais de 90 s | [DZqVCbmgu2X](https://www.instagram.com/reel/DZqVCbmgu2X/) @conicesar | Sem diferença |
+| Motivação | 17 (4%) | 4% | talking head | promessa | até 15 s | [DfAPiukxKrP](https://www.instagram.com/reel/DfAPiukxKrP/) @josikonkol | Poucos dados |
+| Ferramentas e maquininha | 6 (1%) | 1% | bastidores | curiosidade | 30 a 60 s | [DdH6l9iG4nD](https://www.instagram.com/reel/DdH6l9iG4nD/) @infinitepay | Poucos dados |
+| Atendimento | 4 (1%) | 2% | explicativo | polêmica | 60 a 90 s | [DbnuKRmRJ_H](https://www.instagram.com/reel/DbnuKRmRJ_H/) @_kalps23 | Poucos dados |
+
+### Recorte por formato
+
+O mesmo, por formato de vídeo: quanto cada formato aparece no top, sobre o que costuma falar e quanto dura.
+
+| Formato | Reels no top | Nos comuns | Tema mais comum | Gancho mais comum | Duração mais comum | Exemplo | Separa o top? |
+|---|---|---|---|---|---|---|---|
+| Talking head | 160 (34%) | 47% | vendas | curiosidade | mais de 90 s | [DZYbcAfCwQc](https://www.instagram.com/reel/DZYbcAfCwQc/) @rayssamedrado | Sem diferença |
+| Explicativo | 92 (20%) | 9% | vendas | curiosidade | 60 a 90 s | [DbnuKRmRJ_H](https://www.instagram.com/reel/DbnuKRmRJ_H/) @_kalps23 | Indício (mais no top), depende de poucos criadores |
+| Tutorial | 58 (12%) | 8% | marketing | promessa | 60 a 90 s | [DSS-3BDgWx6](https://www.instagram.com/reel/DSS-3BDgWx6/) @brunabarros.flora | Sem diferença |
+| Bastidores | 43 (9%) | 12% | outro | curiosidade | até 15 s | [DcdmwlcOQEZ](https://www.instagram.com/reel/DcdmwlcOQEZ/) @marinatavora | Sem diferença |
+| Depoimento | 28 (6%) | 3% | história de empreendedor | curiosidade | mais de 90 s | [DbLn745giR1](https://www.instagram.com/reel/DbLn745giR1/) @conicesar | Sem diferença |
+| Humor/esquete | 26 (6%) | 4% | gestão | curiosidade | até 15 s | [Dcegd4WCUhi](https://www.instagram.com/reel/Dcegd4WCUhi/) @mariliasartori.modamkt | Sem diferença |
+| Lista de dicas | 22 (5%) | 6% | vendas | número | até 15 s | [DeuE5VWotiU](https://www.instagram.com/reel/DeuE5VWotiU/) @agafestlocacoes | Sem diferença |
+| Vlog lifestyle | 17 (4%) | 6% | outro | curiosidade | até 15 s | [DXmVljvjWHR](https://www.instagram.com/reel/DXmVljvjWHR/) @soucarolssoares | Poucos dados |
+| Outro | 15 (3%) | 6% | outro | promessa | até 15 s | [DYZ2Cm-gLFH](https://www.instagram.com/reel/DYZ2Cm-gLFH/) @redemulherempreendedora | Poucos dados |
+| Trend | 5 (1%) | 0% | outro | curiosidade | 30 a 60 s | [DSAMnSmDTiZ](https://www.instagram.com/reel/DSAMnSmDTiZ/) @contadora.naiale | Poucos dados |
+| POV | 3 (1%) | 1% | outro | curiosidade | 30 a 60 s | [DZKy8quxv06](https://www.instagram.com/reel/DZKy8quxv06/) @hannycristina | Poucos dados |
+| Antes e depois | 3 (1%) | 0% | marketing | curiosidade | 30 a 60 s | [DdoXUNlI9BE](https://www.instagram.com/reel/DdoXUNlI9BE/) @oficialpudimdacris | Poucos dados |
+
+Com menos de 20 Reels no top, a linha aparece como *Poucos dados*. Algumas linhas dizem *Sem diferença* mesmo com números distantes (talking head, história de empreendedor): a margem de erro é calculada por perfil, e essas diferenças vêm de poucos criadores, então não dá para afirmar que valem para o top como um todo.
 
 ## O que fazer
 

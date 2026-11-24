@@ -82,7 +82,7 @@ recalculado sem eles (coluna `mantem_sem_6_maiores`).
 achados finais ou o diagnóstico mudarem. Os criativos vêm de `scripts/criativos_playbook.py`: 3 briefings no modo
 gerar_criativo (educação financeira geral, beleza e alimentação; ~1 min e ~5 chamadas cada), salvos em
 `data/processed/playbook_criativos.json`; o playbook usa os 2 primeiros de cada (6). O script pula briefings já feitos:
-para refazer, apagar o JSON. Seções: resumo, método, o que fazer, o que evitar, o que não faz diferença, diagnóstico da
+para refazer, apagar o JSON. Seções: resumo, método, retrato do top (valor mais comum de cada campo e recortes por tema e formato, com um Reel de exemplo por linha, pedido pelas seções 4.1 e 6.1 do TAPI), o que fazer, o que evitar, o que não faz diferença, diagnóstico da
 @impulsostone, perfis, banco de ganchos, criativos e limites. Sem vídeos (edição está fora do escopo, seção 4.3 do
 documento): só links para os Reels. Filtros do script (23/11): exemplos e ganchos sem os perfis com ocultação parcial
 de curtidas, exemplos de explicativo com 45 s ou mais, `GANCHOS_FORA` (ganchos fora do tema, revisão manual),

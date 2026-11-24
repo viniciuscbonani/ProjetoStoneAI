@@ -45,7 +45,9 @@ VALORES = {"ate_15s": "até 15 s", "15_30s": "15 a 30 s", "30_60s": "30 a 60 s",
            "alimentacao": "alimentação", "servicos": "serviços", "ferramentas_maquininha": "ferramentas e maquininha",
            "financas": "finanças", "gestao": "gestão", "historia_de_empreendedor": "história de empreendedor",
            "gestao_e_vendas": "gestão e vendas", "educacao_financeira": "educação financeira",
-           "historias_reais": "histórias reais", "medio": "médio", "rapido": "rápido", "media": "média"}
+           "historias_reais": "histórias reais", "medio": "médio", "rapido": "rápido", "media": "média",
+           "motivacao": "motivação", "humor_esquete": "humor/esquete", "lista_dicas": "lista de dicas",
+           "pov": "POV", "antes_depois": "antes e depois"}
 NUMERICOS = {"forca_hook_0a10", "clareza_mensagem_0a10", "duracao_s", "cortes_por_minuto", "taxa_engajamento",
              "curtidas", "comentarios", "visualizacoes", "seguidores", "coments_lidos", "coments_intencao"}
 

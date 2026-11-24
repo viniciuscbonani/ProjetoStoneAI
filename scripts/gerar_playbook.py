@@ -14,6 +14,7 @@ Uso: .venv/bin/python scripts/gerar_playbook.py
 import csv
 import json
 import re
+from collections import Counter
 import sys
 from datetime import date
 from pathlib import Path
@@ -247,6 +248,99 @@ def metodo(d: dict) -> list[str]:
         "seguidores (o alcance vem de quem não segue). São os casos mais fortes do top; o padrão vale para os 472.",
         "",
     ]
+
+
+RETRATO_CAMPOS = ["formato_video", "tema_principal", "tipo_hook", "duracao_faixa", "tem_rosto", "texto_na_tela",
+                  "tem_cta", "tipo_cta", "tom", "ritmo_cortes", "legenda_tamanho"]
+
+
+def nome_valor(campo: str, valor) -> str:
+    return dados.rotulo(campo, valor).split(": ", 1)[1].replace("_", " ")
+
+
+def selo_curto(a: dict | None) -> str:
+    if a is None:
+        return "Poucos dados"
+    selo = SELO[a["robustez"]]
+    if a["robustez"] in ("robusto", "fragil"):
+        selo += f" ({'mais' if a['lift'] is None or a['lift'] >= 1 else 'menos'} no top)"
+    return selo + (", depende de poucos criadores" if a.get("depende_de_poucos") else "")
+
+
+def mais_comum(reels: list[dict], campo: str) -> str:
+    cont = Counter(str(r[campo]) for r in reels if r.get(campo) not in (None, ""))
+    return nome_valor(campo, cont.most_common(1)[0][0]) if cont else "–"
+
+
+def recorte(d: dict, campo: str, colunas: list[str]) -> list[str]:
+    """Uma linha por valor do campo no top: quanto do top e dos comuns, o mais comum de outras características
+    dentro do valor e um Reel real de exemplo (o de maior taxa, fora dos perfis com curtidas ocultas)."""
+    reels = dados.todos_reels()
+    top = [r for r in reels if r["grupo"] == "top"]
+    ctrl = [r for r in reels if r["grupo"] == "controle"]
+    linhas = []
+    for valor, n in Counter(str(r[campo]) for r in top).most_common():
+        dentro = [r for r in top if str(r[campo]) == valor]
+        a = d["achados"].get(f"{campo}={valor}")
+        exemplo = max((r for r in dentro if r["perfil"] not in d["ocultas"]),
+                      key=lambda r: r["taxa_engajamento"], default=None)
+        f_top = a["freq_top"] if a else n / len(top)
+        f_ctrl = a["freq_controle"] if a else sum(str(r[campo]) == valor for r in ctrl) / len(ctrl)
+        linhas.append(
+            f"| {maiuscula(nome_valor(campo, valor))} | {n} ({pct(f_top)}) | {pct(f_ctrl)} | "
+            + " | ".join(mais_comum(dentro, c) for c in colunas)
+            + f" | {link_reel(exemplo['shortCode']) + ' @' + exemplo['perfil'] if exemplo else '–'} | "
+            f"{selo_curto(a) if n >= dados.MIN_N_TOP else 'Poucos dados'} |")
+    return linhas
+
+
+def retrato_top(d: dict) -> list[str]:
+    reels = dados.todos_reels()
+    n_top = sum(r["grupo"] == "top" for r in reels)
+    linhas = [
+        "## Como é o Reel do top",
+        "",
+        f"O retrato dos {n_top} Reels de maior engajamento: o valor mais comum de cada característica da ficha de "
+        "leitura. Ao lado, a frequência nos Reels comuns, porque o mais comum no top pode ser só o jeito de todo "
+        "mundo fazer; a última coluna diz se a característica separa o top dos comuns (detalhes nas seções "
+        "seguintes).",
+        "",
+        "| Característica | Mais comum no top | No top | Nos comuns | Separa o top? |",
+        "|---|---|---|---|---|",
+    ]
+    for campo in RETRATO_CAMPOS:
+        candidatos = [a for a in d["achados"].values() if a["campo"] == campo]
+        a = max(candidatos, key=lambda a: a["freq_top"])
+        linhas.append(f"| {maiuscula(dados.CAMPOS[campo])} | {nome_valor(campo, a['valor'])} | "
+                      f"{pct(a['freq_top'])} | {pct(a['freq_controle'])} | {selo_curto(a)} |")
+    linhas += [
+        "",
+        "### Recorte por tema",
+        "",
+        "Quantos Reels do top tratam de cada tema e, dentro de cada tema, o formato, o gancho e a duração mais "
+        "comuns, com um Reel real para assistir (o de maior engajamento do tema).",
+        "",
+        "| Tema | Reels no top | Nos comuns | Formato mais comum | Gancho mais comum | Duração mais comum | "
+        "Exemplo | Separa o top? |",
+        "|---|---|---|---|---|---|---|---|",
+        *recorte(d, "tema_principal", ["formato_video", "tipo_hook", "duracao_faixa"]),
+        "",
+        "### Recorte por formato",
+        "",
+        "O mesmo, por formato de vídeo: quanto cada formato aparece no top, sobre o que costuma falar e quanto dura.",
+        "",
+        "| Formato | Reels no top | Nos comuns | Tema mais comum | Gancho mais comum | Duração mais comum | "
+        "Exemplo | Separa o top? |",
+        "|---|---|---|---|---|---|---|---|",
+        *recorte(d, "formato_video", ["tema_principal", "tipo_hook", "duracao_faixa"]),
+        "",
+        f"Com menos de {dados.MIN_N_TOP} Reels no top, a linha aparece como *Poucos dados*. Algumas linhas dizem "
+        "*Sem diferença* mesmo com números distantes (talking head, história de empreendedor): a margem de erro é "
+        "calculada por perfil, e essas diferenças vêm de poucos criadores, então não dá para afirmar que valem para "
+        "o top como um todo.",
+        "",
+    ]
+    return linhas
 
 
 def bloco_achado(d: dict, f: dict, evitar: bool = False) -> list[str]:
@@ -546,7 +640,7 @@ def limites() -> list[str]:
 
 def main():
     d = carregar()
-    partes = (cabecalho(d) + resumo(d) + metodo(d) + o_que_fazer(d) + o_que_evitar(d) + nao_faz_diferenca(d)
+    partes = (cabecalho(d) + resumo(d) + metodo(d) + retrato_top(d) + o_que_fazer(d) + o_que_evitar(d) + nao_faz_diferenca(d)
               + diagnostico_stone(d) + perfis(d) + ganchos(d) + criativos(d) + limites())
     SAIDA.parent.mkdir(exist_ok=True)
     SAIDA.write_text("\n".join(partes).rstrip() + "\n")
