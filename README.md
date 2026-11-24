@@ -94,12 +94,13 @@ Requisitos: Python 3.12 e Node 20 ou mais recente (só para o front).
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 cp .env.example .env   # preencha GEMINI_API_KEY (e as chaves da Cloudflare, se for gerar imagens)
-.venv/bin/python scripts/indexar_base.py   # cria data/processed/agente.db
 ```
 
-A base do agente (`data/processed/agente.db`, 1,3 MB) fica fora do Git. O `indexar_base.py` precisa dos CSV e JSONL do
-repositório e também de `data/midia/` (duração e cortes de cada Reel), que não é versionada. Sem essa pasta, copie o
-`agente.db` de quem já tem a base.
+A base do agente (`data/processed/agente.db`, SQLite de 1,3 MB) já vem no repositório, então o agente roda logo depois
+da instalação. Ela tem a anotação, as métricas e a legenda de cada Reel (o mesmo que está em `base.csv` e
+`anotacoes.jsonl`), sem transcrições nem texto de comentários. Para refazê-la depois de mudar a anotação ou o lift, rode
+`.venv/bin/python scripts/indexar_base.py`; ele precisa também de `data/midia/` (duração e cortes de cada Reel), que
+não é versionada porque é gerada a partir dos vídeos. Sem os quadros de `data/midia/`, o front mostra os Reels sem capa.
 
 O Gemini roda no plano grátis. A cota diária é contada **por modelo**: o `gemini-3.5-flash-lite` aguenta cerca de 500
 chamadas por dia, e o `gemini-3.5-flash` só 20. Cada execução do agente faz de 3 a 6 chamadas. Quando a cota do flash

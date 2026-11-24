@@ -15,8 +15,7 @@ data/interim/amostra_v1.csv
 data/interim/logs/
 data/interim/validacao.html
 
-# Base do agente (regenerável por scripts/indexar_base.py), logs e vídeos enviados
-data/processed/agente.db
+# Logs, vídeos enviados e imagens geradas
 data/logs/
 data/uploads/
 data/imagens/
