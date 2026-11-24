@@ -120,9 +120,17 @@ traz `findings`, `reference_posts`, `creatives`, `confidence_flag`, `explanation
 
 ### Servidor MCP (local, no Claude)
 
-O servidor (`agente/servidor_mcp.py`, feito com FastMCP) roda na própria máquina via stdio e expõe 4 ferramentas:
-`analisar`, `recomendar`, `gerar_criativo` e `avaliar`. As únicas chamadas externas são as do Gemini. Nos exemplos
-abaixo, troque `/caminho/ProjetoStoneAI` pelo caminho absoluto do repositório.
+O servidor (`agente/servidor_mcp.py`, feito com FastMCP) roda na própria máquina via stdio e expõe 5 ferramentas:
+
+- `analisar`
+- `recomendar`
+- `gerar_criativo`
+- `gerar_imagens`: recebe o `run_id` de um `gerar_criativo` e o número do criativo (1 a 3). Gera a capa 9:16 e uma
+  imagem por cena, passa cada uma pelo revisor de imagem e devolve o caminho local e a nota de cada arquivo.
+- `avaliar`
+
+As chamadas externas são as do Gemini e, só no `gerar_imagens`, as da Cloudflare. Nos exemplos abaixo, troque
+`/caminho/ProjetoStoneAI` pelo caminho absoluto do repositório.
 
 **Claude Code** (terminal ou app):
 
@@ -150,7 +158,8 @@ gerar criativos sobre precificação para salões de beleza".
 
 O `PYTHONPATH` deixa o servidor funcionar seja qual for a pasta de onde o cliente o inicia. As chaves vêm do `.env` do
 repositório, então não é preciso repeti-las na configuração. Tempos de resposta: `analisar` e `recomendar` levam de
-30 a 60 s, `gerar_criativo` de 1 a 2 min e `avaliar` de 30 s (roteiro) a 3 min (vídeo, com transcrição local).
+30 a 60 s, `gerar_criativo` de 1 a 2 min, `gerar_imagens` de 1 a 2 min por criativo e `avaliar` de 30 s (roteiro)
+a 3 min (vídeo, com transcrição local).
 
 ### API e front
 
