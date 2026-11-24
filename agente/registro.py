@@ -23,6 +23,17 @@ def _resumo(m: ToolMessage) -> list[str]:
     return [p["perfil"] for p in m.artifact or []]
 
 
+def execucao(run_id: str) -> dict | None:
+    """A linha mais recente do log com esse run_id, ou None."""
+    if not LOG.exists():
+        return None
+    achada = None
+    for linha in LOG.open():
+        if run_id in linha and (d := json.loads(linha))["run_id"] == run_id:
+            achada = d
+    return achada
+
+
 def gravar(estado: dict, modelo: str, duracao_s: float, erro: str | None = None) -> None:
     mensagens = estado.get("messages", [])
     resultados = {m.tool_call_id: m for m in mensagens if isinstance(m, ToolMessage)}

@@ -374,7 +374,8 @@ INSTRUCOES_CRIATIVO = """Escreva 3 criativos de Reels para a @impulsostone atend
   as imagens do criativo, sempre a mesma pessoa; capa = o que a capa mostra; visual de cada cena = o que a
   imagem daquela cena mostra (ação, enquadramento, ambiente do negócio do setor), sem repetir a personagem.
   Mostre a pessoa fazendo a ação; evite imagens centradas num papel escrito, numa tela ou numa placa (o gerador
-  de imagem inventa texto). Sem pessoas famosas.
+  de imagem inventa texto). Sem pessoas famosas. Nunca peça texto, frase ou título dentro da capa ou das
+  cenas (nada de "with the text '...'"): o texto da capa e o texto na tela entram depois, na edição.
 - Se o pedido citar um setor, use o ambiente e os exemplos desse setor.
 - Não escreva shortCodes nem ids de achado no roteiro, no gancho ou na legenda; eles vão só em inspirado_em
   e achados_usados.
@@ -401,6 +402,17 @@ SEM_ACENTO = re.compile(r"\b(nao|voce|voces|video|videos|conteudo|conteudos|dura
                         r"proporcao|diferenca|frequencia|hipotese|pratica|gestao|presenca|ausencia|acao|sao|ate)\b",
                         re.I)
 PROBLEMA_ACENTO = "o texto está sem acentos; reescreva em português com acentuação correta"
+# Texto pedido dentro da imagem (capa ou visual): contradiz o ESTILO_VISUAL ("No text") e o gerador o embaralha.
+# Frase entre aspas (o apóstrofo de "owner's" não conta) ou "with the text/words/caption...".
+TEXTO_NA_IMAGEM = re.compile(
+    r"[\"“”][^\"“”]{3,}[\"“”]|(?<![A-Za-z])'[^']{3,}'(?![A-Za-z])"
+    r"|\b(with|showing|displaying|reading|saying|says|reads|written)\s+(the\s+|a\s+)?"
+    r"(text|words?|caption|headline|title|phrase|lettering)\b"
+    r"|\btext\s+(overlay|on (the )?(screen|image))\b", re.IGNORECASE)
+
+
+def pede_texto_na_imagem(descricao: str) -> bool:
+    return bool(TEXTO_NA_IMAGEM.search(descricao or ""))
 
 
 def sem_acentos(texto: str) -> bool:
@@ -467,6 +479,9 @@ def revisar_criativos(estado: Estado) -> list[str]:
             problemas.append(f"criativo {n}: faltam o CTA, a personagem ou a capa")
         if any(not cena.visual.strip() for cena in c.roteiro):
             problemas.append(f"criativo {n}: falta o visual de alguma cena")
+        if pede_texto_na_imagem(c.capa) or any(pede_texto_na_imagem(cena.visual) for cena in c.roteiro):
+            problemas.append(f"criativo {n}: a capa ou o visual de uma cena pede texto escrito na imagem; descreva "
+                             "só a cena (o texto entra depois, na edição)")
     textos = " ".join(f"{c.gancho} {c.legenda} {c.cta}" for c in rasc.criativos)
     if sem_acentos(textos):
         problemas.append(PROBLEMA_ACENTO)
