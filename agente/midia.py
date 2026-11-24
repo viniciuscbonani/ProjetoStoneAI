@@ -6,6 +6,7 @@ modo avaliar do agente, para que um vídeo enviado seja lido exatamente como os 
 Saída numa pasta por vídeo: audio.m4a, q_*.jpg (8 quadros), meta.json e transcricao.json.
 """
 
+import sys
 import json
 import re
 import subprocess
@@ -127,7 +128,7 @@ def _anotar_partes(client, modelo: str, partes: list) -> dict:
             codigo = getattr(e, "code", "tempo esgotado")
             if codigo not in (429, 503, "tempo esgotado") or espera is None:
                 raise
-            print(f"  {codigo}, esperando {espera}s")
+            print(f"  {codigo}, esperando {espera}s", file=sys.stderr)
             time.sleep(espera)
     raise RuntimeError("inalcançável")
 
