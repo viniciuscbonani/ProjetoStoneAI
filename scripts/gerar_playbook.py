@@ -232,7 +232,8 @@ def metodo(d: dict) -> list[str]:
         "",
         f"- **Base:** Reels públicos de perfis que falam com micro e pequenos empreendedores (finanças, precificação, "
         f"marketing, alimentação, beleza, contabilidade e outros), publicados entre {datas[0][8:10]}/{datas[0][5:7]}/"
-        f"{datas[0][:4]} e {datas[-1][8:10]}/{datas[-1][5:7]}/{datas[-1][:4]}, coletados pela rota definida no case.",
+        f"{datas[0][:4]} e {datas[-1][8:10]}/{datas[-1][5:7]}/{datas[-1][:4]} (a coleta foi até 14/11/2026, mas os Reels com menos de 14 dias ficaram fora do ranking), "
+        "coletados pela rota definida no case.",
         "- **Métrica:** taxa de engajamento = (curtidas + comentários) ÷ seguidores do perfil. Ela compara perfis "
         "pequenos e grandes de igual para igual; o número absoluto de curtidas favorece as contas grandes.",
         f"- **Top × controle:** os {n_top} Reels de maior taxa (os 10% de cima) foram comparados a {n_ctrl} Reels "
@@ -612,7 +613,8 @@ def criativos(d: dict) -> list[str]:
                 linhas += ["**Achados aplicados:** " + "; ".join(usados), ""]
             if c.get("prompt_capa"):
                 linhas += ["<details><summary>Prompt da capa (9:16) para gerar a imagem</summary>", "",
-                           c["prompt_capa"].replace("smiling confidentially", "smiling confidently"), "", "</details>", ""]
+                           c["prompt_capa"].replace("smiling confidentially", "smiling confidently")
+                           .replace(" with bold text on screen", ""), "", "</details>", ""]
     if not n:
         linhas += ["*Ainda não gerados: rode `scripts/criativos_playbook.py`.*", ""]
     return linhas

@@ -18,7 +18,7 @@ Este documento é para a equipe que planeja e grava os Reels da @impulsostone. C
 
 ## Como chegamos aqui
 
-- **Base:** Reels públicos de perfis que falam com micro e pequenos empreendedores (finanças, precificação, marketing, alimentação, beleza, contabilidade e outros), publicados entre 14/11/2025 e 31/10/2026, coletados pela rota definida no case.
+- **Base:** Reels públicos de perfis que falam com micro e pequenos empreendedores (finanças, precificação, marketing, alimentação, beleza, contabilidade e outros), publicados entre 14/11/2025 e 31/10/2026 (a coleta foi até 14/11/2026, mas os Reels com menos de 14 dias ficaram fora do ranking), coletados pela rota definida no case.
 - **Métrica:** taxa de engajamento = (curtidas + comentários) ÷ seguidores do perfil. Ela compara perfis pequenos e grandes de igual para igual; o número absoluto de curtidas favorece as contas grandes.
 - **Top × controle:** os 472 Reels de maior taxa (os 10% de cima) foram comparados a 472 Reels sorteados do restante, na mesma proporção de perfis micro, médios e grandes. Uma característica só conta como padrão do top se aparecer mais nele do que nos Reels comuns; aparecer muito no top não basta, porque pode ser só o jeito de todo mundo fazer.
 - **Leitura dos vídeos:** o Gemini assistiu a cada Reel da amostra (8 quadros, transcrição do áudio e legenda) e preencheu uma ficha fixa: formato, gancho, tema, duração, CTA, rosto em cena e outros. Uma amostra de 50 Reels foi conferida por outro modelo (Claude), sem ver a resposta do Gemini.
@@ -489,7 +489,7 @@ This image (Reel cover): A male salon consultant looking directly at the camera 
 
 Impulso Stone visual style: bright, warm documentary photography of real small businesses in Brazil; ordinary, approachable Brazilian entrepreneurs aged 30 to 60, diverse in skin tone and body type; Stone green (#00A868) accents in clothing, objects or background, never as a logo; natural light; realistic, not glossy advertising; vertical 9:16 composition with clean empty space in the top third for a text overlay. No text, letters, logos or watermarks in the image; papers, screens and signs are blank or out of focus; natural hands and anatomy.
 Main character: A friendly woman between 35 and 50 years old, wearing a neat home apron with a small green detail, working in a cozy home kitchen.
-This image (Reel cover): Vertical cover showing a woman smiling in a home kitchen next to homemade food boxes with bold text on screen.
+This image (Reel cover): Vertical cover showing a woman smiling in a home kitchen next to homemade food boxes.
 
 </details>
 
