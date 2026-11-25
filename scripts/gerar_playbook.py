@@ -240,8 +240,8 @@ def metodo(d: dict) -> list[str]:
         "como padrão do top se aparecer mais nele do que nos Reels comuns; aparecer muito no top não basta, porque "
         "pode ser só o jeito de todo mundo fazer.",
         "- **Leitura dos vídeos:** o Gemini assistiu a cada Reel da amostra (8 quadros, transcrição do áudio e "
-        "legenda) e preencheu uma ficha fixa: formato, gancho, tema, duração, CTA, rosto em cena e outros. Uma parte "
-        "foi conferida à mão e por outro modelo.",
+        "legenda) e preencheu uma ficha fixa: formato, gancho, tema, duração, CTA, rosto em cena e outros. Uma amostra "
+        "de 50 Reels foi conferida por outro modelo (Claude), sem ver a resposta do Gemini.",
         "- **Concentração:** os 6 criadores com mais Reels no top somam 37% dele. Cada achado foi refeito sem eles; "
         "os que somem sem esses 6 aparecem aqui como *depende de poucos criadores*.",
         "- **Taxas acima de 100%:** acontecem quando um Reel viraliza e recebe mais curtidas do que o perfil tem de "

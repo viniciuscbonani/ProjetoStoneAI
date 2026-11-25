@@ -1,9 +1,9 @@
-"""Gera a página de validação manual (documento do projeto: mínimo de 50 publicações).
+"""Gera a página de validação da anotação (50 publicações).
 
 Sorteia 50 Reels anotados (25 top, 25 controle, semente fixa), embaralha a ordem e esconde o grupo
-e a resposta do Gemini, para a anotação manual ser às cegas. A página mostra quadros, legenda,
+e a resposta do Gemini, para a validação ser às cegas. A página mostra quadros, legenda,
 transcrição e link; salva as respostas no navegador e exporta um JSON, que vai para
-data/interim/validacao_manual.json e é comparado por scripts/concordancia.py.
+data/interim/validacao_claude.json e é comparado por scripts/concordancia.py.
 
 Uso:
     .venv/bin/python scripts/gerar_validacao.py
@@ -68,7 +68,7 @@ def main() -> None:
 <div class="campos">{campos}</div></section>""")
 
     pagina = f"""<!doctype html><html lang="pt-br"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Validação manual</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Validação da anotação</title>
 <style>
 :root {{ --bg:#fafafa; --fg:#1d1d1f; --card:#fff; --borda:#ddd; --destaque:#0b6bcb; }}
 @media (prefers-color-scheme: dark) {{ :root {{ --bg:#161616; --fg:#eee; --card:#222; --borda:#3a3a3a; --destaque:#5aa9ff; }} }}
@@ -89,11 +89,11 @@ a {{ color:var(--destaque); }}
 #barra {{ position:sticky; top:0; background:var(--bg); padding:8px 0; border-bottom:1px solid var(--borda); }}
 button {{ font-size:15px; padding:6px 14px; }}
 </style></head><body>
-<div id="barra"><b>Validação manual</b> · <span id="prog"></span> ·
+<div id="barra"><b>Validação da anotação</b> · <span id="prog"></span> ·
 <button onclick="exportar()">Exportar respostas (JSON)</button></div>
 <p>Marque cada campo olhando os quadros, a legenda e a transcrição (ou o Reel no Instagram).
 As respostas ficam salvas neste navegador. No fim, exporte e salve como
-<code>data/interim/validacao_manual.json</code>.</p>
+<code>data/interim/validacao_claude.json</code>.</p>
 {''.join(cartoes)}
 <script>
 const CHAVE = "validacao_stone_v1", TOTAL = {len(escolhidos) * len(CAMPOS)};
@@ -109,7 +109,7 @@ function exportar() {{
   for (const [k, v] of Object.entries(r)) {{ const [sc, c] = k.split("|"); (out[sc] ||= {{}})[c] = v; }}
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], {{type: "application/json"}}));
-  a.download = "validacao_manual.json"; a.click();
+  a.download = "validacao_claude.json"; a.click();
 }}
 </script></body></html>"""
     destino = RAIZ / "data" / "interim" / "validacao.html"

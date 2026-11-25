@@ -100,7 +100,7 @@ A base do agente (`data/processed/agente.db`, SQLite de 1,3 MB) já vem no repos
 da instalação. Ela tem a anotação, as métricas e a legenda de cada Reel (o mesmo que está em `base.csv` e
 `anotacoes.jsonl`), sem transcrições nem texto de comentários. Para refazê-la depois de mudar a anotação ou o lift, rode
 `.venv/bin/python scripts/indexar_base.py`; ele precisa também de `data/midia/` (duração e cortes de cada Reel), que
-não é versionada porque é gerada a partir dos vídeos. Sem os quadros de `data/midia/`, o front mostra os Reels sem capa.
+não é versionada porque é gerada a partir dos vídeos.
 
 O Gemini roda no plano grátis. A cota diária é contada **por modelo**: o `gemini-3.5-flash-lite` aguenta cerca de 500
 chamadas por dia, e o `gemini-3.5-flash` só 20. Cada execução do agente faz de 3 a 6 chamadas. Quando a cota do flash
@@ -203,7 +203,8 @@ Os scripts ficam em `scripts/` e rodam nesta ordem:
 5. `processar_midia.py` e `transcrever_paralelo.sh 7 2`: 8 quadros por Reel e transcrição com faster-whisper.
 6. `coleta_comentarios.py`: comentários com intenção de contato.
 7. `anotar_gemini.py`: aplica a rubrica v2 (`agente/rubrica.py`) a cada Reel da amostra.
-8. `gerar_validacao.py` e `concordancia.py`: validação manual de 50 Reels às cegas e concordância entre modelos.
+8. `gerar_validacao.py` e `concordancia.py`: validação cruzada da anotação por outro modelo (Claude), às cegas, em 50 Reels
+   sorteados, com concordância e kappa por campo.
 9. `lift.py`: lift top × controle com IC95 por bootstrap de perfil e teste de sensibilidade.
 10. `achados_finais.py`: classifica os achados e refaz o cálculo sem os 6 maiores criadores.
 11. `ler_impulsostone.py`: lê os 56 Reels da @impulsostone com a mesma rubrica.
@@ -247,8 +248,8 @@ de curiosidade** (7% × 36%). A lista completa está em `data/processed/achados_
 ## Limites
 
 - A análise é **correlacional**: mostra o que aparece mais no top, não o que causa engajamento.
-- A anotação é feita por modelo. Os campos de gancho e abordagem têm concordância moderada, e o campo
-  `criador_e_empreendedor_real` não é usado.
+- A anotação é feita por modelo e foi conferida por outro modelo. Os campos de gancho e abordagem têm concordância
+  moderada, e o campo `criador_e_empreendedor_real` não é usado.
 - Os perfis que ocultam as curtidas de forma sistemática ficaram fora do ranking. Quatro perfis em destaque ocultam
   parte delas, e a taxa desses perfis pode estar distorcida; no playbook, eles não aparecem como exemplo.
 - O objetivo da @impulsostone é a inscrição (lead), mas a base mede engajamento orgânico. Por isso todo criativo

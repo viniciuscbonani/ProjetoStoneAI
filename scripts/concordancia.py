@@ -1,8 +1,8 @@
 """Mede a concordância entre as anotações do Gemini e uma anotação de referência, por campo.
 
 A referência é um JSON {shortCode: {campo: valor}} exportado da página de validação
-(data/interim/validacao.html): data/interim/validacao_manual.json (anotação humana) ou
-data/interim/validacao_claude.json (validação cruzada por outro modelo, o Claude, também às cegas).
+(data/interim/validacao.html): data/interim/validacao_claude.json, a validação cruzada por outro modelo
+(o Claude), às cegas.
 
 Para cada campo: % de concordância e kappa de Cohen (concordância corrigida pelo acaso). Leitura usual
 do kappa: < 0,4 fraca, 0,4–0,6 moderada, 0,6–0,8 boa, > 0,8 muito boa.
