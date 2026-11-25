@@ -57,7 +57,7 @@ execução do esdrasdw só com o perfil), quadros em `data/midia/`, transcriçã
 Métrica principal: **taxa de engajamento = (curtidas + comentários) ÷ seguidores**.
 
 ## Achados finais (#17, fechados em 16/11)
-Lista oficial para playbook, README e slides: `data/processed/achados_finais.csv` e
+Lista oficial para playbook e README: `data/processed/achados_finais.csv` e
 `data/processed/perfis_destaque.csv`, gerados por `scripts/achados_finais.py` (rodar de novo se o lift mudar).
 Teste extra de concentração: os 6 criadores com mais Reels no top somam 37% do top; cada achado foi
 recalculado sem eles (coluna `mantem_sem_6_maiores`).

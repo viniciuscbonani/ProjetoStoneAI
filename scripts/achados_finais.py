@@ -1,4 +1,4 @@
-"""Fecha a análise: a lista oficial de achados e os perfis em destaque, usada no playbook, no README e nos slides.
+"""Fecha a análise: a lista oficial de achados e os perfis em destaque, usada no playbook e no README.
 
 Lê a base do agente (data/processed/agente.db, gerada por indexar_base.py a partir do lift) e grava:
 - data/processed/achados_finais.csv: os achados em três grupos
