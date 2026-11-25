@@ -15,7 +15,7 @@ Documentos de referência (fora do repo, em `~/Downloads`): `Proposta de TAPI_St
 ## Regras de trabalho
 - Planejar e propor antes de implementar; o Vinícius aprova a abordagem.
 - Commits agrupados por assunto, em português, **sem linha de coautoria**. Trabalhar numa branch e só
-  juntar na `main` quando pedido.
+  juntar na `main` quando pedido; depois de juntar, apagar a branch (local e no GitHub).
 - Não criar arquivos `.md` avulsos; contexto para agentes vai neste arquivo. Exceção: o playbook (`docs/playbook.md`).
 - Segredos só no `.env` (`GEMINI_API_KEY`, `APIFY_TOKEN`); nunca no código, no chat ou no Git.
 - Dados brutos, mídia e comentários de terceiros ficam fora do Git (ver `.gitignore`).
@@ -119,7 +119,7 @@ Exigências do documento do projeto:
 - Pronto quando: os 3 modos respondem com achados provisórios, saída validada, referências com link e
   log gravado.
 
-Implementação (pacote `agente/`, branch `agente`): um agente que recebe o modo. Grafo em `grafo.py`:
+Implementação (pacote `agente/`): um agente que recebe o modo. Grafo em `grafo.py`:
 orquestrador (Gemini com ferramentas) ⇄ ferramentas → coletar → redator (analisar, recomendar) ou gerador
 (gerar_criativo) → revisor (refaz 1×) → montar_saida.
 - `ferramentas.py`: `consultar_caracteristicas`, `buscar_referencias`, `perfis_em_destaque`; cada `@tool`
