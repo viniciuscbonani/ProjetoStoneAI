@@ -80,6 +80,10 @@ GANCHOS_FORA = {
     "DZGaFVJxct9",  # "eu sou feiofóbica": gosto pessoal, sem gancho de negócio
 }
 
+# Concorrentes da Stone que entraram na base: seguem na análise, mas não aparecem como exemplo nem inspiração
+# num material da Stone.
+CONCORRENTES = {"infinitepay", "pagbank", "contaazul"}
+
 # Hashtags com gênero nos criativos: a @impulsostone fala com empreendedores e empreendedoras (persona).
 HASHTAGS_NEUTRAS = {"#EmpreendedorismoFeminino": "#Empreendedorismo", "#Empreendedora": "#Empreendedorismo",
                     "#DonaDeSalao": "#SalaoDeBeleza"}
@@ -135,13 +139,15 @@ def carregar() -> dict:
     base = list(csv.DictReader(open(RAIZ / "data/processed/base.csv")))
     return {"achados": achados, "finais": finais, "perfis": perfis, "diag": diagnostico(), "criativos": criativos,
             "amostra": list(csv.DictReader(open(RAIZ / "data/processed/amostra.csv"))), "base": base,
-            "ocultas": {r["perfil"] for r in base if r["perfil_oculta_parcial"] == "True"}}
+            "ocultas": {r["perfil"] for r in base if r["perfil_oculta_parcial"] == "True"},
+            "fora": CONCORRENTES | {r["perfil"] for r in base if r["perfil_oculta_parcial"] == "True"}}
 
 
 def exemplos(d: dict, caracteristicas: dict, n: int = 3) -> list[dict]:
     """Reels do top para assistir: um por criador, sem repetir Reel nem gancho já usados no playbook.
 
-    Ficam de fora os perfis com ocultação parcial de curtidas (a taxa pode estar distorcida) e, nos achados de
+    Ficam de fora os concorrentes da Stone, os perfis com ocultação parcial de curtidas (a taxa pode estar
+    distorcida) e, nos achados de
     formato, os Reels curtos demais para mostrar o formato (DURACAO_MIN_EXEMPLO)."""
     usados = d.setdefault("usados", set())
     minimo = max((DURACAO_MIN_EXEMPLO.get(f"{c}={v}", 0) for c, v in caracteristicas.items()), default=0)
@@ -150,7 +156,7 @@ def exemplos(d: dict, caracteristicas: dict, n: int = 3) -> list[dict]:
         gancho = limpar(r["hook_texto"]).lower().rstrip(".!?")
         if r["shortCode"] in usados or gancho in usados or r["perfil"] in {x["perfil"] for x in saida}:
             continue
-        if r["perfil"] in d["ocultas"] or r["duracao_s"] < minimo:
+        if r["perfil"] in d["fora"] or r["duracao_s"] < minimo:
             continue
         usados |= {r["shortCode"], gancho}
         saida.append(r)
@@ -275,7 +281,7 @@ def mais_comum(reels: list[dict], campo: str) -> str:
 
 def recorte(d: dict, campo: str, colunas: list[str]) -> list[str]:
     """Uma linha por valor do campo no top: quanto do top e dos comuns, o mais comum de outras características
-    dentro do valor e um Reel real de exemplo (o de maior taxa, fora dos perfis com curtidas ocultas)."""
+    dentro do valor e um Reel real de exemplo (o de maior taxa, fora dos concorrentes e dos perfis com curtidas ocultas)."""
     reels = dados.todos_reels()
     top = [r for r in reels if r["grupo"] == "top"]
     ctrl = [r for r in reels if r["grupo"] == "controle"]
@@ -283,7 +289,7 @@ def recorte(d: dict, campo: str, colunas: list[str]) -> list[str]:
     for valor, n in Counter(str(r[campo]) for r in top).most_common():
         dentro = [r for r in top if str(r[campo]) == valor]
         a = d["achados"].get(f"{campo}={valor}")
-        exemplo = max((r for r in dentro if r["perfil"] not in d["ocultas"]),
+        exemplo = max((r for r in dentro if r["perfil"] not in d["fora"]),
                       key=lambda r: r["taxa_engajamento"], default=None)
         f_top = a["freq_top"] if a else n / len(top)
         f_ctrl = a["freq_controle"] if a else sum(str(r[campo]) == valor for r in ctrl) / len(ctrl)
@@ -500,7 +506,7 @@ def ganchos(d: dict) -> list[str]:
     tipos.sort(key=lambda a: (a["robustez"] not in ("robusto", "fragil") or a["lift"] < 1, -a["freq_top"]))
     top = [r for r in dados.filtrar(grupo="top")
            if r["fala_de_negocio"] and r["hook_texto"] and r["shortCode"] not in GANCHOS_FORA
-           and r["perfil"] not in d["ocultas"]]
+           and r["perfil"] not in d["fora"]]
     linhas = [
         "## Banco de ganchos",
         "",
@@ -606,6 +612,8 @@ def criativos(d: dict) -> list[str]:
             insp = []
             for sc in c["inspirado_em"]:
                 r = dados.reel(sc)
+                if r and r["perfil"] in CONCORRENTES:
+                    continue
                 insp.append(f"{link_reel(sc)} (@{r['perfil']}, \"{limpar(r['hook_texto'])}\")" if r else link_reel(sc))
             linhas += [f"**Inspirado em:** {'; '.join(insp)}", ""]
             usados = achados_do_criativo(c)

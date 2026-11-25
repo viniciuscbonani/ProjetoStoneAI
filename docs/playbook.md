@@ -56,7 +56,7 @@ Quantos Reels do top tratam de cada tema e, dentro de cada tema, o formato, o ga
 | Finanças | 51 (11%) | 18% | talking head | dor | 60 a 90 s | [DSAMnSmDTiZ](https://www.instagram.com/reel/DSAMnSmDTiZ/) @contadora.naiale | Sem diferença |
 | História de empreendedor | 36 (8%) | 3% | depoimento | curiosidade | mais de 90 s | [DZqVCbmgu2X](https://www.instagram.com/reel/DZqVCbmgu2X/) @conicesar | Sem diferença |
 | Motivação | 17 (4%) | 4% | talking head | promessa | até 15 s | [DfAPiukxKrP](https://www.instagram.com/reel/DfAPiukxKrP/) @josikonkol | Poucos dados |
-| Ferramentas e maquininha | 6 (1%) | 1% | bastidores | curiosidade | 30 a 60 s | [DdH6l9iG4nD](https://www.instagram.com/reel/DdH6l9iG4nD/) @infinitepay | Poucos dados |
+| Ferramentas e maquininha | 6 (1%) | 1% | bastidores | curiosidade | 30 a 60 s | [DS0lcF5j9XL](https://www.instagram.com/reel/DS0lcF5j9XL/) @rannallygomes | Poucos dados |
 | Atendimento | 4 (1%) | 2% | explicativo | polêmica | 60 a 90 s | [DbnuKRmRJ_H](https://www.instagram.com/reel/DbnuKRmRJ_H/) @_kalps23 | Poucos dados |
 
 ### Recorte por formato
@@ -379,7 +379,7 @@ This image (Reel cover): A small business owner standing in her bakery looking a
 
 **CTA:** Garanta sua vaga no Impulso Stone e receba mentoria gratuita para organizar suas contas!
 
-**Inspirado em:** [DXaTt7Pj5DY](https://www.instagram.com/reel/DXaTt7Pj5DY/) (@gislainebarbosaoficial, "Ter vício não é bom, mas já experimentou PARAR de Receber Pix no CPF?"); [De7J01Yx_lG](https://www.instagram.com/reel/De7J01Yx_lG/) (@contaazul, "Empresário é tudo malvadão?")
+**Inspirado em:** [DXaTt7Pj5DY](https://www.instagram.com/reel/DXaTt7Pj5DY/) (@gislainebarbosaoficial, "Ter vício não é bom, mas já experimentou PARAR de Receber Pix no CPF?")
 
 **Achados aplicados:** duração: mais de 90 s (2,0× mais comum no top); formato do vídeo: explicativo (2,2× mais comum no top), depende de poucos criadores; tipo de gancho: polêmica (2,6× mais comum no top)
 
@@ -447,7 +447,7 @@ This image (Reel cover): A female salon owner smiling confidently while holding 
 
 **CTA:** Garanta sua vaga gratuita no programa Impulso Stone e receba mentoria prática para o seu salão!
 
-**Inspirado em:** [De7J01Yx_lG](https://www.instagram.com/reel/De7J01Yx_lG/) (@contaazul, "Empresário é tudo malvadão?"); [DWpd-C0gOAN](https://www.instagram.com/reel/DWpd-C0gOAN/) (@conicesar, "Eu sou a Ana, eu tenho 30 anos")
+**Inspirado em:** [DWpd-C0gOAN](https://www.instagram.com/reel/DWpd-C0gOAN/) (@conicesar, "Eu sou a Ana, eu tenho 30 anos")
 
 **Achados aplicados:** duração: mais de 90 s (2,0× mais comum no top); tipo de gancho: polêmica (2,6× mais comum no top)
 

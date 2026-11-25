@@ -85,7 +85,8 @@ gerar_criativo (educação financeira geral, beleza e alimentação; ~1 min e ~5
 para refazer, apagar o JSON. Seções: resumo, método, retrato do top (valor mais comum de cada campo e recortes por tema e formato, com um Reel de exemplo por linha, pedido pelas seções 4.1 e 6.1 do TAPI), o que fazer, o que evitar, o que não faz diferença, diagnóstico da
 @impulsostone, perfis, banco de ganchos, criativos e limites. Sem vídeos (edição está fora do escopo, seção 4.3 do
 documento): só links para os Reels. Filtros do script (23/11): exemplos e ganchos sem os perfis com ocultação parcial
-de curtidas, exemplos de explicativo com 45 s ou mais, `GANCHOS_FORA` (ganchos fora do tema, revisão manual),
+de curtidas e sem concorrentes da Stone (`CONCORRENTES`: @infinitepay, @pagbank, @contaazul; também fora dos "Inspirado
+em" dos criativos), exemplos de explicativo com 45 s ou mais, `GANCHOS_FORA` (ganchos fora do tema, revisão manual),
 hashtags com gênero trocadas por neutras e, nos criativos, só os achados que o roteiro cumpre (formato e duração),
 com o aviso de "depende de poucos criadores". Capas dos 6 criativos: geradas à parte com `agente.imagens` em
 `data/imagens/{run_id}/` (conferidas a olho; as duas de alimentação foram refeitas sem "bold text on screen" e sem
